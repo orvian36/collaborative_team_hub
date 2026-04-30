@@ -1,0 +1,10 @@
+{
+  "name": "@team-hub/shared",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.js",
+  "scripts": {
+    "build": "echo 'No build step for shared'",
+    "lint": "eslint src/"
+  }
+}

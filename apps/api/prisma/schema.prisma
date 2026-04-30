@@ -1,0 +1,201 @@
+// Prisma Schema for Collaborative Team Hub
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Auth & Users ────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  password     String
+  name         String
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  memberships  WorkspaceMember[]
+  goals        Goal[]            @relation("GoalOwner")
+  actionItems  ActionItem[]      @relation("ActionItemAssignee")
+  comments     Comment[]
+  reactions    Reaction[]
+  activities   Activity[]
+  notifications Notification[]
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+// ─── Workspaces ──────────────────────────────────────────────
+
+model Workspace {
+  id           String   @id @default(uuid())
+  name         String
+  description  String?
+  accentColor  String   @default("#3b82f6")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  members       WorkspaceMember[]
+  goals         Goal[]
+  announcements Announcement[]
+  actionItems   ActionItem[]
+  activities    Activity[]
+}
+
+model WorkspaceMember {
+  id          String   @id @default(uuid())
+  role        String   @default("MEMBER") // ADMIN | MEMBER
+  joinedAt    DateTime @default(now())
+
+  userId      String
+  workspaceId String
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, workspaceId])
+}
+
+// ─── Goals & Milestones ──────────────────────────────────────
+
+model Goal {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  status      String   @default("NOT_STARTED") // NOT_STARTED | IN_PROGRESS | COMPLETED
+  dueDate     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  ownerId     String
+  workspaceId String
+
+  owner       User        @relation("GoalOwner", fields: [ownerId], references: [id])
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  milestones  Milestone[]
+  actionItems ActionItem[]
+  activities  Activity[]
+}
+
+model Milestone {
+  id         String   @id @default(uuid())
+  title      String
+  progress   Int      @default(0) // 0-100
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  goalId     String
+  goal       Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+}
+
+// ─── Announcements ───────────────────────────────────────────
+
+model Announcement {
+  id          String   @id @default(uuid())
+  title       String
+  content     String   // Rich text (HTML/markdown)
+  isPinned    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  authorId    String
+  workspaceId String
+
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  comments    Comment[]
+  reactions   Reaction[]
+}
+
+// ─── Action Items ────────────────────────────────────────────
+
+model ActionItem {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  priority    String   @default("MEDIUM") // LOW | MEDIUM | HIGH | URGENT
+  status      String   @default("TODO")   // TODO | IN_PROGRESS | DONE
+  dueDate     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  assigneeId  String?
+  goalId      String?
+  workspaceId String
+
+  assignee    User?     @relation("ActionItemAssignee", fields: [assigneeId], references: [id])
+  goal        Goal?     @relation(fields: [goalId], references: [id])
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+// ─── Comments & Reactions ────────────────────────────────────
+
+model Comment {
+  id             String   @id @default(uuid())
+  content        String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  authorId       String
+  announcementId String
+
+  author         User         @relation(fields: [authorId], references: [id])
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+}
+
+model Reaction {
+  id             String   @id @default(uuid())
+  emoji          String
+  createdAt      DateTime @default(now())
+
+  userId         String
+  announcementId String
+
+  user           User         @relation(fields: [userId], references: [id])
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, announcementId, emoji])
+}
+
+// ─── Activity & Notifications ────────────────────────────────
+
+model Activity {
+  id          String   @id @default(uuid())
+  type        String   // GOAL_CREATED | STATUS_CHANGED | COMMENT_ADDED | etc.
+  message     String
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  userId      String
+  workspaceId String
+  goalId      String?
+
+  user        User      @relation(fields: [userId], references: [id])
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  goal        Goal?     @relation(fields: [goalId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  type      String   // MENTION | INVITE | ASSIGNMENT | etc.
+  message   String
+  isRead    Boolean  @default(false)
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
