@@ -1,5 +1,10 @@
-// TODO: Authentication routes (register, login, logout, refresh, profile)
+// Authentication routes (register, login, logout, refresh, profile)
 const express = require('express');
+const bcrypt = require('bcryptjs');
+const prisma = require('../lib/prisma');
+const { generateAccessToken, generateRefreshToken, verifyRefreshToken, setAuthCookies, clearAuthCookies, REFRESH_TOKEN_EXPIRY_MS } = require('../lib/jwt');
+const { authenticate } = require('../middleware/auth');
+
 const router = express.Router();
 
 /**
@@ -21,6 +26,49 @@ const router = express.Router();
  *       400:
  *         description: Validation error
  */
+router.post('/register', async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: 'Name, email, and password are required' });
+    }
+
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already in use' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
+    });
+
+    const accessToken = generateAccessToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
+
+    await prisma.refreshToken.create({
+      data: {
+        token: refreshToken,
+        userId: user.id,
+        expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY_MS),
+      },
+    });
+
+    setAuthCookies(res, accessToken, refreshToken);
+
+    const { password: _, ...userWithoutPassword } = user;
+    res.status(201).json({ user: userWithoutPassword });
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 /**
  * @openapi
@@ -41,6 +89,44 @@ const router = express.Router();
  *       401:
  *         description: Invalid credentials
  */
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const accessToken = generateAccessToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
+
+    await prisma.refreshToken.create({
+      data: {
+        token: refreshToken,
+        userId: user.id,
+        expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY_MS),
+      },
+    });
+
+    setAuthCookies(res, accessToken, refreshToken);
+
+    const { password: _, ...userWithoutPassword } = user;
+    res.status(200).json({ user: userWithoutPassword });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 /**
  * @openapi
@@ -52,6 +138,23 @@ const router = express.Router();
  *       200:
  *         description: Logged out
  */
+router.post('/logout', async (req, res) => {
+  try {
+    const { refreshToken } = req.cookies;
+    
+    if (refreshToken) {
+      await prisma.refreshToken.deleteMany({
+        where: { token: refreshToken },
+      });
+    }
+
+    clearAuthCookies(res);
+    res.status(200).json({ message: 'Logged out successfully' });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 /**
  * @openapi
@@ -65,6 +168,59 @@ const router = express.Router();
  *       401:
  *         description: Invalid or expired refresh token
  */
+router.post('/refresh', async (req, res) => {
+  try {
+    const { refreshToken } = req.cookies;
+
+    if (!refreshToken) {
+      return res.status(401).json({ error: 'Refresh token not found' });
+    }
+
+    // Verify token signature
+    let payload;
+    try {
+      payload = verifyRefreshToken(refreshToken);
+    } catch (err) {
+      return res.status(401).json({ error: 'Invalid or expired refresh token' });
+    }
+
+    // Check if token exists in database and is not expired
+    const storedToken = await prisma.refreshToken.findUnique({
+      where: { token: refreshToken },
+    });
+
+    if (!storedToken || storedToken.expiresAt < new Date()) {
+      return res.status(401).json({ error: 'Invalid or expired refresh token' });
+    }
+
+    // Ensure token belongs to the user
+    if (storedToken.userId !== payload.userId) {
+      return res.status(401).json({ error: 'Invalid refresh token' });
+    }
+
+    // Generate new tokens (rotating refresh token)
+    const newAccessToken = generateAccessToken(payload.userId);
+    const newRefreshToken = generateRefreshToken(payload.userId);
+
+    // Replace old refresh token with new one
+    await prisma.$transaction([
+      prisma.refreshToken.delete({ where: { id: storedToken.id } }),
+      prisma.refreshToken.create({
+        data: {
+          token: newRefreshToken,
+          userId: payload.userId,
+          expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY_MS),
+        },
+      }),
+    ]);
+
+    setAuthCookies(res, newAccessToken, newRefreshToken);
+    res.status(200).json({ message: 'Token refreshed' });
+  } catch (error) {
+    console.error('Refresh token error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 /**
  * @openapi
@@ -97,5 +253,28 @@ const router = express.Router();
  *       200:
  *         description: Profile updated
  */
+router.get('/me', authenticate, async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        avatarUrl: true,
+        createdAt: true,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error('Get profile error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 module.exports = router;

@@ -42,12 +42,12 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// TODO: Mount route handlers
-// app.use('/api/auth', require('./routes/auth'));
-// app.use('/api/workspaces', require('./routes/workspaces'));
-// app.use('/api/goals', require('./routes/goals'));
-// app.use('/api/announcements', require('./routes/announcements'));
-// app.use('/api/action-items', require('./routes/actionItems'));
+// Mount route handlers
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/workspaces', require('./routes/workspaces'));
+app.use('/api/goals', require('./routes/goals'));
+app.use('/api/announcements', require('./routes/announcements'));
+app.use('/api/actionItems', require('./routes/actionItems'));
 
 // TODO: Initialize Socket.io
 // const { Server } = require('socket.io');
