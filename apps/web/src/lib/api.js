@@ -14,14 +14,15 @@ const onRefreshed = (err) => {
   refreshSubscribers = [];
 };
 
-const customFetch = async (url, options = {}) => {
+const customFetch = async (url, options = {}, { isFormData = false } = {}) => {
+  const headers = isFormData
+    ? { ...options.headers } // browser sets multipart boundary
+    : { 'Content-Type': 'application/json', ...options.headers };
+
   const finalOptions = {
     ...options,
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
+    headers,
   };
 
   let response = await fetch(`${API_URL}${url}`, finalOptions);
@@ -38,15 +39,12 @@ const customFetch = async (url, options = {}) => {
         if (refreshResponse.ok) {
           isRefreshing = false;
           onRefreshed(null);
-          // Retry original request
           response = await fetch(`${API_URL}${url}`, finalOptions);
         } else {
           isRefreshing = false;
           const error = new Error('Session expired');
           error.status = 401;
           onRefreshed(error);
-          
-          // Optionally redirect to login here, but better handled in store/components
           if (typeof window !== 'undefined') {
             window.location.href = '/login';
           }
@@ -61,7 +59,6 @@ const customFetch = async (url, options = {}) => {
         throw error;
       }
     } else {
-      // Wait for the ongoing refresh to complete, then retry
       return new Promise((resolve, reject) => {
         subscribeTokenRefresh(async (err) => {
           if (err) return reject(err);
@@ -88,7 +85,7 @@ const customFetch = async (url, options = {}) => {
     throw error;
   }
 
-  // Handle empty responses
+  if (response.status === 204) return {};
   const text = await response.text();
   return text ? JSON.parse(text) : {};
 };
@@ -96,6 +93,8 @@ const customFetch = async (url, options = {}) => {
 export const api = {
   get: (path) => customFetch(path, { method: 'GET' }),
   post: (path, body) => customFetch(path, { method: 'POST', body: JSON.stringify(body) }),
+  patch: (path, body) => customFetch(path, { method: 'PATCH', body: JSON.stringify(body) }),
   put: (path, body) => customFetch(path, { method: 'PUT', body: JSON.stringify(body) }),
   delete: (path) => customFetch(path, { method: 'DELETE' }),
+  upload: (path, formData) => customFetch(path, { method: 'POST', body: formData }, { isFormData: true }),
 };
