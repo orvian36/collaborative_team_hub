@@ -52,10 +52,31 @@ const NOTIFICATION_TYPES = {
   STATUS_UPDATE: 'STATUS_UPDATE',
 };
 
+// ─── Invitations ─────────────────────────────────────────────
+const INVITATION_STATUS = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REVOKED: 'REVOKED',
+  EXPIRED: 'EXPIRED',
+};
+
+const INVITATION_TTL_DAYS = 7;
+
+// ─── Workspace Accent Palette ────────────────────────────────
+// 12-swatch curated palette matching Tailwind 500-tier hex values.
+const WORKSPACE_ACCENT_PALETTE = [
+  '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7',
+  '#ec4899', '#f43f5e', '#ef4444', '#f97316',
+  '#f59e0b', '#10b981', '#14b8a6', '#06b6d4',
+];
+
 // ─── Socket Events ───────────────────────────────────────────
 const SOCKET_EVENTS = {
   JOIN_WORKSPACE: 'workspace:join',
   LEAVE_WORKSPACE: 'workspace:leave',
+  WORKSPACE_UPDATED: 'workspace:updated',
+  MEMBER_JOINED: 'member:joined',
+  MEMBER_REMOVED: 'member:removed',
   NEW_ANNOUNCEMENT: 'announcement:new',
   NEW_COMMENT: 'comment:new',
   NEW_REACTION: 'reaction:new',
@@ -72,5 +93,8 @@ module.exports = {
   PRIORITY,
   ACTIVITY_TYPES,
   NOTIFICATION_TYPES,
+  INVITATION_STATUS,
+  INVITATION_TTL_DAYS,
+  WORKSPACE_ACCENT_PALETTE,
   SOCKET_EVENTS,
 };
