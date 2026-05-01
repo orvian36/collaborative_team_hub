@@ -16,13 +16,4 @@ const authenticate = (req, res, next) => {
   }
 };
 
-const authorize = (...roles) => {
-  return (req, res, next) => {
-    // TODO: Check if req.user.role is in roles (requires fetching member role for a workspace)
-    // For workspace-specific authorization, this is usually handled in the route
-    // by checking WorkspaceMember table since roles are per-workspace.
-    next();
-  };
-};
-
-module.exports = { authenticate, authorize };
+module.exports = { authenticate };

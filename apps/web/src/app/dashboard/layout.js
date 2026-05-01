@@ -3,10 +3,14 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import useAuthStore from '@/stores/authStore';
+import useWorkspaceStore from '@/stores/workspaceStore';
+import WorkspaceRail from '@/components/workspace/WorkspaceRail';
+import Button from '@/components/ui/Button';
 
 export default function DashboardLayout({ children }) {
   const router = useRouter();
-  const { isAuthenticated, isCheckingAuth, checkAuth, logout } = useAuthStore();
+  const { user, isAuthenticated, isCheckingAuth, checkAuth, logout } = useAuthStore();
+  const { fetchWorkspaces } = useWorkspaceStore();
 
   useEffect(() => {
     checkAuth();
@@ -18,7 +22,11 @@ export default function DashboardLayout({ children }) {
     }
   }, [isCheckingAuth, isAuthenticated, router]);
 
-  if (isCheckingAuth) {
+  useEffect(() => {
+    if (isAuthenticated) fetchWorkspaces();
+  }, [isAuthenticated, fetchWorkspaces]);
+
+  if (isCheckingAuth || (!isAuthenticated && !isCheckingAuth)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
@@ -26,35 +34,25 @@ export default function DashboardLayout({ children }) {
     );
   }
 
-  if (!isAuthenticated) {
-    return null; // Will redirect in useEffect
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Basic Navigation Bar placeholder */}
-      <nav className="bg-white dark:bg-gray-800 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
+    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
+      <WorkspaceRail />
+      <div className="flex-1 flex flex-col">
+        <nav className="bg-white dark:bg-gray-800 shadow-sm">
+          <div className="px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16 items-center">
               <span className="text-xl font-bold text-primary-600">Team Hub</span>
-            </div>
-            <div className="flex items-center">
-              <button
-                onClick={() => logout()}
-                className="ml-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 dark:text-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-              >
-                Logout
-              </button>
+              <div className="flex items-center gap-3">
+                <span className="hidden sm:block text-sm text-gray-600 dark:text-gray-300">
+                  {user?.name}
+                </span>
+                <Button variant="secondary" size="sm" onClick={() => logout()}>Logout</Button>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {children}
-      </main>
+        </nav>
+        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6">{children}</main>
+      </div>
     </div>
   );
 }

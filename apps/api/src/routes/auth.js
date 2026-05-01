@@ -34,35 +34,47 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Name, email, and password are required' });
     }
 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
     if (existingUser) {
       return res.status(400).json({ error: 'Email already in use' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-      },
+    // Create user, refresh token, default workspace, and admin membership
+    // atomically. createWorkspaceTx is reused from the workspaces controller.
+    const { createWorkspaceTx } = require('../controllers/workspaces');
+
+    const user = await prisma.$transaction(async (tx) => {
+      const created = await tx.user.create({
+        data: { name: name.trim(), email: normalizedEmail, password: hashedPassword },
+      });
+
+      const accessToken = generateAccessToken(created.id);
+      const refreshToken = generateRefreshToken(created.id);
+
+      await tx.refreshToken.create({
+        data: {
+          token: refreshToken,
+          userId: created.id,
+          expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY_MS),
+        },
+      });
+
+      await createWorkspaceTx(tx, created.id, {
+        name: `${created.name}'s Workspace`,
+      });
+
+      // Stash tokens on the closure for the outer scope
+      created.__tokens = { accessToken, refreshToken };
+      return created;
     });
 
-    const accessToken = generateAccessToken(user.id);
-    const refreshToken = generateRefreshToken(user.id);
+    setAuthCookies(res, user.__tokens.accessToken, user.__tokens.refreshToken);
 
-    await prisma.refreshToken.create({
-      data: {
-        token: refreshToken,
-        userId: user.id,
-        expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY_MS),
-      },
-    });
-
-    setAuthCookies(res, accessToken, refreshToken);
-
-    const { password: _, ...userWithoutPassword } = user;
+    const { password: _, __tokens: __, ...userWithoutPassword } = user;
     res.status(201).json({ user: userWithoutPassword });
   } catch (error) {
     console.error('Registration error:', error);
