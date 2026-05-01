@@ -21,13 +21,16 @@ model User {
   updatedAt    DateTime @updatedAt
 
   // Relations
-  memberships  WorkspaceMember[]
-  goals        Goal[]            @relation("GoalOwner")
-  actionItems  ActionItem[]      @relation("ActionItemAssignee")
-  comments     Comment[]
-  reactions    Reaction[]
-  activities   Activity[]
-  notifications Notification[]
+  memberships         WorkspaceMember[]
+  goals               Goal[]            @relation("GoalOwner")
+  actionItems         ActionItem[]      @relation("ActionItemAssignee")
+  comments            Comment[]
+  reactions           Reaction[]
+  activities          Activity[]
+  notifications       Notification[]
+  createdWorkspaces   Workspace[]       @relation("WorkspaceCreator")
+  invitationsSent     Invitation[]      @relation("InvitationsSent")
+  invitationsAccepted Invitation[]      @relation("InvitationsAccepted")
 }
 
 model RefreshToken {
@@ -45,11 +48,15 @@ model Workspace {
   name         String
   description  String?
   accentColor  String   @default("#3b82f6")
+  iconUrl      String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  // Relations
+  createdById  String
+  createdBy    User     @relation("WorkspaceCreator", fields: [createdById], references: [id])
+
   members       WorkspaceMember[]
+  invitations   Invitation[]
   goals         Goal[]
   announcements Announcement[]
   actionItems   ActionItem[]
@@ -68,6 +75,28 @@ model WorkspaceMember {
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
   @@unique([userId, workspaceId])
+}
+
+model Invitation {
+  id           String   @id @default(uuid())
+  email        String                          // lowercased, trimmed
+  role         String   @default("MEMBER")     // ADMIN | MEMBER
+  token        String   @unique                // crypto.randomBytes(32).hex
+  status       String   @default("PENDING")    // PENDING | ACCEPTED | REVOKED | EXPIRED
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  acceptedAt   DateTime?
+
+  workspaceId  String
+  invitedById  String
+  acceptedById String?
+
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  invitedBy    User      @relation("InvitationsSent",     fields: [invitedById],   references: [id])
+  acceptedBy   User?     @relation("InvitationsAccepted", fields: [acceptedById],  references: [id])
+
+  @@index([workspaceId, status])
+  @@unique([workspaceId, email, status])
 }
 
 // ─── Goals & Milestones ──────────────────────────────────────
