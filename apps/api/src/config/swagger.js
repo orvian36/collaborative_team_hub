@@ -70,11 +70,15 @@ const options = {
         Workspace: {
           type: 'object',
           properties: {
-            id: { type: 'string', format: 'uuid' },
-            name: { type: 'string' },
-            description: { type: 'string' },
+            id:          { type: 'string', format: 'uuid' },
+            name:        { type: 'string' },
+            description: { type: 'string', nullable: true },
             accentColor: { type: 'string' },
-            createdAt: { type: 'string', format: 'date-time' },
+            iconUrl:     { type: 'string', nullable: true },
+            createdById: { type: 'string', format: 'uuid' },
+            createdAt:   { type: 'string', format: 'date-time' },
+            myRole:      { type: 'string', enum: ['ADMIN', 'MEMBER'] },
+            memberCount: { type: 'integer' },
           },
         },
         InviteInput: {
@@ -82,6 +86,40 @@ const options = {
           required: ['email', 'role'],
           properties: {
             email: { type: 'string', format: 'email' },
+            role: { type: 'string', enum: ['ADMIN', 'MEMBER'] },
+          },
+        },
+        Member: {
+          type: 'object',
+          properties: {
+            id:        { type: 'string', format: 'uuid' },
+            userId:    { type: 'string', format: 'uuid' },
+            name:      { type: 'string' },
+            email:     { type: 'string', format: 'email' },
+            avatarUrl: { type: 'string', nullable: true },
+            role:      { type: 'string', enum: ['ADMIN', 'MEMBER'] },
+            joinedAt:  { type: 'string', format: 'date-time' },
+          },
+        },
+        Invitation: {
+          type: 'object',
+          properties: {
+            id:           { type: 'string', format: 'uuid' },
+            email:        { type: 'string', format: 'email' },
+            role:         { type: 'string', enum: ['ADMIN', 'MEMBER'] },
+            status:       { type: 'string', enum: ['PENDING', 'ACCEPTED', 'REVOKED', 'EXPIRED'] },
+            expiresAt:    { type: 'string', format: 'date-time' },
+            createdAt:    { type: 'string', format: 'date-time' },
+            workspaceId:  { type: 'string', format: 'uuid' },
+            invitedById:  { type: 'string', format: 'uuid' },
+            acceptedAt:   { type: 'string', format: 'date-time', nullable: true },
+            acceptedById: { type: 'string', format: 'uuid', nullable: true },
+          },
+        },
+        RoleUpdateInput: {
+          type: 'object',
+          required: ['role'],
+          properties: {
             role: { type: 'string', enum: ['ADMIN', 'MEMBER'] },
           },
         },
@@ -189,7 +227,7 @@ const options = {
     },
     security: [{ cookieAuth: [] }],
   },
-  apis: ['./src/routes/*.js', './src/index.js'],
+  apis: ['./src/routes/*.js', './src/controllers/*.js', './src/index.js'],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
