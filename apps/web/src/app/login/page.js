@@ -24,7 +24,8 @@ export default function LoginPage() {
 
     const res = await login(email, password);
     if (res.success) {
-      router.push('/dashboard');
+      const next = new URLSearchParams(window.location.search).get('next');
+      router.push(next && next.startsWith('/') ? next : '/dashboard');
     }
   };
 
