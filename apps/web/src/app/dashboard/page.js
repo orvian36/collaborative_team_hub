@@ -1,18 +1,29 @@
 'use client';
 
-import useAuthStore from '@/stores/authStore';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import useWorkspaceStore from '@/stores/workspaceStore';
 
 export default function DashboardPage() {
-  const { user } = useAuthStore();
+  const router = useRouter();
+  const { workspaces, isLoading, getLastActiveWorkspaceId } = useWorkspaceStore();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (workspaces.length === 0) {
+      router.replace('/onboarding');
+      return;
+    }
+
+    const lastId = getLastActiveWorkspaceId();
+    const target = workspaces.find((w) => w.id === lastId) || workspaces[0];
+    router.replace(`/dashboard/${target.id}`);
+  }, [isLoading, workspaces, router, getLastActiveWorkspaceId]);
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-        Welcome back, {user?.name || 'User'}!
-      </h1>
-      <p className="text-gray-600 dark:text-gray-300">
-        You have successfully authenticated. This is your protected dashboard.
-      </p>
+    <div className="flex items-center justify-center min-h-[40vh]">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
     </div>
   );
 }
