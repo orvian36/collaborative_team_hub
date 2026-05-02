@@ -9,6 +9,7 @@ import useNotificationsStore from '@/stores/notificationsStore';
 import usePresenceStore from '@/stores/presenceStore';
 import NotificationsBell from '@/components/notifications/NotificationsBell';
 import PresenceAvatars from '@/components/presence/PresenceAvatars';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export default function WorkspaceLayout({ children }) {
   const router = useRouter();
@@ -82,6 +83,7 @@ export default function WorkspaceLayout({ children }) {
         <div className="flex items-center gap-4 bg-white/10 px-4 py-2 rounded-lg">
           <PresenceAvatars />
           <div className="w-px h-6 bg-white/30" />
+          <ThemeToggle />
           <NotificationsBell />
         </div>
       </header>
