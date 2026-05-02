@@ -4,6 +4,13 @@ import { useEffect } from 'react';
 import { useParams, useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import useWorkspaceStore from '@/stores/workspaceStore';
+import { startRealtime, stopRealtime } from '@/lib/realtimeBridge';
+import useNotificationsStore from '@/stores/notificationsStore';
+import usePresenceStore from '@/stores/presenceStore';
+import NotificationsBell from '@/components/notifications/NotificationsBell';
+import PresenceAvatars from '@/components/presence/PresenceAvatars';
+import ThemeToggle from '@/components/ui/ThemeToggle';
+import CommandPalette from '@/components/ui/CommandPalette';
 
 export default function WorkspaceLayout({ children }) {
   const router = useRouter();
@@ -11,6 +18,16 @@ export default function WorkspaceLayout({ children }) {
   const { workspaceId } = useParams();
   const { workspaces, isLoading, setActiveWorkspaceId } = useWorkspaceStore();
   const workspace = workspaces.find((w) => w.id === workspaceId);
+
+  const { fetch: fetchNotifications } = useNotificationsStore();
+  const { hydrate: hydratePresence } = usePresenceStore();
+
+  useEffect(() => {
+    startRealtime(workspaceId);
+    fetchNotifications();
+    hydratePresence(workspaceId);
+    return () => stopRealtime();
+  }, [workspaceId, fetchNotifications, hydratePresence]);
 
   useEffect(() => {
     if (!isLoading && workspaces.length > 0 && !workspace) {
@@ -33,22 +50,42 @@ export default function WorkspaceLayout({ children }) {
   const isAdmin = workspace.myRole === 'ADMIN';
   const tabs = [
     { href: `/dashboard/${workspace.id}`, label: 'Home' },
-    isAdmin && { href: `/dashboard/${workspace.id}/settings`, label: 'Settings' },
+    isAdmin && {
+      href: `/dashboard/${workspace.id}/settings`,
+      label: 'Settings',
+    },
+    { href: `/dashboard/${workspace.id}/goals`, label: 'Goals' },
+    {
+      href: `/dashboard/${workspace.id}/announcements`,
+      label: 'Announcements',
+    },
+    { href: `/dashboard/${workspace.id}/action-items`, label: 'Action Items' },
     { href: `/dashboard/${workspace.id}/settings/members`, label: 'Members' },
-    isAdmin && { href: `/dashboard/${workspace.id}/settings/invitations`, label: 'Invitations' },
+    isAdmin && {
+      href: `/dashboard/${workspace.id}/settings/invitations`,
+      label: 'Invitations',
+    },
+    isAdmin && {
+      href: `/dashboard/${workspace.id}/settings/audit`,
+      label: 'Audit Log',
+    },
   ].filter(Boolean);
 
   return (
     <div>
       <header
-        className="rounded-lg p-6 mb-6 text-white"
+        className="rounded-lg p-6 mb-6 text-white flex items-center justify-between shadow-sm"
         style={{ backgroundColor: workspace.accentColor }}
       >
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-lg overflow-hidden bg-white/20 flex items-center justify-center text-2xl font-bold">
             {workspace.iconUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={workspace.iconUrl} alt="" className="w-full h-full object-cover" />
+              <img
+                src={workspace.iconUrl}
+                alt=""
+                className="w-full h-full object-cover"
+              />
             ) : (
               (workspace.name[0] || '?').toUpperCase()
             )}
@@ -59,6 +96,12 @@ export default function WorkspaceLayout({ children }) {
               <p className="text-sm opacity-90">{workspace.description}</p>
             )}
           </div>
+        </div>
+        <div className="flex items-center gap-4 bg-white/10 px-4 py-2 rounded-lg">
+          <PresenceAvatars />
+          <div className="w-px h-6 bg-white/30" />
+          <ThemeToggle />
+          <NotificationsBell />
         </div>
       </header>
       <nav className="flex gap-1 mb-6 border-b border-gray-200 dark:border-gray-700">
@@ -80,6 +123,7 @@ export default function WorkspaceLayout({ children }) {
         })}
       </nav>
       {children}
+      <CommandPalette />
     </div>
   );
 }

@@ -27,7 +27,11 @@ const customFetch = async (url, options = {}, { isFormData = false } = {}) => {
 
   let response = await fetch(`${API_URL}${url}`, finalOptions);
 
-  if (response.status === 401 && !url.includes('/api/auth/refresh') && !url.includes('/api/auth/login')) {
+  if (
+    response.status === 401 &&
+    !url.includes('/api/auth/refresh') &&
+    !url.includes('/api/auth/login')
+  ) {
     if (!isRefreshing) {
       isRefreshing = true;
       try {
@@ -92,9 +96,13 @@ const customFetch = async (url, options = {}, { isFormData = false } = {}) => {
 
 export const api = {
   get: (path) => customFetch(path, { method: 'GET' }),
-  post: (path, body) => customFetch(path, { method: 'POST', body: JSON.stringify(body) }),
-  patch: (path, body) => customFetch(path, { method: 'PATCH', body: JSON.stringify(body) }),
-  put: (path, body) => customFetch(path, { method: 'PUT', body: JSON.stringify(body) }),
+  post: (path, body) =>
+    customFetch(path, { method: 'POST', body: JSON.stringify(body) }),
+  patch: (path, body) =>
+    customFetch(path, { method: 'PATCH', body: JSON.stringify(body) }),
+  put: (path, body) =>
+    customFetch(path, { method: 'PUT', body: JSON.stringify(body) }),
   delete: (path) => customFetch(path, { method: 'DELETE' }),
-  upload: (path, formData) => customFetch(path, { method: 'POST', body: formData }, { isFormData: true }),
+  upload: (path, formData, { method = 'POST' } = {}) =>
+    customFetch(path, { method, body: formData }, { isFormData: true }),
 };

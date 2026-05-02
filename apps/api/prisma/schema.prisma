@@ -23,11 +23,14 @@ model User {
   // Relations
   memberships         WorkspaceMember[]
   goals               Goal[]            @relation("GoalOwner")
+  createdGoals        Goal[]            @relation("GoalCreator")
   actionItems         ActionItem[]      @relation("ActionItemAssignee")
   comments            Comment[]
   reactions           Reaction[]
   activities          Activity[]
-  notifications       Notification[]
+  notifications        Notification[] @relation("NotificationOwner")
+  notificationsActor   Notification[] @relation("NotificationActor")
+  announcements       Announcement[]    @relation("AnnouncementAuthor")
   createdWorkspaces   Workspace[]       @relation("WorkspaceCreator")
   invitationsSent     Invitation[]      @relation("InvitationsSent")
   invitationsAccepted Invitation[]      @relation("InvitationsAccepted")
@@ -111,9 +114,11 @@ model Goal {
   updatedAt   DateTime @updatedAt
 
   ownerId     String
+  createdById String
   workspaceId String
 
-  owner       User        @relation("GoalOwner", fields: [ownerId], references: [id])
+  owner       User        @relation("GoalOwner",   fields: [ownerId],     references: [id])
+  createdBy   User        @relation("GoalCreator", fields: [createdById], references: [id])
   workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   milestones  Milestone[]
   actionItems ActionItem[]
@@ -121,14 +126,16 @@ model Goal {
 }
 
 model Milestone {
-  id         String   @id @default(uuid())
-  title      String
-  progress   Int      @default(0) // 0-100
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String   @id @default(uuid())
+  title       String
+  progress    Int      @default(0) // 0-100
+  dueDate     DateTime?
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  goalId     String
-  goal       Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  goalId      String
+  goal        Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
 }
 
 // ─── Announcements ───────────────────────────────────────────
@@ -136,17 +143,21 @@ model Milestone {
 model Announcement {
   id          String   @id @default(uuid())
   title       String
-  content     String   // Rich text (HTML/markdown)
+  content     String   // Sanitized HTML from TipTap
   isPinned    Boolean  @default(false)
+  pinnedAt    DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   authorId    String
   workspaceId String
 
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  author      User       @relation("AnnouncementAuthor", fields: [authorId], references: [id])
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   comments    Comment[]
   reactions   Reaction[]
+
+  @@index([workspaceId, isPinned, createdAt])
 }
 
 // ─── Action Items ────────────────────────────────────────────
@@ -157,6 +168,7 @@ model ActionItem {
   description String?
   priority    String   @default("MEDIUM") // LOW | MEDIUM | HIGH | URGENT
   status      String   @default("TODO")   // TODO | IN_PROGRESS | DONE
+  position    Int      @default(0)
   dueDate     DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -168,21 +180,24 @@ model ActionItem {
   assignee    User?     @relation("ActionItemAssignee", fields: [assigneeId], references: [id])
   goal        Goal?     @relation(fields: [goalId], references: [id])
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, status, position])
 }
 
 // ─── Comments & Reactions ────────────────────────────────────
 
 model Comment {
-  id             String   @id @default(uuid())
-  content        String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id               String   @id @default(uuid())
+  content          String
+  mentionedUserIds String[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-  authorId       String
-  announcementId String
+  authorId         String
+  announcementId   String
 
-  author         User         @relation(fields: [authorId], references: [id])
-  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  author           User         @relation(fields: [authorId], references: [id])
+  announcement     Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
 }
 
 model Reaction {
@@ -206,6 +221,8 @@ model Activity {
   type        String   // GOAL_CREATED | STATUS_CHANGED | COMMENT_ADDED | etc.
   message     String
   metadata    Json?
+  entityType  String?
+  entityId    String?
   createdAt   DateTime @default(now())
 
   userId      String
@@ -215,16 +232,26 @@ model Activity {
   user        User      @relation(fields: [userId], references: [id])
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   goal        Goal?     @relation(fields: [goalId], references: [id])
+
+  @@index([workspaceId, createdAt])
+  @@index([goalId, createdAt])
 }
 
 model Notification {
-  id        String   @id @default(uuid())
-  type      String   // MENTION | INVITE | ASSIGNMENT | etc.
-  message   String
-  isRead    Boolean  @default(false)
-  metadata  Json?
-  createdAt DateTime @default(now())
+  id         String   @id @default(uuid())
+  type       String   // MENTION | INVITE | ASSIGNMENT | etc.
+  message    String
+  isRead     Boolean  @default(false)
+  metadata   Json?
+  entityType String?
+  entityId   String?
+  createdAt  DateTime @default(now())
 
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  actorId    String?
+
+  user       User     @relation("NotificationOwner", fields: [userId],  references: [id], onDelete: Cascade)
+  actor      User?    @relation("NotificationActor", fields: [actorId], references: [id])
+
+  @@index([userId, isRead, createdAt])
 }

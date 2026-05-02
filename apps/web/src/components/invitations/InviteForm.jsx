@@ -14,7 +14,9 @@ export default function InviteForm({ onInvite }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); setSuccessUrl(''); setCopied(false);
+    setError('');
+    setSuccessUrl('');
+    setCopied(false);
     setSubmitting(true);
     try {
       const { inviteUrl } = await onInvite({ email: email.trim(), role });
@@ -65,7 +67,9 @@ export default function InviteForm({ onInvite }) {
       </div>
       {successUrl && (
         <div className="bg-green-50 dark:bg-green-900/30 p-3 rounded flex flex-col sm:flex-row sm:items-center gap-2">
-          <code className="text-xs flex-1 break-all text-gray-800 dark:text-gray-200">{successUrl}</code>
+          <code className="text-xs flex-1 break-all text-gray-800 dark:text-gray-200">
+            {successUrl}
+          </code>
           <Button variant="secondary" size="sm" onClick={copy} type="button">
             {copied ? 'Copied!' : 'Copy link'}
           </Button>

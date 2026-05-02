@@ -1,127 +1,49 @@
-// TODO: Goal routes
 const express = require('express');
-const router = express.Router();
+const { CAPABILITIES } = require('@team-hub/shared');
+const { authenticate } = require('../middleware/auth');
+const { requireWorkspaceMembership } = require('../middleware/workspace');
+const { requirePermission } = require('../middleware/permission');
+const milestonesRouter = require('./milestones');
+const c = require('../controllers/goals');
 
-/**
- * @openapi
- * /api/goals:
- *   post:
- *     tags: [Goals]
- *     summary: Create a goal
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/GoalInput'
- *     responses:
- *       201:
- *         description: Goal created
- *   get:
- *     tags: [Goals]
- *     summary: List goals for a workspace
- *     parameters:
- *       - in: query
- *         name: workspaceId
- *         required: true
- *         schema:
- *           type: string
- *           format: uuid
- *     responses:
- *       200:
- *         description: List of goals
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Goal'
- */
+const router = express.Router({ mergeParams: true });
 
-/**
- * @openapi
- * /api/goals/{id}:
- *   get:
- *     tags: [Goals]
- *     summary: Get goal by ID
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Goal details
- *   put:
- *     tags: [Goals]
- *     summary: Update a goal
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/GoalInput'
- *     responses:
- *       200:
- *         description: Goal updated
- *   delete:
- *     tags: [Goals]
- *     summary: Delete a goal
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       204:
- *         description: Goal deleted
- */
+router.use(authenticate);
 
-/**
- * @openapi
- * /api/goals/{id}/milestones:
- *   post:
- *     tags: [Goals]
- *     summary: Add a milestone to a goal
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/MilestoneInput'
- *     responses:
- *       201:
- *         description: Milestone created
- */
+// /api/workspaces/:workspaceId/goals
+router.get('/', requireWorkspaceMembership(), c.listGoals);
+router.post(
+  '/',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.GOAL_CREATE),
+  c.createGoal
+);
 
-/**
- * @openapi
- * /api/goals/{id}/activity:
- *   get:
- *     tags: [Goals]
- *     summary: Get activity feed for a goal
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Activity list
- */
+router.get('/:goalId', requireWorkspaceMembership(), c.getGoal);
+router.put(
+  '/:goalId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.GOAL_EDIT),
+  c.updateGoal
+);
+router.patch(
+  '/:goalId/status',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.GOAL_EDIT),
+  c.changeGoalStatus
+);
+router.delete(
+  '/:goalId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.GOAL_DELETE),
+  c.deleteGoal
+);
+router.get(
+  '/:goalId/activity',
+  requireWorkspaceMembership(),
+  c.getGoalActivity
+);
+
+router.use('/:goalId/milestones', milestonesRouter);
 
 module.exports = router;

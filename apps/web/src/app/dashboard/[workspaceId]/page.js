@@ -1,21 +1,37 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import useWorkspaceStore from '@/stores/workspaceStore';
+import useAnalyticsStore from '@/stores/analyticsStore';
+import StatsTiles from '@/components/analytics/StatsTiles';
+import GoalCompletionChart from '@/components/analytics/GoalCompletionChart';
+import ExportButtons from '@/components/analytics/ExportButtons';
 
-export default function WorkspaceHome() {
+export default function DashboardHome() {
   const { workspaceId } = useParams();
-  const workspace = useWorkspaceStore((s) => s.workspaces.find((w) => w.id === workspaceId));
+  const { stats, isLoading, fetch } = useAnalyticsStore();
+
+  useEffect(() => {
+    fetch(workspaceId);
+  }, [workspaceId, fetch]);
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-        {workspace?.name || 'Workspace'}
-      </h2>
-      <p className="text-gray-600 dark:text-gray-300">
-        Goals, announcements, and action items will live here in upcoming milestones.
-        Use the tabs above to manage members and invitations.
-      </p>
+    <div className="p-6 max-w-6xl mx-auto space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Dashboard
+        </h1>
+        <ExportButtons />
+      </div>
+
+      {isLoading || !stats ? (
+        <p className="text-gray-500">Loading…</p>
+      ) : (
+        <>
+          <StatsTiles stats={stats} />
+          <GoalCompletionChart data={stats.goalCompletionByMonth} />
+        </>
+      )}
     </div>
   );
 }

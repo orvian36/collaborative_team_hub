@@ -20,7 +20,9 @@ export default function ConfirmDialog({
       title={title}
       footer={
         <>
-          <Button variant="secondary" onClick={onClose} disabled={isLoading}>Cancel</Button>
+          <Button variant="secondary" onClick={onClose} disabled={isLoading}>
+            Cancel
+          </Button>
           <Button variant={variant} onClick={onConfirm} disabled={isLoading}>
             {isLoading ? 'Working…' : confirmLabel}
           </Button>

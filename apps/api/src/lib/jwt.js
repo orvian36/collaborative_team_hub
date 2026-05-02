@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
 
-const ACCESS_TOKEN_SECRET = process.env.JWT_ACCESS_SECRET || 'your-access-secret-change-me';
-const REFRESH_TOKEN_SECRET = process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-change-me';
+const ACCESS_TOKEN_SECRET =
+  process.env.JWT_ACCESS_SECRET || 'your-access-secret-change-me';
+const REFRESH_TOKEN_SECRET =
+  process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-change-me';
 
 // Token expiration times
 const ACCESS_TOKEN_EXPIRY = '15m'; // 15 minutes
@@ -12,14 +14,18 @@ const REFRESH_TOKEN_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000;
  * Generate an access token for a user
  */
 const generateAccessToken = (userId) => {
-  return jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRY });
+  return jwt.sign({ userId }, ACCESS_TOKEN_SECRET, {
+    expiresIn: ACCESS_TOKEN_EXPIRY,
+  });
 };
 
 /**
  * Generate a refresh token for a user
  */
 const generateRefreshToken = (userId) => {
-  return jwt.sign({ userId }, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY });
+  return jwt.sign({ userId }, REFRESH_TOKEN_SECRET, {
+    expiresIn: REFRESH_TOKEN_EXPIRY,
+  });
 };
 
 /**

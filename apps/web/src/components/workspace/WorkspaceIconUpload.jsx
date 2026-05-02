@@ -37,7 +37,11 @@ export default function WorkspaceIconUpload({ workspace, onUpload }) {
       >
         {workspace.iconUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={workspace.iconUrl} alt="" className="w-full h-full object-cover" />
+          <img
+            src={workspace.iconUrl}
+            alt=""
+            className="w-full h-full object-cover"
+          />
         ) : (
           (workspace.name[0] || '?').toUpperCase()
         )}
@@ -56,7 +60,11 @@ export default function WorkspaceIconUpload({ workspace, onUpload }) {
           onClick={() => inputRef.current?.click()}
           disabled={isUploading}
         >
-          {isUploading ? 'Uploading…' : workspace.iconUrl ? 'Replace icon' : 'Upload icon'}
+          {isUploading
+            ? 'Uploading…'
+            : workspace.iconUrl
+              ? 'Replace icon'
+              : 'Upload icon'}
         </Button>
         {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
       </div>

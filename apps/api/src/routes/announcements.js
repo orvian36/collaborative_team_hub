@@ -1,120 +1,44 @@
-// TODO: Announcement routes
 const express = require('express');
-const router = express.Router();
+const { CAPABILITIES } = require('@team-hub/shared');
+const { authenticate } = require('../middleware/auth');
+const { requireWorkspaceMembership } = require('../middleware/workspace');
+const { requirePermission } = require('../middleware/permission');
+const c = require('../controllers/announcements');
+const commentsRouter = require('./comments');
+const reactionsRouter = require('./reactions');
 
-/**
- * @openapi
- * /api/announcements:
- *   post:
- *     tags: [Announcements]
- *     summary: Create an announcement
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/AnnouncementInput'
- *     responses:
- *       201:
- *         description: Announcement created
- *   get:
- *     tags: [Announcements]
- *     summary: List announcements for a workspace
- *     parameters:
- *       - in: query
- *         name: workspaceId
- *         required: true
- *         schema:
- *           type: string
- *           format: uuid
- *     responses:
- *       200:
- *         description: List of announcements
- */
+const router = express.Router({ mergeParams: true });
+router.use(authenticate);
 
-/**
- * @openapi
- * /api/announcements/{id}:
- *   put:
- *     tags: [Announcements]
- *     summary: Update an announcement
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/AnnouncementInput'
- *     responses:
- *       200:
- *         description: Announcement updated
- */
+router.get('/', requireWorkspaceMembership(), c.listAnnouncements);
+router.post(
+  '/',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.ANNOUNCEMENT_CREATE),
+  c.createAnnouncement
+);
 
-/**
- * @openapi
- * /api/announcements/{id}/pin:
- *   put:
- *     tags: [Announcements]
- *     summary: Pin or unpin an announcement
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Pin status toggled
- */
+router.get('/:announcementId', requireWorkspaceMembership(), c.getAnnouncement);
+router.put(
+  '/:announcementId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.ANNOUNCEMENT_EDIT),
+  c.updateAnnouncement
+);
+router.delete(
+  '/:announcementId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.ANNOUNCEMENT_DELETE),
+  c.deleteAnnouncement
+);
+router.patch(
+  '/:announcementId/pin',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.ANNOUNCEMENT_PIN),
+  c.togglePin
+);
 
-/**
- * @openapi
- * /api/announcements/{id}/comments:
- *   post:
- *     tags: [Announcements]
- *     summary: Add a comment to an announcement
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CommentInput'
- *     responses:
- *       201:
- *         description: Comment added
- */
-
-/**
- * @openapi
- * /api/announcements/{id}/reactions:
- *   post:
- *     tags: [Announcements]
- *     summary: Add a reaction to an announcement
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ReactionInput'
- *     responses:
- *       201:
- *         description: Reaction added
- */
+router.use('/:announcementId/comments', commentsRouter);
+router.use('/:announcementId/reactions', reactionsRouter);
 
 module.exports = router;

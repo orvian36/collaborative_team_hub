@@ -25,16 +25,16 @@ This spec also covers the implicit pieces those requirements drag in: workspace 
 
 ## Decisions made during brainstorming
 
-| # | Decision | Choice | Rationale |
-|---|---|---|---|
-| Q1 | Invitation flow | **Token-link invite** — backend creates an `Invitation` row with a one-time token; admin gets a shareable link; recipient registers/logs in, then accepts. | Matches "invite by email" wording in the PDF (which implies outreach to people without accounts) and pairs naturally with the bonus email-notifications feature. |
-| Q2 | Permissions matrix | Standard set: Admin can edit/invite/remove/delete; any Admin can delete the workspace; last-admin guard on demote/leave/remove; admins may self-demote subject to the guard. | Covers the assignment's "Admin / Member" requirement without over-engineering. RBAC matrix is one of the optional advanced features (separate scope). |
-| Q3 | Switcher UX | **Left vertical workspace rail** (Discord/Slack-style avatars), with the active workspace highlighted by its accent colour. | More distinctive UX than a top-nav dropdown, and gives the accent-colour requirement somewhere to actually shine in the chrome. |
-| Q4 | First run + workspace icon | (a) Auto-create a default workspace `"<Name>'s Workspace"` during registration. (b) Add an optional `iconUrl` field with a Cloudinary upload endpoint. | Eliminates dead-end first-run states. Icon upload exercises the Cloudinary credentials that are already provisioned, makes the rail look polished. |
-| Arch | Backend layout | Split routers + controllers layer + a dedicated `requireWorkspaceMembership` middleware. | Keeps handlers small, makes the controllers reusable across routers (auto-create-on-register reuses `createWorkspaceTx`), and replaces the misleading `authorize()` stub. |
-| Sec-1 | Invite acceptance | Strict — the logged-in user's email must match the invitation email (case-insensitive). | A leaked link should not grant blanket workspace access. |
-| Sec-2 | Membership lookup errors | `404` for non-members hitting a workspace ID, not `403`. | Avoids leaking workspace existence to non-members. |
-| Doc | OpenAPI annotation location | Move `@openapi` JSDoc to the controllers; widen the swagger.js glob to `./src/{routes,controllers}/*.js`. | Annotations belong next to the handler logic, not the wiring. |
+| #     | Decision                    | Choice                                                                                                                                                                       | Rationale                                                                                                                                                                 |
+| ----- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Q1    | Invitation flow             | **Token-link invite** — backend creates an `Invitation` row with a one-time token; admin gets a shareable link; recipient registers/logs in, then accepts.                   | Matches "invite by email" wording in the PDF (which implies outreach to people without accounts) and pairs naturally with the bonus email-notifications feature.          |
+| Q2    | Permissions matrix          | Standard set: Admin can edit/invite/remove/delete; any Admin can delete the workspace; last-admin guard on demote/leave/remove; admins may self-demote subject to the guard. | Covers the assignment's "Admin / Member" requirement without over-engineering. RBAC matrix is one of the optional advanced features (separate scope).                     |
+| Q3    | Switcher UX                 | **Left vertical workspace rail** (Discord/Slack-style avatars), with the active workspace highlighted by its accent colour.                                                  | More distinctive UX than a top-nav dropdown, and gives the accent-colour requirement somewhere to actually shine in the chrome.                                           |
+| Q4    | First run + workspace icon  | (a) Auto-create a default workspace `"<Name>'s Workspace"` during registration. (b) Add an optional `iconUrl` field with a Cloudinary upload endpoint.                       | Eliminates dead-end first-run states. Icon upload exercises the Cloudinary credentials that are already provisioned, makes the rail look polished.                        |
+| Arch  | Backend layout              | Split routers + controllers layer + a dedicated `requireWorkspaceMembership` middleware.                                                                                     | Keeps handlers small, makes the controllers reusable across routers (auto-create-on-register reuses `createWorkspaceTx`), and replaces the misleading `authorize()` stub. |
+| Sec-1 | Invite acceptance           | Strict — the logged-in user's email must match the invitation email (case-insensitive).                                                                                      | A leaked link should not grant blanket workspace access.                                                                                                                  |
+| Sec-2 | Membership lookup errors    | `404` for non-members hitting a workspace ID, not `403`.                                                                                                                     | Avoids leaking workspace existence to non-members.                                                                                                                        |
+| Doc   | OpenAPI annotation location | Move `@openapi` JSDoc to the controllers; widen the swagger.js glob to `./src/{routes,controllers}/*.js`.                                                                    | Annotations belong next to the handler logic, not the wiring.                                                                                                             |
 
 ---
 
@@ -146,17 +146,26 @@ Add:
 
 ```js
 const INVITATION_STATUS = {
-  PENDING:  'PENDING',
+  PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',
-  REVOKED:  'REVOKED',
-  EXPIRED:  'EXPIRED',
+  REVOKED: 'REVOKED',
+  EXPIRED: 'EXPIRED',
 };
 const INVITATION_TTL_DAYS = 7;
 
 const WORKSPACE_ACCENT_PALETTE = [
-  '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7',
-  '#ec4899', '#f43f5e', '#ef4444', '#f97316',
-  '#f59e0b', '#10b981', '#14b8a6', '#06b6d4',
+  '#3b82f6',
+  '#6366f1',
+  '#8b5cf6',
+  '#a855f7',
+  '#ec4899',
+  '#f43f5e',
+  '#ef4444',
+  '#f97316',
+  '#f59e0b',
+  '#10b981',
+  '#14b8a6',
+  '#06b6d4',
 ];
 ```
 
@@ -170,39 +179,39 @@ All routes require `authenticate`. Workspace-scoped routes additionally use `req
 
 ### Workspaces — `/api/workspaces`
 
-| Method | Path | Auth | Body | Returns |
-|---|---|---|---|---|
-| `POST` | `/` | authed | `{ name, description?, accentColor?, iconUrl? }` | `201 { workspace }` — caller becomes ADMIN |
-| `GET` | `/` | authed | — | `200 { workspaces: [...] }` — only ones caller is a member of, includes `myRole`, `memberCount` |
-| `GET` | `/:id` | member | — | `200 { workspace, myRole }` |
-| `PATCH` | `/:id` | ADMIN | `{ name?, description?, accentColor?, iconUrl? }` | `200 { workspace }` |
-| `DELETE` | `/:id` | ADMIN | — | `204` — schema cascade handles dependent rows |
-| `POST` | `/:id/icon` | ADMIN | `multipart/form-data` with `icon` file | `200 { iconUrl }` — uploads to Cloudinary, persists to workspace |
+| Method   | Path        | Auth   | Body                                              | Returns                                                                                         |
+| -------- | ----------- | ------ | ------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `POST`   | `/`         | authed | `{ name, description?, accentColor?, iconUrl? }`  | `201 { workspace }` — caller becomes ADMIN                                                      |
+| `GET`    | `/`         | authed | —                                                 | `200 { workspaces: [...] }` — only ones caller is a member of, includes `myRole`, `memberCount` |
+| `GET`    | `/:id`      | member | —                                                 | `200 { workspace, myRole }`                                                                     |
+| `PATCH`  | `/:id`      | ADMIN  | `{ name?, description?, accentColor?, iconUrl? }` | `200 { workspace }`                                                                             |
+| `DELETE` | `/:id`      | ADMIN  | —                                                 | `204` — schema cascade handles dependent rows                                                   |
+| `POST`   | `/:id/icon` | ADMIN  | `multipart/form-data` with `icon` file            | `200 { iconUrl }` — uploads to Cloudinary, persists to workspace                                |
 
 ### Members — mounted at `/api/workspaces/:workspaceId/members`
 
-| Method | Path | Auth | Body | Returns |
-|---|---|---|---|---|
-| `GET` | `/` | member | — | `200 { members: [{ id, userId, name, email, avatarUrl, role, joinedAt }] }` |
-| `PATCH` | `/:memberId` | ADMIN | `{ role: "ADMIN" \| "MEMBER" }` | `200 { member }` — last-admin guard on demote |
-| `DELETE` | `/:memberId` | ADMIN OR self | — | `204` — last-admin guard |
-| `POST` | `/leave` | member | — | `204` — convenience self-leave; last-admin guard |
+| Method   | Path         | Auth          | Body                            | Returns                                                                     |
+| -------- | ------------ | ------------- | ------------------------------- | --------------------------------------------------------------------------- |
+| `GET`    | `/`          | member        | —                               | `200 { members: [{ id, userId, name, email, avatarUrl, role, joinedAt }] }` |
+| `PATCH`  | `/:memberId` | ADMIN         | `{ role: "ADMIN" \| "MEMBER" }` | `200 { member }` — last-admin guard on demote                               |
+| `DELETE` | `/:memberId` | ADMIN OR self | —                               | `204` — last-admin guard                                                    |
+| `POST`   | `/leave`     | member        | —                               | `204` — convenience self-leave; last-admin guard                            |
 
 ### Invitations (workspace-scoped) — `/api/workspaces/:workspaceId/invitations`
 
-| Method | Path | Auth | Body | Returns |
-|---|---|---|---|---|
-| `POST` | `/` | ADMIN | `{ email, role }` | `201 { invitation, inviteUrl }` |
-| `GET` | `/` | ADMIN | — | `200 { invitations: [...] }` — pending + recent history |
-| `DELETE` | `/:invitationId` | ADMIN | — | `204` — sets status `REVOKED` |
-| `POST` | `/:invitationId/resend` | ADMIN | — | `200 { invitation, inviteUrl }` — extends `expiresAt`, returns same token |
+| Method   | Path                    | Auth  | Body              | Returns                                                                   |
+| -------- | ----------------------- | ----- | ----------------- | ------------------------------------------------------------------------- |
+| `POST`   | `/`                     | ADMIN | `{ email, role }` | `201 { invitation, inviteUrl }`                                           |
+| `GET`    | `/`                     | ADMIN | —                 | `200 { invitations: [...] }` — pending + recent history                   |
+| `DELETE` | `/:invitationId`        | ADMIN | —                 | `204` — sets status `REVOKED`                                             |
+| `POST`   | `/:invitationId/resend` | ADMIN | —                 | `200 { invitation, inviteUrl }` — extends `expiresAt`, returns same token |
 
 ### Invitations (public-by-token) — `/api/invitations`
 
-| Method | Path | Auth | Body | Returns |
-|---|---|---|---|---|
-| `GET` | `/:token` | optional | — | `200 { workspace: { name, iconUrl, accentColor }, invitation: { email, role, status }, requiresAuth }` — flips status to `EXPIRED` if past `expiresAt` |
-| `POST` | `/:token/accept` | required | — | `200 { workspace }` — strict email match (case-insensitive); creates `WorkspaceMember`, marks invite `ACCEPTED` |
+| Method | Path             | Auth     | Body | Returns                                                                                                                                                |
+| ------ | ---------------- | -------- | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GET`  | `/:token`        | optional | —    | `200 { workspace: { name, iconUrl, accentColor }, invitation: { email, role, status }, requiresAuth }` — flips status to `EXPIRED` if past `expiresAt` |
+| `POST` | `/:token/accept` | required | —    | `200 { workspace }` — strict email match (case-insensitive); creates `WorkspaceMember`, marks invite `ACCEPTED`                                        |
 
 ### Failure codes
 
@@ -217,7 +226,7 @@ All routes require `authenticate`. Workspace-scoped routes additionally use `req
 
 ```js
 // apps/api/src/index.js
-app.use('/api/workspaces',  require('./routes/workspaces'));
+app.use('/api/workspaces', require('./routes/workspaces'));
 app.use('/api/invitations', require('./routes/invitations'));
 ```
 
@@ -231,13 +240,13 @@ The members router is mounted **inside** `routes/workspaces.js` via `router.use(
 
 Every multi-statement operation runs inside `prisma.$transaction`:
 
-| Operation | Why |
-|---|---|
-| Create workspace | Insert `Workspace` + `WorkspaceMember (ADMIN)` for creator atomically. |
+| Operation               | Why                                                                                                                                                                                                                    |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Create workspace        | Insert `Workspace` + `WorkspaceMember (ADMIN)` for creator atomically.                                                                                                                                                 |
 | Auto-create on register | Extend the existing register transaction (which already creates user + refresh token) to also create the default workspace + admin membership. The controller exposes `createWorkspaceTx(tx, userId, data)` for reuse. |
-| Accept invitation | Re-validate `status=PENDING` and `expiresAt > now()` inside the transaction; create `WorkspaceMember`; update `invitation.status = ACCEPTED`. |
-| Demote / remove member | Run the last-admin count inside the transaction with the mutation. |
-| Send invitation | Check no existing membership and no PENDING invite within the transaction with the insert. The composite unique is the safety net. |
+| Accept invitation       | Re-validate `status=PENDING` and `expiresAt > now()` inside the transaction; create `WorkspaceMember`; update `invitation.status = ACCEPTED`.                                                                          |
+| Demote / remove member  | Run the last-admin count inside the transaction with the mutation.                                                                                                                                                     |
+| Send invitation         | Check no existing membership and no PENDING invite within the transaction with the insert. The composite unique is the safety net.                                                                                     |
 
 ### Last-admin guard — single source of truth
 
@@ -247,7 +256,11 @@ async function assertNotLastAdmin(tx, workspaceId, leavingMemberId) {
     where: { workspaceId, role: 'ADMIN', id: { not: leavingMemberId } },
   });
   if (remaining === 0) {
-    throw new HttpError(409, 'LAST_ADMIN', 'Promote another member to admin before leaving');
+    throw new HttpError(
+      409,
+      'LAST_ADMIN',
+      'Promote another member to admin before leaving'
+    );
   }
 }
 ```
@@ -356,15 +369,15 @@ Plus terminal states: expired, revoked, not found, already accepted (redirect in
 
 ## Failure modes — user-facing
 
-| Scenario | UX |
-|---|---|
-| Last admin tries to demote/remove themselves | Inline error, "Promote someone else first." Action reverts. |
-| User deletes their only workspace | Allowed. Frontend redirects to the onboarding empty state. |
-| Invite accepted but user is already a member | `409` from API → friendly "You're already in this workspace" + redirect in. |
-| Invite link expired | "Invitation expired" landing state, with guidance to request a new one. |
-| Token doesn't match any invitation | Generic "Invitation not found or no longer valid" (same wording for "never existed" and "revoked", to avoid token enumeration). |
-| Two admins edit the workspace simultaneously | Last write wins. Acceptable for this scope. |
-| Network drops mid-icon-upload | Frontend toast + prior icon intact (DB is only written after Cloudinary returns). |
+| Scenario                                     | UX                                                                                                                              |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Last admin tries to demote/remove themselves | Inline error, "Promote someone else first." Action reverts.                                                                     |
+| User deletes their only workspace            | Allowed. Frontend redirects to the onboarding empty state.                                                                      |
+| Invite accepted but user is already a member | `409` from API → friendly "You're already in this workspace" + redirect in.                                                     |
+| Invite link expired                          | "Invitation expired" landing state, with guidance to request a new one.                                                         |
+| Token doesn't match any invitation           | Generic "Invitation not found or no longer valid" (same wording for "never existed" and "revoked", to avoid token enumeration). |
+| Two admins edit the workspace simultaneously | Last write wins. Acceptable for this scope.                                                                                     |
+| Network drops mid-icon-upload                | Frontend toast + prior icon intact (DB is only written after Cloudinary returns).                                               |
 
 Logging matches existing `auth.js` style — `console.error('<op> error:', err)` in catch, generic `{ error: 'Internal server error' }` to the client.
 
@@ -392,6 +405,7 @@ Logging matches existing `auth.js` style — `console.error('<op> error:', err)`
 ## File inventory
 
 **Backend — created**
+
 - `apps/api/src/middleware/workspace.js`
 - `apps/api/src/controllers/workspaces.js`
 - `apps/api/src/controllers/members.js`
@@ -402,6 +416,7 @@ Logging matches existing `auth.js` style — `console.error('<op> error:', err)`
 - `apps/api/prisma/migrations/<timestamp>_add_workspace_icon_and_invitations/`
 
 **Backend — modified**
+
 - `apps/api/prisma/schema.prisma`
 - `apps/api/src/routes/workspaces.js`
 - `apps/api/src/routes/auth.js`
@@ -411,6 +426,7 @@ Logging matches existing `auth.js` style — `console.error('<op> error:', err)`
 - `apps/api/package.json` (add `multer`, `cloudinary` if missing)
 
 **Frontend — created**
+
 - `apps/web/src/app/dashboard/[workspaceId]/{layout,page}.js`
 - `apps/web/src/app/dashboard/[workspaceId]/settings/{page,members/page,invitations/page}.js`
 - `apps/web/src/app/invite/[token]/page.js`
@@ -422,12 +438,14 @@ Logging matches existing `auth.js` style — `console.error('<op> error:', err)`
 - `apps/web/src/components/ui/{Modal,Button,ConfirmDialog}.jsx`
 
 **Frontend — modified**
+
 - `apps/web/src/app/dashboard/layout.js`
 - `apps/web/src/app/dashboard/page.js`
 - `apps/web/src/stores/workspaceStore.js`
 - `apps/web/src/lib/api.js`
 
 **Shared — modified**
+
 - `packages/shared/src/index.js`
 
 ---

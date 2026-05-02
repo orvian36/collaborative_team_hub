@@ -9,7 +9,8 @@ export default function RoleSelect({ value, onChange, disabled }) {
 
   const handle = async (e) => {
     const next = e.target.value;
-    setBusy(true); setError('');
+    setBusy(true);
+    setError('');
     try {
       await onChange(next);
     } catch (err) {

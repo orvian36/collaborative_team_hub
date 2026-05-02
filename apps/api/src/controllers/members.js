@@ -30,24 +30,26 @@ const assertNotLastAdmin = async (tx, workspaceId, leavingMemberId) => {
  */
 const listMembers = async (req, res) => {
   try {
+    const search = (req.query.search || '').trim().toLowerCase();
     const members = await prisma.workspaceMember.findMany({
       where: { workspaceId: req.params.workspaceId },
       include: {
-        user: { select: { id: true, name: true, email: true, avatarUrl: true } },
+        user: {
+          select: { id: true, name: true, email: true, avatarUrl: true },
+        },
       },
       orderBy: [{ role: 'asc' }, { joinedAt: 'asc' }],
     });
 
-    const out = members.map((m) => ({
-      id: m.id,
-      userId: m.user.id,
-      name: m.user.name,
-      email: m.user.email,
-      avatarUrl: m.user.avatarUrl,
-      role: m.role,
-      joinedAt: m.joinedAt,
-    }));
-    res.status(200).json({ members: out });
+    const filtered = !search
+      ? members
+      : members.filter(
+          (m) =>
+            m.user.name.toLowerCase().includes(search) ||
+            m.user.email.toLowerCase().includes(search)
+        );
+
+    res.status(200).json({ members: filtered });
   } catch (err) {
     console.error('listMembers error:', err);
     res.status(500).json({ error: 'Internal server error' });
@@ -158,4 +160,10 @@ const leaveWorkspace = async (req, res) => {
   }
 };
 
-module.exports = { listMembers, updateMemberRole, removeMember, leaveWorkspace, assertNotLastAdmin };
+module.exports = {
+  listMembers,
+  updateMemberRole,
+  removeMember,
+  leaveWorkspace,
+  assertNotLastAdmin,
+};

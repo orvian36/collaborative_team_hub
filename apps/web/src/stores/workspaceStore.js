@@ -49,7 +49,9 @@ const useWorkspaceStore = create((set, get) => ({
     const data = await api.patch(`/api/workspaces/${id}`, patch);
     const updated = data.workspace;
     set((s) => ({
-      workspaces: s.workspaces.map((w) => (w.id === id ? { ...w, ...updated } : w)),
+      workspaces: s.workspaces.map((w) =>
+        w.id === id ? { ...w, ...updated } : w
+      ),
     }));
     return updated;
   },
@@ -59,7 +61,9 @@ const useWorkspaceStore = create((set, get) => ({
     fd.append('icon', file);
     const data = await api.upload(`/api/workspaces/${id}/icon`, fd);
     set((s) => ({
-      workspaces: s.workspaces.map((w) => (w.id === id ? { ...w, iconUrl: data.iconUrl } : w)),
+      workspaces: s.workspaces.map((w) =>
+        w.id === id ? { ...w, iconUrl: data.iconUrl } : w
+      ),
     }));
     return data.iconUrl;
   },
@@ -74,7 +78,10 @@ const useWorkspaceStore = create((set, get) => ({
         activeWorkspaceId: activeRemoved ? null : s.activeWorkspaceId,
       };
     });
-    if (typeof window !== 'undefined' && get().getLastActiveWorkspaceId() === id) {
+    if (
+      typeof window !== 'undefined' &&
+      get().getLastActiveWorkspaceId() === id
+    ) {
       window.localStorage.removeItem(LAST_ACTIVE_KEY);
     }
   },

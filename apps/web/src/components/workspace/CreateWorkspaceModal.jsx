@@ -13,15 +13,27 @@ export default function CreateWorkspaceModal({ open, onClose, onCreate }) {
   const [submitting, setSubmitting] = useState(false);
 
   const reset = () => {
-    setName(''); setDescription(''); setAccentColor('#3b82f6'); setError(''); setSubmitting(false);
+    setName('');
+    setDescription('');
+    setAccentColor('#3b82f6');
+    setError('');
+    setSubmitting(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name.trim()) { setError('Name is required'); return; }
-    setSubmitting(true); setError('');
+    if (!name.trim()) {
+      setError('Name is required');
+      return;
+    }
+    setSubmitting(true);
+    setError('');
     try {
-      await onCreate({ name: name.trim(), description: description.trim() || undefined, accentColor });
+      await onCreate({
+        name: name.trim(),
+        description: description.trim() || undefined,
+        accentColor,
+      });
       reset();
     } catch (err) {
       setError(err.message || 'Failed to create workspace');
@@ -32,11 +44,25 @@ export default function CreateWorkspaceModal({ open, onClose, onCreate }) {
   return (
     <Modal
       open={open}
-      onClose={() => { if (!submitting) { reset(); onClose(); } }}
+      onClose={() => {
+        if (!submitting) {
+          reset();
+          onClose();
+        }
+      }}
       title="Create workspace"
       footer={
         <>
-          <Button variant="secondary" onClick={() => { reset(); onClose(); }} disabled={submitting}>Cancel</Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              reset();
+              onClose();
+            }}
+            disabled={submitting}
+          >
+            Cancel
+          </Button>
           <Button onClick={handleSubmit} disabled={submitting}>
             {submitting ? 'Creating…' : 'Create'}
           </Button>
@@ -50,7 +76,9 @@ export default function CreateWorkspaceModal({ open, onClose, onCreate }) {
           </div>
         )}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Name
+          </label>
           <input
             type="text"
             value={name}
@@ -61,7 +89,9 @@ export default function CreateWorkspaceModal({ open, onClose, onCreate }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Description (optional)</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Description (optional)
+          </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
