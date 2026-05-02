@@ -40,8 +40,39 @@ router.post(
   c.uploadIcon
 );
 
+const analyticsController = require('../controllers/analytics');
+const exportsController   = require('../controllers/exports');
+const { CAPABILITIES } = require('@team-hub/shared');
+const { requirePermission } = require('../middleware/permission');
+
 // Sub-routers (defined in later tasks). Both need mergeParams to see :workspaceId.
 router.use('/:workspaceId/members', require('./members'));
 router.use('/:workspaceId/invitations', require('./invitations.workspace'));
+
+// Presence endpoint
+const { getOnlineUserIds } = require('../lib/socket');
+router.get('/:id/presence', requireWorkspaceMembership(), (req, res) => {
+  res.json({ onlineUserIds: getOnlineUserIds(req.params.id) });
+});
+
+router.get('/:id/stats',
+  authenticate, requireWorkspaceMembership(),
+  analyticsController.getStats);
+
+router.get('/:id/exports/goals.csv',
+  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
+  exportsController.exportGoals);
+
+router.get('/:id/exports/action-items.csv',
+  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
+  exportsController.exportActionItems);
+
+router.get('/:id/exports/announcements.csv',
+  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
+  exportsController.exportAnnouncements);
+
+router.get('/:id/exports/audit.csv',
+  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
+  exportsController.exportAudit);
 
 module.exports = router;
