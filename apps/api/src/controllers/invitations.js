@@ -1,10 +1,15 @@
 const crypto = require('crypto');
 const prisma = require('../lib/prisma');
-const { ROLES, INVITATION_STATUS, INVITATION_TTL_DAYS } = require('@team-hub/shared');
+const {
+  ROLES,
+  INVITATION_STATUS,
+  INVITATION_TTL_DAYS,
+} = require('@team-hub/shared');
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const normalizeEmail = (s) => String(s).trim().toLowerCase();
-const ttlFromNow = () => new Date(Date.now() + INVITATION_TTL_DAYS * 24 * 60 * 60 * 1000);
+const ttlFromNow = () =>
+  new Date(Date.now() + INVITATION_TTL_DAYS * 24 * 60 * 60 * 1000);
 const inviteUrlFor = (token) => {
   const base = process.env.CLIENT_URL || 'http://localhost:3000';
   return `${base.replace(/\/$/, '')}/invite/${token}`;
@@ -16,7 +21,10 @@ const inviteUrlFor = (token) => {
  * a transaction.
  */
 const expireIfNeeded = async (tx, invitation) => {
-  if (invitation.status === INVITATION_STATUS.PENDING && invitation.expiresAt < new Date()) {
+  if (
+    invitation.status === INVITATION_STATUS.PENDING &&
+    invitation.expiresAt < new Date()
+  ) {
     return tx.invitation.update({
       where: { id: invitation.id },
       data: { status: INVITATION_STATUS.EXPIRED },
@@ -36,8 +44,10 @@ const createInvitation = async (req, res) => {
   const email = req.body.email && normalizeEmail(req.body.email);
   const role = req.body.role || ROLES.MEMBER;
 
-  if (!email || !EMAIL_RE.test(email)) return res.status(400).json({ error: 'Valid email is required' });
-  if (![ROLES.ADMIN, ROLES.MEMBER].includes(role)) return res.status(400).json({ error: 'Role must be ADMIN or MEMBER' });
+  if (!email || !EMAIL_RE.test(email))
+    return res.status(400).json({ error: 'Valid email is required' });
+  if (![ROLES.ADMIN, ROLES.MEMBER].includes(role))
+    return res.status(400).json({ error: 'Role must be ADMIN or MEMBER' });
 
   try {
     const workspaceId = req.params.workspaceId;
@@ -49,7 +59,9 @@ const createInvitation = async (req, res) => {
         where: { userId_workspaceId: { userId: existingUser.id, workspaceId } },
       });
       if (existingMember) {
-        return res.status(409).json({ error: 'User is already a member of this workspace' });
+        return res
+          .status(409)
+          .json({ error: 'User is already a member of this workspace' });
       }
     }
 
@@ -58,7 +70,9 @@ const createInvitation = async (req, res) => {
       where: { workspaceId, email, status: INVITATION_STATUS.PENDING },
     });
     if (existingPending) {
-      return res.status(409).json({ error: 'A pending invitation already exists for this email' });
+      return res
+        .status(409)
+        .json({ error: 'A pending invitation already exists for this email' });
     }
 
     const token = crypto.randomBytes(32).toString('hex');
@@ -83,7 +97,9 @@ const createInvitation = async (req, res) => {
       where: { id: req.user.id },
       select: { id: true, name: true },
     });
-    sendInvitationEmail({ invitation, workspace, inviter }).catch((err) => console.error('email error', err));
+    sendInvitationEmail({ invitation, workspace, inviter }).catch((err) =>
+      console.error('email error', err)
+    );
 
     res.status(201).json({ invitation, inviteUrl: inviteUrlFor(token) });
   } catch (err) {
@@ -105,13 +121,16 @@ const listInvitations = async (req, res) => {
       where: { workspaceId: req.params.workspaceId },
       orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
       include: {
-        invitedBy:  { select: { id: true, name: true, email: true } },
+        invitedBy: { select: { id: true, name: true, email: true } },
         acceptedBy: { select: { id: true, name: true, email: true } },
       },
     });
     // Lazy-expire any stale rows so the UI stays consistent
     const expiredIds = rows
-      .filter((r) => r.status === INVITATION_STATUS.PENDING && r.expiresAt < new Date())
+      .filter(
+        (r) =>
+          r.status === INVITATION_STATUS.PENDING && r.expiresAt < new Date()
+      )
       .map((r) => r.id);
     if (expiredIds.length) {
       await prisma.invitation.updateMany({
@@ -138,12 +157,16 @@ const listInvitations = async (req, res) => {
  */
 const revokeInvitation = async (req, res) => {
   try {
-    const inv = await prisma.invitation.findUnique({ where: { id: req.params.invitationId } });
+    const inv = await prisma.invitation.findUnique({
+      where: { id: req.params.invitationId },
+    });
     if (!inv || inv.workspaceId !== req.params.workspaceId) {
       return res.status(404).json({ error: 'Invitation not found' });
     }
     if (inv.status !== INVITATION_STATUS.PENDING) {
-      return res.status(409).json({ error: 'Only pending invitations can be revoked' });
+      return res
+        .status(409)
+        .json({ error: 'Only pending invitations can be revoked' });
     }
     await prisma.invitation.update({
       where: { id: inv.id },
@@ -165,12 +188,19 @@ const revokeInvitation = async (req, res) => {
  */
 const resendInvitation = async (req, res) => {
   try {
-    const inv = await prisma.invitation.findUnique({ where: { id: req.params.invitationId } });
+    const inv = await prisma.invitation.findUnique({
+      where: { id: req.params.invitationId },
+    });
     if (!inv || inv.workspaceId !== req.params.workspaceId) {
       return res.status(404).json({ error: 'Invitation not found' });
     }
-    if (inv.status !== INVITATION_STATUS.PENDING && inv.status !== INVITATION_STATUS.EXPIRED) {
-      return res.status(409).json({ error: 'Only pending or expired invitations can be resent' });
+    if (
+      inv.status !== INVITATION_STATUS.PENDING &&
+      inv.status !== INVITATION_STATUS.EXPIRED
+    ) {
+      return res
+        .status(409)
+        .json({ error: 'Only pending or expired invitations can be resent' });
     }
     const updated = await prisma.invitation.update({
       where: { id: inv.id },
@@ -186,9 +216,13 @@ const resendInvitation = async (req, res) => {
       where: { id: req.user.id },
       select: { id: true, name: true },
     });
-    sendInvitationEmail({ invitation: updated, workspace, inviter }).catch((err) => console.error('email error', err));
+    sendInvitationEmail({ invitation: updated, workspace, inviter }).catch(
+      (err) => console.error('email error', err)
+    );
 
-    res.status(200).json({ invitation: updated, inviteUrl: inviteUrlFor(updated.token) });
+    res
+      .status(200)
+      .json({ invitation: updated, inviteUrl: inviteUrlFor(updated.token) });
   } catch (err) {
     console.error('resendInvitation error:', err);
     res.status(500).json({ error: 'Internal server error' });
@@ -208,10 +242,15 @@ const getInvitationByToken = async (req, res) => {
     const inv = await prisma.invitation.findUnique({
       where: { token: req.params.token },
       include: {
-        workspace: { select: { id: true, name: true, iconUrl: true, accentColor: true } },
+        workspace: {
+          select: { id: true, name: true, iconUrl: true, accentColor: true },
+        },
       },
     });
-    if (!inv) return res.status(404).json({ error: 'Invitation not found or no longer valid' });
+    if (!inv)
+      return res
+        .status(404)
+        .json({ error: 'Invitation not found or no longer valid' });
 
     const refreshed = await expireIfNeeded(prisma, inv);
 
@@ -243,27 +282,43 @@ const acceptInvitation = async (req, res) => {
   try {
     // Re-load user (we only have id from authenticate middleware) to compare email
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
-    if (!user) return res.status(401).json({ error: 'Authentication required' });
+    if (!user)
+      return res.status(401).json({ error: 'Authentication required' });
 
     const result = await prisma.$transaction(async (tx) => {
       const inv = await tx.invitation.findUnique({
         where: { token: req.params.token },
       });
-      if (!inv) return { status: 404, error: 'Invitation not found or no longer valid' };
+      if (!inv)
+        return {
+          status: 404,
+          error: 'Invitation not found or no longer valid',
+        };
 
       // Lazy expire
       const refreshed = await expireIfNeeded(tx, inv);
 
       if (refreshed.status !== INVITATION_STATUS.PENDING) {
-        return { status: 410, error: `Invitation is ${refreshed.status.toLowerCase()}` };
+        return {
+          status: 410,
+          error: `Invitation is ${refreshed.status.toLowerCase()}`,
+        };
       }
       if (refreshed.email !== normalizeEmail(user.email)) {
-        return { status: 403, error: 'This invitation was sent to a different email address' };
+        return {
+          status: 403,
+          error: 'This invitation was sent to a different email address',
+        };
       }
 
       // If already a member, mark accepted and short-circuit
       const existing = await tx.workspaceMember.findUnique({
-        where: { userId_workspaceId: { userId: user.id, workspaceId: refreshed.workspaceId } },
+        where: {
+          userId_workspaceId: {
+            userId: user.id,
+            workspaceId: refreshed.workspaceId,
+          },
+        },
       });
       if (existing) {
         await tx.invitation.update({
@@ -274,11 +329,19 @@ const acceptInvitation = async (req, res) => {
             acceptedById: user.id,
           },
         });
-        return { status: 409, error: 'You are already a member of this workspace', workspaceId: refreshed.workspaceId };
+        return {
+          status: 409,
+          error: 'You are already a member of this workspace',
+          workspaceId: refreshed.workspaceId,
+        };
       }
 
       await tx.workspaceMember.create({
-        data: { userId: user.id, workspaceId: refreshed.workspaceId, role: refreshed.role },
+        data: {
+          userId: user.id,
+          workspaceId: refreshed.workspaceId,
+          role: refreshed.role,
+        },
       });
       const accepted = await tx.invitation.update({
         where: { id: refreshed.id },
@@ -292,10 +355,14 @@ const acceptInvitation = async (req, res) => {
     });
 
     if (result.status === 200) {
-      const workspace = await prisma.workspace.findUnique({ where: { id: result.workspaceId } });
+      const workspace = await prisma.workspace.findUnique({
+        where: { id: result.workspaceId },
+      });
       return res.status(200).json({ workspace });
     }
-    return res.status(result.status).json({ error: result.error, workspaceId: result.workspaceId });
+    return res
+      .status(result.status)
+      .json({ error: result.error, workspaceId: result.workspaceId });
   } catch (err) {
     console.error('acceptInvitation error:', err);
     res.status(500).json({ error: 'Internal server error' });

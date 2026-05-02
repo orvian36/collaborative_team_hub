@@ -6,7 +6,9 @@ import useThemeStore from '@/stores/themeStore';
 export default function ThemeToggle() {
   const { theme, cycle, hydrate } = useThemeStore();
 
-  useEffect(() => { hydrate(); }, [hydrate]);
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
 
   const label = theme === 'light' ? '☀️' : theme === 'dark' ? '🌙' : '🖥️';
   return (

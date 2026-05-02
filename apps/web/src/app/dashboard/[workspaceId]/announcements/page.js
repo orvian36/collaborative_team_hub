@@ -14,7 +14,15 @@ import { api } from '@/lib/api';
 
 export default function AnnouncementsPage() {
   const { workspaceId } = useParams();
-  const { announcements, isLoading, fetchAll, create, update, remove, togglePin } = useAnnouncementsStore();
+  const {
+    announcements,
+    isLoading,
+    fetchAll,
+    create,
+    update,
+    remove,
+    togglePin,
+  } = useAnnouncementsStore();
   const { setForAnnouncement } = useReactionsStore();
   const canCreate = useCapability(CAPABILITIES.ANNOUNCEMENT_CREATE);
   const [composerOpen, setComposerOpen] = useState(false);
@@ -36,18 +44,30 @@ export default function AnnouncementsPage() {
   // Hydrate reactions per visible announcement (one extra request each).
   useEffect(() => {
     for (const a of announcements) {
-      api.get(`/api/workspaces/${workspaceId}/announcements/${a.id}`).then(({ announcement }) => {
-        setForAnnouncement(a.id, announcement.reactions || []);
-      }).catch(() => {});
+      api
+        .get(`/api/workspaces/${workspaceId}/announcements/${a.id}`)
+        .then(({ announcement }) => {
+          setForAnnouncement(a.id, announcement.reactions || []);
+        })
+        .catch(() => {});
     }
   }, [announcements, workspaceId, setForAnnouncement]);
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Announcements</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Announcements
+        </h1>
         {canCreate && (
-          <Button onClick={() => { setEditing(null); setComposerOpen(true); }}>New announcement</Button>
+          <Button
+            onClick={() => {
+              setEditing(null);
+              setComposerOpen(true);
+            }}
+          >
+            New announcement
+          </Button>
         )}
       </div>
 
@@ -62,7 +82,10 @@ export default function AnnouncementsPage() {
               key={a.id}
               announcement={a}
               onTogglePin={(id) => togglePin(workspaceId, id)}
-              onEdit={(item) => { setEditing(item); setComposerOpen(true); }}
+              onEdit={(item) => {
+                setEditing(item);
+                setComposerOpen(true);
+              }}
               onDelete={(id) => setConfirmDelete(id)}
             />
           ))}
@@ -71,7 +94,10 @@ export default function AnnouncementsPage() {
 
       <AnnouncementComposer
         open={composerOpen}
-        onClose={() => { setComposerOpen(false); setEditing(null); }}
+        onClose={() => {
+          setComposerOpen(false);
+          setEditing(null);
+        }}
         initial={editing}
         onSubmit={async (data) => {
           if (editing) await update(workspaceId, editing.id, data);

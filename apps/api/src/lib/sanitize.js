@@ -1,11 +1,21 @@
 const sanitizeHtml = require('sanitize-html');
 
 const ALLOWED_TAGS = [
-  'p', 'br',
-  'strong', 'em', 'u', 's', 'code',
-  'h1', 'h2', 'h3',
-  'ul', 'ol', 'li',
-  'blockquote', 'pre',
+  'p',
+  'br',
+  'strong',
+  'em',
+  'u',
+  's',
+  'code',
+  'h1',
+  'h2',
+  'h3',
+  'ul',
+  'ol',
+  'li',
+  'blockquote',
+  'pre',
   'a',
   'span',
 ];

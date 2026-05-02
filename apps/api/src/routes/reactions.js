@@ -9,6 +9,11 @@ const router = express.Router({ mergeParams: true });
 router.use(authenticate);
 
 // POST /api/workspaces/:workspaceId/announcements/:announcementId/reactions  body: { emoji }
-router.post('/', requireWorkspaceMembership(), requirePermission(CAPABILITIES.REACTION_TOGGLE), c.toggleReaction);
+router.post(
+  '/',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.REACTION_TOGGLE),
+  c.toggleReaction
+);
 
 module.exports = router;

@@ -1,7 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { DndContext, PointerSensor, useSensor, useSensors, closestCenter, DragOverlay } from '@dnd-kit/core';
+import {
+  DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  closestCorners,
+  DragOverlay,
+} from '@dnd-kit/core';
 import { useParams } from 'next/navigation';
 import useActionItemsStore from '@/stores/actionItemsStore';
 import { ACTION_ITEM_STATUS } from '@team-hub/shared';
@@ -11,12 +18,19 @@ import ActionItemCard from './ActionItemCard';
 export default function KanbanBoard({ onCardClick }) {
   const { workspaceId } = useParams();
   const { byStatus, move } = useActionItemsStore();
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+  );
   const [active, setActive] = useState(null);
 
-  const columns = [ACTION_ITEM_STATUS.TODO, ACTION_ITEM_STATUS.IN_PROGRESS, ACTION_ITEM_STATUS.DONE];
+  const columns = [
+    ACTION_ITEM_STATUS.TODO,
+    ACTION_ITEM_STATUS.IN_PROGRESS,
+    ACTION_ITEM_STATUS.DONE,
+  ];
 
   const findContainer = (id) => {
+    if (columns.includes(id)) return id;
     for (const k of columns) {
       if ((byStatus[k] || []).some((it) => it.id === id)) return k;
     }
@@ -31,36 +45,60 @@ export default function KanbanBoard({ onCardClick }) {
     }
   };
 
+  const onDragOver = (e) => {
+    const { active: a, over } = e;
+    if (!over) return;
+
+    const fromCol = findContainer(a.id);
+    const toCol = findContainer(over.id);
+
+    if (!fromCol || !toCol || fromCol === toCol) return;
+
+    // We don't call the API here, just update local state if we want visual jumping.
+    // However, since we are using SortableContext with items from store, 
+    // updating store here might be jittery if we don't handle it carefully.
+    // For now, onDragEnd is sufficient for persistence, but let's ensure it's reliable.
+  };
+
   const onDragEnd = async (e) => {
     setActive(null);
     const { active: a, over } = e;
     if (!over) return;
+
     const fromCol = findContainer(a.id);
-    let toCol = findContainer(over.id);
-    let toIndex = 0;
-    if (toCol) {
-      const list = byStatus[toCol];
-      toIndex = list.findIndex((i) => i.id === over.id);
-      if (toIndex < 0) toIndex = list.length;
-    } else if (columns.includes(over.id)) {
-      // dropped on empty column area
-      toCol = over.id;
-      toIndex = (byStatus[toCol] || []).length;
-    }
-    if (!toCol) return;
+    const toCol = findContainer(over.id);
+
+    if (!fromCol || !toCol) return;
+
     if (a.id === over.id && fromCol === toCol) return;
+
+    const list = byStatus[toCol] || [];
+    let toIndex = list.findIndex((i) => i.id === over.id);
+    if (toIndex < 0) toIndex = list.length;
+
     try {
       await move(workspaceId, a.id, toCol, toIndex);
     } catch (err) {
-      alert(err.message || 'Failed to move card');
+      console.error('Move error:', err);
     }
   };
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={onDragStart} onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCorners}
+      onDragStart={onDragStart}
+      onDragOver={onDragOver}
+      onDragEnd={onDragEnd}
+    >
       <div className="flex gap-4 overflow-x-auto">
         {columns.map((status) => (
-          <KanbanColumn key={status} status={status} items={byStatus[status] || []} onCardClick={onCardClick} />
+          <KanbanColumn
+            key={status}
+            status={status}
+            items={byStatus[status] || []}
+            onCardClick={onCardClick}
+          />
         ))}
       </div>
       <DragOverlay>

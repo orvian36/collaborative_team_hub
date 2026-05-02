@@ -20,13 +20,18 @@ const useWorkspaceMembersStore = create((set, get) => ({
   },
 
   inviteMember: async (workspaceId, { email, role }) => {
-    const data = await api.post(`/api/workspaces/${workspaceId}/invitations`, { email, role });
+    const data = await api.post(`/api/workspaces/${workspaceId}/invitations`, {
+      email,
+      role,
+    });
     set((s) => ({ invitations: [data.invitation, ...s.invitations] }));
     return data;
   },
 
   revokeInvitation: async (workspaceId, invitationId) => {
-    await api.delete(`/api/workspaces/${workspaceId}/invitations/${invitationId}`);
+    await api.delete(
+      `/api/workspaces/${workspaceId}/invitations/${invitationId}`
+    );
     set((s) => ({
       invitations: s.invitations.map((i) =>
         i.id === invitationId ? { ...i, status: 'REVOKED' } : i
@@ -35,7 +40,10 @@ const useWorkspaceMembersStore = create((set, get) => ({
   },
 
   resendInvitation: async (workspaceId, invitationId) => {
-    const data = await api.post(`/api/workspaces/${workspaceId}/invitations/${invitationId}/resend`, {});
+    const data = await api.post(
+      `/api/workspaces/${workspaceId}/invitations/${invitationId}/resend`,
+      {}
+    );
     set((s) => ({
       invitations: s.invitations.map((i) =>
         i.id === invitationId ? data.invitation : i
@@ -45,9 +53,14 @@ const useWorkspaceMembersStore = create((set, get) => ({
   },
 
   updateMemberRole: async (workspaceId, memberId, role) => {
-    const data = await api.patch(`/api/workspaces/${workspaceId}/members/${memberId}`, { role });
+    const data = await api.patch(
+      `/api/workspaces/${workspaceId}/members/${memberId}`,
+      { role }
+    );
     set((s) => ({
-      members: s.members.map((m) => (m.id === memberId ? { ...m, role: data.member.role } : m)),
+      members: s.members.map((m) =>
+        m.id === memberId ? { ...m, role: data.member.role } : m
+      ),
     }));
     return data.member;
   },

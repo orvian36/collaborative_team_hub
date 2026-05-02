@@ -2,7 +2,10 @@ const prisma = require('../lib/prisma');
 const { streamCsv } = require('../lib/csv');
 
 function slug(name) {
-  return (name || 'workspace').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return (name || 'workspace')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 }
 function dateStr() {
   return new Date().toISOString().slice(0, 10);
@@ -10,7 +13,10 @@ function dateStr() {
 
 async function exportGoals(req, res) {
   const workspaceId = req.member.workspaceId;
-  const ws = await prisma.workspace.findUnique({ where: { id: workspaceId }, select: { name: true } });
+  const ws = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    select: { name: true },
+  });
   const goals = await prisma.goal.findMany({
     where: { workspaceId },
     include: { owner: { select: { name: true, email: true } } },
@@ -44,12 +50,15 @@ async function exportGoals(req, res) {
 
 async function exportActionItems(req, res) {
   const workspaceId = req.member.workspaceId;
-  const ws = await prisma.workspace.findUnique({ where: { id: workspaceId }, select: { name: true } });
+  const ws = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    select: { name: true },
+  });
   const items = await prisma.actionItem.findMany({
     where: { workspaceId },
     include: {
       assignee: { select: { name: true, email: true } },
-      goal:     { select: { title: true } },
+      goal: { select: { title: true } },
     },
     orderBy: { createdAt: 'asc' },
   });
@@ -85,10 +94,16 @@ async function exportActionItems(req, res) {
 
 async function exportAnnouncements(req, res) {
   const workspaceId = req.member.workspaceId;
-  const ws = await prisma.workspace.findUnique({ where: { id: workspaceId }, select: { name: true } });
+  const ws = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    select: { name: true },
+  });
   const items = await prisma.announcement.findMany({
     where: { workspaceId },
-    include: { author: { select: { name: true, email: true } }, _count: { select: { comments: true, reactions: true } } },
+    include: {
+      author: { select: { name: true, email: true } },
+      _count: { select: { comments: true, reactions: true } },
+    },
     orderBy: { createdAt: 'asc' },
   });
   const rows = items.map((a) => ({
@@ -121,10 +136,21 @@ async function exportAnnouncements(req, res) {
 
 async function exportAudit(req, res) {
   const workspaceId = req.member.workspaceId;
-  const ws = await prisma.workspace.findUnique({ where: { id: workspaceId }, select: { name: true } });
+  const ws = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    select: { name: true },
+  });
   const where = { workspaceId };
-  if (req.query.from) where.createdAt = { ...(where.createdAt || {}), gte: new Date(req.query.from) };
-  if (req.query.to)   where.createdAt = { ...(where.createdAt || {}), lte: new Date(req.query.to) };
+  if (req.query.from)
+    where.createdAt = {
+      ...(where.createdAt || {}),
+      gte: new Date(req.query.from),
+    };
+  if (req.query.to)
+    where.createdAt = {
+      ...(where.createdAt || {}),
+      lte: new Date(req.query.to),
+    };
   if (req.query.type) where.type = req.query.type;
   if (req.query.actorId) where.userId = req.query.actorId;
 
@@ -161,4 +187,9 @@ async function exportAudit(req, res) {
   });
 }
 
-module.exports = { exportGoals, exportActionItems, exportAnnouncements, exportAudit };
+module.exports = {
+  exportGoals,
+  exportActionItems,
+  exportAnnouncements,
+  exportAudit,
+};

@@ -5,8 +5,8 @@ const c = require('../controllers/notifications');
 const router = express.Router();
 router.use(authenticate);
 
-router.get('/',                  c.listNotifications);
-router.patch('/:id/read',        c.markRead);
-router.patch('/read-all',        c.markAllRead);
+router.get('/', c.listNotifications);
+router.patch('/:id/read', c.markRead);
+router.patch('/read-all', c.markAllRead);
 
 module.exports = router;

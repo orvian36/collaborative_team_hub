@@ -9,14 +9,17 @@ const { stringify } = require('csv-stringify');
  */
 async function streamCsv(res, { filename, columns, rows }) {
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-  res.setHeader('Content-Disposition', `attachment; filename="${filename}.csv"`);
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="${filename}.csv"`
+  );
 
   const stringifier = stringify({
     header: true,
     columns: columns.map((c) => ({ key: c.key, header: c.header })),
     cast: {
       date: (v) => v.toISOString(),
-      boolean: (v) => v ? 'true' : 'false',
+      boolean: (v) => (v ? 'true' : 'false'),
     },
   });
   stringifier.pipe(res);

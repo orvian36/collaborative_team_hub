@@ -3,7 +3,14 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
 const prisma = require('../lib/prisma');
-const { generateAccessToken, generateRefreshToken, verifyRefreshToken, setAuthCookies, clearAuthCookies, REFRESH_TOKEN_EXPIRY_MS } = require('../lib/jwt');
+const {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+  setAuthCookies,
+  clearAuthCookies,
+  REFRESH_TOKEN_EXPIRY_MS,
+} = require('../lib/jwt');
 const { authenticate } = require('../middleware/auth');
 const { uploadBuffer } = require('../lib/cloudinary');
 
@@ -44,12 +51,16 @@ router.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ error: 'Name, email, and password are required' });
+      return res
+        .status(400)
+        .json({ error: 'Name, email, and password are required' });
     }
 
     const normalizedEmail = email.trim().toLowerCase();
 
-    const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+    const existingUser = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
     if (existingUser) {
       return res.status(400).json({ error: 'Email already in use' });
     }
@@ -62,7 +73,11 @@ router.post('/register', async (req, res) => {
 
     const user = await prisma.$transaction(async (tx) => {
       const created = await tx.user.create({
-        data: { name: name.trim(), email: normalizedEmail, password: hashedPassword },
+        data: {
+          name: name.trim(),
+          email: normalizedEmail,
+          password: hashedPassword,
+        },
       });
 
       const accessToken = generateAccessToken(created.id);
@@ -166,7 +181,7 @@ router.post('/login', async (req, res) => {
 router.post('/logout', async (req, res) => {
   try {
     const { refreshToken } = req.cookies;
-    
+
     if (refreshToken) {
       await prisma.refreshToken.deleteMany({
         where: { token: refreshToken },
@@ -206,7 +221,9 @@ router.post('/refresh', async (req, res) => {
     try {
       payload = verifyRefreshToken(refreshToken);
     } catch (err) {
-      return res.status(401).json({ error: 'Invalid or expired refresh token' });
+      return res
+        .status(401)
+        .json({ error: 'Invalid or expired refresh token' });
     }
 
     // Check if token exists in database and is not expired
@@ -215,7 +232,9 @@ router.post('/refresh', async (req, res) => {
     });
 
     if (!storedToken || storedToken.expiresAt < new Date()) {
-      return res.status(401).json({ error: 'Invalid or expired refresh token' });
+      return res
+        .status(401)
+        .json({ error: 'Invalid or expired refresh token' });
     }
 
     // Ensure token belongs to the user
@@ -346,7 +365,13 @@ router.put('/me', authenticate, upload.single('avatar'), async (req, res) => {
     const user = await prisma.user.update({
       where: { id: req.user.id },
       data,
-      select: { id: true, email: true, name: true, avatarUrl: true, createdAt: true },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        avatarUrl: true,
+        createdAt: true,
+      },
     });
 
     res.status(200).json({ user });

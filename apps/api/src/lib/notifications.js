@@ -23,24 +23,28 @@ async function createNotification(tx, payload) {
 
   const notification = await tx.notification.create({
     data: {
-      userId:     payload.userId,
-      type:       payload.type,
-      message:    payload.message,
-      actorId:    payload.actorId    ?? null,
+      userId: payload.userId,
+      type: payload.type,
+      message: payload.message,
+      actorId: payload.actorId ?? null,
       entityType: payload.entityType ?? null,
-      entityId:   payload.entityId   ?? null,
-      metadata:   payload.metadata   ?? null,
+      entityId: payload.entityId ?? null,
+      metadata: payload.metadata ?? null,
     },
   });
 
   process.nextTick(() => {
-    emitToUser(payload.userId, SOCKET_EVENTS.NOTIFICATION_NEW, { notification });
+    emitToUser(payload.userId, SOCKET_EVENTS.NOTIFICATION_NEW, {
+      notification,
+    });
     if (payload.type === NOTIFICATION_TYPES.MENTION) {
       // Phase 5 plugs in the email module; for now this is a forward-compatible no-op.
       try {
         const { sendMentionEmail } = require('./email');
         if (typeof sendMentionEmail === 'function') {
-          sendMentionEmail({ notification }).catch((err) => console.error('email error', err));
+          sendMentionEmail({ notification }).catch((err) =>
+            console.error('email error', err)
+          );
         }
       } catch {
         // email lib not wired yet (Phase 5)

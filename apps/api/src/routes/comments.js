@@ -8,8 +8,13 @@ const c = require('../controllers/comments');
 const router = express.Router({ mergeParams: true });
 router.use(authenticate);
 
-router.get('/',                            requireWorkspaceMembership(), c.listComments);
-router.post('/',                           requireWorkspaceMembership(), requirePermission(CAPABILITIES.COMMENT_CREATE), c.createComment);
-router.delete('/:commentId',               requireWorkspaceMembership(), c.deleteComment); // capability check inline
+router.get('/', requireWorkspaceMembership(), c.listComments);
+router.post(
+  '/',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.COMMENT_CREATE),
+  c.createComment
+);
+router.delete('/:commentId', requireWorkspaceMembership(), c.deleteComment); // capability check inline
 
 module.exports = router;

@@ -8,7 +8,7 @@ import useAuthStore from '@/stores/authStore';
 export default function RegisterPage() {
   const router = useRouter();
   const { register, isLoading, error } = useAuthStore();
-  
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,7 +43,10 @@ export default function RegisterPage() {
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
           Already have an account?{' '}
-          <Link href="/login" className="font-medium text-primary-600 hover:text-primary-500">
+          <Link
+            href="/login"
+            className="font-medium text-primary-600 hover:text-primary-500"
+          >
             Sign in
           </Link>
         </p>
@@ -54,12 +57,17 @@ export default function RegisterPage() {
           <form className="space-y-6" onSubmit={handleSubmit}>
             {(error || formError) && (
               <div className="bg-red-50 dark:bg-red-900/30 p-4 rounded-md">
-                <p className="text-sm text-red-700 dark:text-red-400">{error || formError}</p>
+                <p className="text-sm text-red-700 dark:text-red-400">
+                  {error || formError}
+                </p>
               </div>
             )}
 
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Full Name
               </label>
               <div className="mt-1">
@@ -77,7 +85,10 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Email address
               </label>
               <div className="mt-1">
@@ -95,7 +106,10 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Password
               </label>
               <div className="mt-1">

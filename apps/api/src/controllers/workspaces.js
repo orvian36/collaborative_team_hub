@@ -5,18 +5,31 @@ const { uploadBuffer, destroyByPublicId } = require('../lib/cloudinary');
 
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/;
 
-const validateWorkspaceInput = ({ name, description, accentColor, iconUrl }, { partial = false } = {}) => {
+const validateWorkspaceInput = (
+  { name, description, accentColor, iconUrl },
+  { partial = false } = {}
+) => {
   if (!partial || name !== undefined) {
-    if (typeof name !== 'string' || !name.trim()) return 'Workspace name is required';
-    if (name.length > 100) return 'Workspace name must be 100 characters or fewer';
+    if (typeof name !== 'string' || !name.trim())
+      return 'Workspace name is required';
+    if (name.length > 100)
+      return 'Workspace name must be 100 characters or fewer';
   }
-  if (description !== undefined && description !== null && typeof description !== 'string') {
+  if (
+    description !== undefined &&
+    description !== null &&
+    typeof description !== 'string'
+  ) {
     return 'Description must be a string';
   }
   if (accentColor !== undefined && !HEX_COLOR.test(accentColor)) {
     return 'accentColor must be a 6-digit hex like #3b82f6';
   }
-  if (iconUrl !== undefined && iconUrl !== null && typeof iconUrl !== 'string') {
+  if (
+    iconUrl !== undefined &&
+    iconUrl !== null &&
+    typeof iconUrl !== 'string'
+  ) {
     return 'iconUrl must be a string';
   }
   return null;
@@ -70,7 +83,11 @@ const createWorkspace = async (req, res) => {
     const workspace = await prisma.$transaction((tx) =>
       createWorkspaceTx(tx, req.user.id, req.body)
     );
-    res.status(201).json({ workspace: { ...workspace, myRole: ROLES.ADMIN, memberCount: 1 } });
+    res
+      .status(201)
+      .json({
+        workspace: { ...workspace, myRole: ROLES.ADMIN, memberCount: 1 },
+      });
   } catch (err) {
     console.error('createWorkspace error:', err);
     res.status(500).json({ error: 'Internal server error' });
@@ -139,7 +156,8 @@ const getWorkspace = async (req, res) => {
       where: { id: req.params.id },
       include: { _count: { select: { members: true } } },
     });
-    if (!workspace) return res.status(404).json({ error: 'Workspace not found' });
+    if (!workspace)
+      return res.status(404).json({ error: 'Workspace not found' });
 
     res.status(200).json({
       workspace: {
@@ -199,8 +217,11 @@ const updateWorkspace = async (req, res) => {
  */
 const deleteWorkspace = async (req, res) => {
   try {
-    const workspace = await prisma.workspace.findUnique({ where: { id: req.params.id } });
-    if (!workspace) return res.status(404).json({ error: 'Workspace not found' });
+    const workspace = await prisma.workspace.findUnique({
+      where: { id: req.params.id },
+    });
+    if (!workspace)
+      return res.status(404).json({ error: 'Workspace not found' });
 
     await prisma.workspace.delete({ where: { id: req.params.id } });
     // Best-effort Cloudinary cleanup
@@ -232,7 +253,8 @@ const deleteWorkspace = async (req, res) => {
  *       200: { description: Icon uploaded }
  */
 const uploadIcon = async (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'Icon file is required' });
+  if (!req.file)
+    return res.status(400).json({ error: 'Icon file is required' });
 
   try {
     const url = await uploadBuffer(req.file.buffer, {

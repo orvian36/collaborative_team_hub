@@ -29,14 +29,19 @@ const useThemeStore = create((set, get) => ({
 
 function apply(theme) {
   if (typeof window === 'undefined') return;
-  const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const isDark =
+    theme === 'dark' ||
+    (theme === 'system' &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.classList.toggle('dark', isDark);
 }
 
 if (typeof window !== 'undefined') {
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    if (useThemeStore.getState().theme === 'system') apply('system');
-  });
+  window
+    .matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', () => {
+      if (useThemeStore.getState().theme === 'system') apply('system');
+    });
 }
 
 export default useThemeStore;

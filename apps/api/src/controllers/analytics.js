@@ -6,7 +6,13 @@ async function getStats(req, res) {
   const now = new Date();
   const startOfWeek = startOfCurrentWeek(now);
 
-  const [totalGoals, byGoalStatus, completedActionItemsThisWeek, overdueActionItems, monthBuckets] = await Promise.all([
+  const [
+    totalGoals,
+    byGoalStatus,
+    completedActionItemsThisWeek,
+    overdueActionItems,
+    monthBuckets,
+  ] = await Promise.all([
     prisma.goal.count({ where: { workspaceId } }),
     prisma.goal.groupBy({
       by: ['status'],
@@ -14,16 +20,27 @@ async function getStats(req, res) {
       _count: { _all: true },
     }),
     prisma.actionItem.count({
-      where: { workspaceId, status: ACTION_ITEM_STATUS.DONE, updatedAt: { gte: startOfWeek } },
+      where: {
+        workspaceId,
+        status: ACTION_ITEM_STATUS.DONE,
+        updatedAt: { gte: startOfWeek },
+      },
     }),
     prisma.actionItem.count({
-      where: { workspaceId, status: { not: ACTION_ITEM_STATUS.DONE }, dueDate: { lt: now } },
+      where: {
+        workspaceId,
+        status: { not: ACTION_ITEM_STATUS.DONE },
+        dueDate: { lt: now },
+      },
     }),
     completionByMonth(workspaceId),
   ]);
 
   const goalsByStatus = Object.fromEntries(
-    Object.values(GOAL_STATUS).map((s) => [s, byGoalStatus.find((r) => r.status === s)?._count._all || 0])
+    Object.values(GOAL_STATUS).map((s) => [
+      s,
+      byGoalStatus.find((r) => r.status === s)?._count._all || 0,
+    ])
   );
 
   res.json({

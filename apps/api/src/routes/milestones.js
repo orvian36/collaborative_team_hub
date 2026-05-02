@@ -10,9 +10,24 @@ const router = express.Router({ mergeParams: true });
 router.use(authenticate);
 
 // /api/workspaces/:workspaceId/goals/:goalId/milestones
-router.get('/',     requireWorkspaceMembership(),                                  c.listMilestones);
-router.post('/',    requireWorkspaceMembership(), requirePermission(CAPABILITIES.MILESTONE_WRITE), c.createMilestone);
-router.put('/:milestoneId',    requireWorkspaceMembership(), requirePermission(CAPABILITIES.MILESTONE_WRITE), c.updateMilestone);
-router.delete('/:milestoneId', requireWorkspaceMembership(), requirePermission(CAPABILITIES.MILESTONE_WRITE), c.deleteMilestone);
+router.get('/', requireWorkspaceMembership(), c.listMilestones);
+router.post(
+  '/',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.MILESTONE_WRITE),
+  c.createMilestone
+);
+router.put(
+  '/:milestoneId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.MILESTONE_WRITE),
+  c.updateMilestone
+);
+router.delete(
+  '/:milestoneId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.MILESTONE_WRITE),
+  c.deleteMilestone
+);
 
 module.exports = router;

@@ -6,24 +6,28 @@ const usePresenceStore = create((set, get) => ({
 
   hydrate: async (workspaceId) => {
     try {
-      const { onlineUserIds } = await api.get(`/api/workspaces/${workspaceId}/presence`);
+      const { onlineUserIds } = await api.get(
+        `/api/workspaces/${workspaceId}/presence`
+      );
       set({ onlineUserIds: new Set(onlineUserIds) });
     } catch {}
   },
 
-  setOnline: (userId) => set((s) => {
-    if (s.onlineUserIds.has(userId)) return s;
-    const next = new Set(s.onlineUserIds);
-    next.add(userId);
-    return { onlineUserIds: next };
-  }),
+  setOnline: (userId) =>
+    set((s) => {
+      if (s.onlineUserIds.has(userId)) return s;
+      const next = new Set(s.onlineUserIds);
+      next.add(userId);
+      return { onlineUserIds: next };
+    }),
 
-  setOffline: (userId) => set((s) => {
-    if (!s.onlineUserIds.has(userId)) return s;
-    const next = new Set(s.onlineUserIds);
-    next.delete(userId);
-    return { onlineUserIds: next };
-  }),
+  setOffline: (userId) =>
+    set((s) => {
+      if (!s.onlineUserIds.has(userId)) return s;
+      const next = new Set(s.onlineUserIds);
+      next.delete(userId);
+      return { onlineUserIds: next };
+    }),
 
   reset: () => set({ onlineUserIds: new Set() }),
 }));

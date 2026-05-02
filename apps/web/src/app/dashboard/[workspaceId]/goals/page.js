@@ -25,22 +25,30 @@ export default function GoalsPage() {
     if (searchParams.get('new') === '1') setOpen(true);
   }, [searchParams]);
 
-  const filtered = goals.filter((g) => statusFilter === 'ALL' || g.status === statusFilter);
+  const filtered = goals.filter(
+    (g) => statusFilter === 'ALL' || g.status === statusFilter
+  );
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Goals</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Goals
+        </h1>
         {canCreate && <Button onClick={() => setOpen(true)}>New goal</Button>}
       </div>
 
       <div className="flex gap-2 mb-6">
         {['ALL', 'NOT_STARTED', 'IN_PROGRESS', 'COMPLETED'].map((s) => (
-          <button key={s}
+          <button
+            key={s}
             onClick={() => setStatusFilter(s)}
-            className={`px-3 py-1 text-sm rounded-full border ${statusFilter === s
-              ? 'bg-primary-600 text-white border-primary-600'
-              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700'}`}>
+            className={`px-3 py-1 text-sm rounded-full border ${
+              statusFilter === s
+                ? 'bg-primary-600 text-white border-primary-600'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700'
+            }`}
+          >
             {s === 'ALL' ? 'All' : s.replace('_', ' ').toLowerCase()}
           </button>
         ))}
@@ -52,7 +60,9 @@ export default function GoalsPage() {
         <p className="text-gray-500">No goals yet.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((g) => <GoalCard key={g.id} goal={g} workspaceId={workspaceId} />)}
+          {filtered.map((g) => (
+            <GoalCard key={g.id} goal={g} workspaceId={workspaceId} />
+          ))}
         </div>
       )}
 

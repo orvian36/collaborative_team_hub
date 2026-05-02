@@ -39,7 +39,11 @@ export default function ReactionBar({ announcementId }) {
             } ${!canReact ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <span>{emoji}</span>
-            {count > 0 && <span className="ml-1 text-xs text-gray-600 dark:text-gray-400">{count}</span>}
+            {count > 0 && (
+              <span className="ml-1 text-xs text-gray-600 dark:text-gray-400">
+                {count}
+              </span>
+            )}
           </button>
         );
       })}

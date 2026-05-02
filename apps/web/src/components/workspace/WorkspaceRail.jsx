@@ -15,7 +15,9 @@ export default function WorkspaceRail() {
 
   return (
     <aside className="flex flex-col items-center gap-3 py-4 w-20 bg-gray-900 text-white min-h-screen">
-      <div className="text-[10px] uppercase tracking-wide text-gray-500 mb-1">Hubs</div>
+      <div className="text-[10px] uppercase tracking-wide text-gray-500 mb-1">
+        Hubs
+      </div>
       {workspaces.map((w) => (
         <WorkspaceTile
           key={w.id}

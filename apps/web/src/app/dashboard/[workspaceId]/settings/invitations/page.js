@@ -9,8 +9,16 @@ import InvitationList from '@/components/invitations/InvitationList';
 
 export default function InvitationsPage() {
   const { workspaceId } = useParams();
-  const workspace = useWorkspaceStore((s) => s.workspaces.find((w) => w.id === workspaceId));
-  const { invitations, fetchInvitations, inviteMember, revokeInvitation, resendInvitation } = useWorkspaceMembersStore();
+  const workspace = useWorkspaceStore((s) =>
+    s.workspaces.find((w) => w.id === workspaceId)
+  );
+  const {
+    invitations,
+    fetchInvitations,
+    inviteMember,
+    revokeInvitation,
+    resendInvitation,
+  } = useWorkspaceMembersStore();
 
   useEffect(() => {
     if (workspaceId) fetchInvitations(workspaceId);
@@ -20,7 +28,9 @@ export default function InvitationsPage() {
   if (workspace.myRole !== 'ADMIN') {
     return (
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <p className="text-gray-600 dark:text-gray-300">Only admins can manage invitations.</p>
+        <p className="text-gray-600 dark:text-gray-300">
+          Only admins can manage invitations.
+        </p>
       </div>
     );
   }

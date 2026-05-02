@@ -28,20 +28,22 @@ const { SOCKET_EVENTS } = require('@team-hub/shared');
 async function logActivity(tx, payload) {
   const activity = await tx.activity.create({
     data: {
-      type:        payload.type,
-      message:     payload.message,
-      userId:      payload.userId,
+      type: payload.type,
+      message: payload.message,
+      userId: payload.userId,
       workspaceId: payload.workspaceId,
-      goalId:      payload.goalId      ?? null,
-      entityType:  payload.entityType  ?? null,
-      entityId:    payload.entityId    ?? null,
-      metadata:    payload.metadata    ?? null,
+      goalId: payload.goalId ?? null,
+      entityType: payload.entityType ?? null,
+      entityId: payload.entityId ?? null,
+      metadata: payload.metadata ?? null,
     },
   });
   // Fire after the caller commits — but since this is the same tx,
   // we schedule the broadcast on next tick so any rollback prevents emission.
   process.nextTick(() => {
-    broadcastToWorkspace(payload.workspaceId, SOCKET_EVENTS.ACTIVITY_NEW, { activity });
+    broadcastToWorkspace(payload.workspaceId, SOCKET_EVENTS.ACTIVITY_NEW, {
+      activity,
+    });
   });
   return activity;
 }

@@ -6,7 +6,8 @@ import useWorkspaceStore from '@/stores/workspaceStore';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { workspaces, isLoading, getLastActiveWorkspaceId } = useWorkspaceStore();
+  const { workspaces, isLoading, getLastActiveWorkspaceId } =
+    useWorkspaceStore();
 
   useEffect(() => {
     if (isLoading) return;

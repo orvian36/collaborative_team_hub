@@ -2,14 +2,20 @@ const prisma = require('../lib/prisma');
 const { logActivity } = require('../lib/activity');
 const { broadcastToWorkspace } = require('../lib/socket');
 const { createNotification } = require('../lib/notifications');
-const { ACTIVITY_TYPES, SOCKET_EVENTS, NOTIFICATION_TYPES, ACTION_ITEM_STATUS, PRIORITY } = require('@team-hub/shared');
+const {
+  ACTIVITY_TYPES,
+  SOCKET_EVENTS,
+  NOTIFICATION_TYPES,
+  ACTION_ITEM_STATUS,
+  PRIORITY,
+} = require('@team-hub/shared');
 
 async function listActionItems(req, res) {
   const items = await prisma.actionItem.findMany({
     where: { workspaceId: req.member.workspaceId },
     include: {
       assignee: { select: { id: true, name: true, avatarUrl: true } },
-      goal:     { select: { id: true, title: true } },
+      goal: { select: { id: true, title: true } },
     },
     orderBy: [{ status: 'asc' }, { position: 'asc' }, { createdAt: 'desc' }],
   });
@@ -21,7 +27,7 @@ async function getActionItem(req, res) {
     where: { id: req.params.actionItemId, workspaceId: req.member.workspaceId },
     include: {
       assignee: { select: { id: true, name: true, avatarUrl: true } },
-      goal:     { select: { id: true, title: true } },
+      goal: { select: { id: true, title: true } },
     },
   });
   if (!item) return res.status(404).json({ error: 'Action item not found' });
@@ -29,8 +35,10 @@ async function getActionItem(req, res) {
 }
 
 async function createActionItem(req, res) {
-  const { title, description, priority, status, dueDate, assigneeId, goalId } = req.body;
-  if (!title?.trim()) return res.status(400).json({ error: 'Title is required' });
+  const { title, description, priority, status, dueDate, assigneeId, goalId } =
+    req.body;
+  if (!title?.trim())
+    return res.status(400).json({ error: 'Title is required' });
   if (priority && !Object.values(PRIORITY).includes(priority)) {
     return res.status(400).json({ error: 'Invalid priority' });
   }
@@ -39,13 +47,26 @@ async function createActionItem(req, res) {
   }
   if (assigneeId) {
     const m = await prisma.workspaceMember.findUnique({
-      where: { userId_workspaceId: { userId: assigneeId, workspaceId: req.member.workspaceId } },
+      where: {
+        userId_workspaceId: {
+          userId: assigneeId,
+          workspaceId: req.member.workspaceId,
+        },
+      },
     });
-    if (!m) return res.status(400).json({ error: 'Assignee must be a workspace member' });
+    if (!m)
+      return res
+        .status(400)
+        .json({ error: 'Assignee must be a workspace member' });
   }
   if (goalId) {
-    const g = await prisma.goal.findFirst({ where: { id: goalId, workspaceId: req.member.workspaceId } });
-    if (!g) return res.status(400).json({ error: 'Goal must belong to this workspace' });
+    const g = await prisma.goal.findFirst({
+      where: { id: goalId, workspaceId: req.member.workspaceId },
+    });
+    if (!g)
+      return res
+        .status(400)
+        .json({ error: 'Goal must belong to this workspace' });
   }
 
   const targetStatus = status || ACTION_ITEM_STATUS.TODO;
@@ -61,44 +82,48 @@ async function createActionItem(req, res) {
 
     const created = await tx.actionItem.create({
       data: {
-        title:       title.trim(),
+        title: title.trim(),
         description: description?.trim() || null,
-        priority:    priority || PRIORITY.MEDIUM,
-        status:      targetStatus,
-        dueDate:     dueDate ? new Date(dueDate) : null,
-        assigneeId:  assigneeId || null,
-        goalId:      goalId || null,
+        priority: priority || PRIORITY.MEDIUM,
+        status: targetStatus,
+        dueDate: dueDate ? new Date(dueDate) : null,
+        assigneeId: assigneeId || null,
+        goalId: goalId || null,
         workspaceId: req.member.workspaceId,
         position,
       },
       include: {
         assignee: { select: { id: true, name: true, avatarUrl: true } },
-        goal:     { select: { id: true, title: true } },
+        goal: { select: { id: true, title: true } },
       },
     });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.ACTION_ITEM_CREATED,
-      message:     `created action item "${created.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.ACTION_ITEM_CREATED,
+      message: `created action item "${created.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      goalId:      created.goalId || null,
-      entityType:  'actionItem',
-      entityId:    created.id,
+      goalId: created.goalId || null,
+      entityType: 'actionItem',
+      entityId: created.id,
     });
     if (assigneeId && assigneeId !== req.user.id) {
       await createNotification(tx, {
-        userId:     assigneeId,
-        type:       NOTIFICATION_TYPES.ASSIGNMENT,
-        message:    `${req.user.name || 'Someone'} assigned you "${created.title}"`,
-        actorId:    req.user.id,
+        userId: assigneeId,
+        type: NOTIFICATION_TYPES.ASSIGNMENT,
+        message: `${req.user.name || 'Someone'} assigned you "${created.title}"`,
+        actorId: req.user.id,
         entityType: 'actionItem',
-        entityId:   created.id,
+        entityId: created.id,
       });
     }
     return created;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ACTION_ITEM_CREATED, { actionItem: item });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.ACTION_ITEM_CREATED,
+    { actionItem: item }
+  );
   res.status(201).json({ actionItem: item });
 }
 
@@ -108,19 +133,28 @@ async function updateActionItem(req, res) {
   });
   if (!item) return res.status(404).json({ error: 'Action item not found' });
 
-  const { title, description, priority, dueDate, assigneeId, goalId } = req.body;
+  const { title, description, priority, dueDate, assigneeId, goalId } =
+    req.body;
   const data = {};
-  if (typeof title === 'string')       data.title = title.trim();
-  if (typeof description === 'string') data.description = description.trim() || null;
+  if (typeof title === 'string') data.title = title.trim();
+  if (typeof description === 'string')
+    data.description = description.trim() || null;
   if (priority) {
-    if (!Object.values(PRIORITY).includes(priority)) return res.status(400).json({ error: 'Invalid priority' });
+    if (!Object.values(PRIORITY).includes(priority))
+      return res.status(400).json({ error: 'Invalid priority' });
     data.priority = priority;
   }
-  if (typeof dueDate !== 'undefined') data.dueDate = dueDate ? new Date(dueDate) : null;
+  if (typeof dueDate !== 'undefined')
+    data.dueDate = dueDate ? new Date(dueDate) : null;
   if (typeof goalId !== 'undefined') {
     if (goalId) {
-      const g = await prisma.goal.findFirst({ where: { id: goalId, workspaceId: req.member.workspaceId } });
-      if (!g) return res.status(400).json({ error: 'Goal must belong to this workspace' });
+      const g = await prisma.goal.findFirst({
+        where: { id: goalId, workspaceId: req.member.workspaceId },
+      });
+      if (!g)
+        return res
+          .status(400)
+          .json({ error: 'Goal must belong to this workspace' });
       data.goalId = goalId;
     } else {
       data.goalId = null;
@@ -129,13 +163,22 @@ async function updateActionItem(req, res) {
   if (typeof assigneeId !== 'undefined' && assigneeId !== item.assigneeId) {
     if (assigneeId) {
       const m = await prisma.workspaceMember.findUnique({
-        where: { userId_workspaceId: { userId: assigneeId, workspaceId: req.member.workspaceId } },
+        where: {
+          userId_workspaceId: {
+            userId: assigneeId,
+            workspaceId: req.member.workspaceId,
+          },
+        },
       });
-      if (!m) return res.status(400).json({ error: 'Assignee must be a workspace member' });
+      if (!m)
+        return res
+          .status(400)
+          .json({ error: 'Assignee must be a workspace member' });
     }
     data.assigneeId = assigneeId || null;
   }
-  if (Object.keys(data).length === 0) return res.status(400).json({ error: 'No changes provided' });
+  if (Object.keys(data).length === 0)
+    return res.status(400).json({ error: 'No changes provided' });
 
   const updated = await prisma.$transaction(async (tx) => {
     const u = await tx.actionItem.update({
@@ -143,32 +186,40 @@ async function updateActionItem(req, res) {
       data,
       include: {
         assignee: { select: { id: true, name: true, avatarUrl: true } },
-        goal:     { select: { id: true, title: true } },
+        goal: { select: { id: true, title: true } },
       },
     });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.ACTION_ITEM_UPDATED,
-      message:     `updated action item "${u.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.ACTION_ITEM_UPDATED,
+      message: `updated action item "${u.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      goalId:      u.goalId || null,
-      entityType:  'actionItem',
-      entityId:    u.id,
+      goalId: u.goalId || null,
+      entityType: 'actionItem',
+      entityId: u.id,
     });
-    if ('assigneeId' in data && data.assigneeId && data.assigneeId !== req.user.id) {
+    if (
+      'assigneeId' in data &&
+      data.assigneeId &&
+      data.assigneeId !== req.user.id
+    ) {
       await createNotification(tx, {
-        userId:     data.assigneeId,
-        type:       NOTIFICATION_TYPES.ASSIGNMENT,
-        message:    `${req.user.name || 'Someone'} assigned you "${u.title}"`,
-        actorId:    req.user.id,
+        userId: data.assigneeId,
+        type: NOTIFICATION_TYPES.ASSIGNMENT,
+        message: `${req.user.name || 'Someone'} assigned you "${u.title}"`,
+        actorId: req.user.id,
         entityType: 'actionItem',
-        entityId:   u.id,
+        entityId: u.id,
       });
     }
     return u;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ACTION_ITEM_UPDATED, { actionItem: updated });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.ACTION_ITEM_UPDATED,
+    { actionItem: updated }
+  );
   res.json({ actionItem: updated });
 }
 
@@ -181,17 +232,21 @@ async function deleteActionItem(req, res) {
   await prisma.$transaction(async (tx) => {
     await tx.actionItem.delete({ where: { id: item.id } });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.ACTION_ITEM_DELETED,
-      message:     `deleted action item "${item.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.ACTION_ITEM_DELETED,
+      message: `deleted action item "${item.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      goalId:      item.goalId || null,
-      entityType:  'actionItem',
-      entityId:    item.id,
+      goalId: item.goalId || null,
+      entityType: 'actionItem',
+      entityId: item.id,
     });
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ACTION_ITEM_DELETED, { actionItemId: item.id });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.ACTION_ITEM_DELETED,
+    { actionItemId: item.id }
+  );
   res.status(204).end();
 }
 
@@ -254,31 +309,44 @@ async function moveActionItem(req, res) {
     }
     const u = await tx.actionItem.update({
       where: { id: item.id },
-      data:  { status, position },
+      data: { status, position },
       include: {
         assignee: { select: { id: true, name: true, avatarUrl: true } },
-        goal:     { select: { id: true, title: true } },
+        goal: { select: { id: true, title: true } },
       },
     });
     if (item.status !== status) {
       await logActivity(tx, {
-        type:        ACTIVITY_TYPES.ACTION_ITEM_STATUS_CHANGED,
-        message:     `moved "${u.title}" to ${status}`,
-        userId:      req.user.id,
+        type: ACTIVITY_TYPES.ACTION_ITEM_STATUS_CHANGED,
+        message: `moved "${u.title}" to ${status}`,
+        userId: req.user.id,
         workspaceId: req.member.workspaceId,
-        goalId:      u.goalId || null,
-        entityType:  'actionItem',
-        entityId:    u.id,
-        metadata:    { from: item.status, to: status },
+        goalId: u.goalId || null,
+        entityType: 'actionItem',
+        entityId: u.id,
+        metadata: { from: item.status, to: status },
       });
     }
     return u;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ACTION_ITEM_MOVED, {
-    actionItem: updated, previousStatus: item.status, previousPosition: item.position,
-  });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.ACTION_ITEM_MOVED,
+    {
+      actionItem: updated,
+      previousStatus: item.status,
+      previousPosition: item.position,
+    }
+  );
   res.json({ actionItem: updated });
 }
 
-module.exports = { listActionItems, getActionItem, createActionItem, updateActionItem, deleteActionItem, moveActionItem };
+module.exports = {
+  listActionItems,
+  getActionItem,
+  createActionItem,
+  updateActionItem,
+  deleteActionItem,
+  moveActionItem,
+};

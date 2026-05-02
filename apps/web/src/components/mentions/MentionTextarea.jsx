@@ -12,20 +12,35 @@ import { api } from '@/lib/api';
  * this for goal updates). The TipTap editor handles announcement bodies
  * with its own mention extension.
  */
-export default function MentionTextarea({ value, onChange, placeholder, rows = 3 }) {
+export default function MentionTextarea({
+  value,
+  onChange,
+  placeholder,
+  rows = 3,
+}) {
   const { workspaceId } = useParams();
   const ref = useRef(null);
   const [suggestions, setSuggestions] = useState([]);
   const [showAt, setShowAt] = useState(null);
 
   useEffect(() => {
-    if (!showAt) { setSuggestions([]); return; }
+    if (!showAt) {
+      setSuggestions([]);
+      return;
+    }
     const term = value.slice(showAt.start + 1, showAt.caret);
     let cancelled = false;
-    api.get(`/api/workspaces/${workspaceId}/members?search=${encodeURIComponent(term)}`).then((r) => {
-      if (!cancelled) setSuggestions((r.members || []).slice(0, 5));
-    }).catch(() => {});
-    return () => { cancelled = true; };
+    api
+      .get(
+        `/api/workspaces/${workspaceId}/members?search=${encodeURIComponent(term)}`
+      )
+      .then((r) => {
+        if (!cancelled) setSuggestions((r.members || []).slice(0, 5));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
   }, [value, showAt, workspaceId]);
 
   const onKeyUp = (e) => {
@@ -42,7 +57,8 @@ export default function MentionTextarea({ value, onChange, placeholder, rows = 3
   const insertMention = (member) => {
     if (!showAt) return;
     const token = `@[${member.user.name}](${member.user.id})`;
-    const next = value.slice(0, showAt.start) + token + value.slice(showAt.caret);
+    const next =
+      value.slice(0, showAt.start) + token + value.slice(showAt.caret);
     onChange(next);
     setShowAt(null);
     setTimeout(() => ref.current?.focus(), 0);

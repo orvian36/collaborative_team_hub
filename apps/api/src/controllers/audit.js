@@ -7,11 +7,21 @@ async function listAudit(req, res) {
 
   const where = { workspaceId };
   if (req.query.type) {
-    where.type = Array.isArray(req.query.type) ? { in: req.query.type } : req.query.type;
+    where.type = Array.isArray(req.query.type)
+      ? { in: req.query.type }
+      : req.query.type;
   }
   if (req.query.actorId) where.userId = req.query.actorId;
-  if (req.query.from) where.createdAt = { ...(where.createdAt || {}), gte: new Date(req.query.from) };
-  if (req.query.to)   where.createdAt = { ...(where.createdAt || {}), lte: new Date(req.query.to) };
+  if (req.query.from)
+    where.createdAt = {
+      ...(where.createdAt || {}),
+      gte: new Date(req.query.from),
+    };
+  if (req.query.to)
+    where.createdAt = {
+      ...(where.createdAt || {}),
+      lte: new Date(req.query.to),
+    };
 
   const [total, events] = await Promise.all([
     prisma.activity.count({ where }),
@@ -24,7 +34,13 @@ async function listAudit(req, res) {
     }),
   ]);
 
-  res.json({ events, page, pageSize, total, totalPages: Math.ceil(total / pageSize) });
+  res.json({
+    events,
+    page,
+    pageSize,
+    total,
+    totalPages: Math.ceil(total / pageSize),
+  });
 }
 
 module.exports = { listAudit };

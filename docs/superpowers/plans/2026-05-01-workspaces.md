@@ -33,6 +33,7 @@
 ## Task 1: Update Prisma schema and run migration
 
 **Files:**
+
 - Modify: `apps/api/prisma/schema.prisma`
 
 - [ ] **Step 1: Add `iconUrl` and `createdById` to Workspace, plus the User back-relation**
@@ -141,6 +142,7 @@ git commit -m "feat(db): add Workspace.iconUrl, createdById, and Invitation mode
 ## Task 2: Update shared constants
 
 **Files:**
+
 - Modify: `packages/shared/src/index.js`
 
 - [ ] **Step 1: Add invitation constants, accent palette, and new socket events**
@@ -215,9 +217,18 @@ const INVITATION_TTL_DAYS = 7;
 // ─── Workspace Accent Palette ────────────────────────────────
 // 12-swatch curated palette matching Tailwind 500-tier hex values.
 const WORKSPACE_ACCENT_PALETTE = [
-  '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7',
-  '#ec4899', '#f43f5e', '#ef4444', '#f97316',
-  '#f59e0b', '#10b981', '#14b8a6', '#06b6d4',
+  '#3b82f6',
+  '#6366f1',
+  '#8b5cf6',
+  '#a855f7',
+  '#ec4899',
+  '#f43f5e',
+  '#ef4444',
+  '#f97316',
+  '#f59e0b',
+  '#10b981',
+  '#14b8a6',
+  '#06b6d4',
 ];
 
 // ─── Socket Events ───────────────────────────────────────────
@@ -255,6 +266,7 @@ module.exports = {
 ```bash
 node -e "console.log(require('@team-hub/shared').INVITATION_STATUS)"
 ```
+
 from `apps/api/`. Expected output: `{ PENDING: 'PENDING', ACCEPTED: 'ACCEPTED', REVOKED: 'REVOKED', EXPIRED: 'EXPIRED' }`.
 
 - [ ] **Step 3: Commit**
@@ -269,6 +281,7 @@ git commit -m "feat(shared): add INVITATION_STATUS, accent palette, member socke
 ## Task 3: Add `requireWorkspaceMembership` middleware and remove the `authorize` stub
 
 **Files:**
+
 - Create: `apps/api/src/middleware/workspace.js`
 - Modify: `apps/api/src/middleware/auth.js`
 
@@ -367,6 +380,7 @@ git commit -m "feat(api): add requireWorkspaceMembership middleware; remove stub
 ## Task 4: Cloudinary helper
 
 **Files:**
+
 - Create: `apps/api/src/lib/cloudinary.js`
 
 - [ ] **Step 1: Implement the helper**
@@ -440,6 +454,7 @@ git commit -m "feat(api): add Cloudinary upload/destroy helper"
 ## Task 5: Workspaces controller (CRUD + icon upload)
 
 **Files:**
+
 - Create: `apps/api/src/controllers/workspaces.js`
 
 - [ ] **Step 1: Implement the controller**
@@ -454,18 +469,31 @@ const { uploadBuffer, destroyByPublicId } = require('../lib/cloudinary');
 
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/;
 
-const validateWorkspaceInput = ({ name, description, accentColor, iconUrl }, { partial = false } = {}) => {
+const validateWorkspaceInput = (
+  { name, description, accentColor, iconUrl },
+  { partial = false } = {}
+) => {
   if (!partial || name !== undefined) {
-    if (typeof name !== 'string' || !name.trim()) return 'Workspace name is required';
-    if (name.length > 100) return 'Workspace name must be 100 characters or fewer';
+    if (typeof name !== 'string' || !name.trim())
+      return 'Workspace name is required';
+    if (name.length > 100)
+      return 'Workspace name must be 100 characters or fewer';
   }
-  if (description !== undefined && description !== null && typeof description !== 'string') {
+  if (
+    description !== undefined &&
+    description !== null &&
+    typeof description !== 'string'
+  ) {
     return 'Description must be a string';
   }
   if (accentColor !== undefined && !HEX_COLOR.test(accentColor)) {
     return 'accentColor must be a 6-digit hex like #3b82f6';
   }
-  if (iconUrl !== undefined && iconUrl !== null && typeof iconUrl !== 'string') {
+  if (
+    iconUrl !== undefined &&
+    iconUrl !== null &&
+    typeof iconUrl !== 'string'
+  ) {
     return 'iconUrl must be a string';
   }
   return null;
@@ -519,7 +547,11 @@ const createWorkspace = async (req, res) => {
     const workspace = await prisma.$transaction((tx) =>
       createWorkspaceTx(tx, req.user.id, req.body)
     );
-    res.status(201).json({ workspace: { ...workspace, myRole: ROLES.ADMIN, memberCount: 1 } });
+    res
+      .status(201)
+      .json({
+        workspace: { ...workspace, myRole: ROLES.ADMIN, memberCount: 1 },
+      });
   } catch (err) {
     console.error('createWorkspace error:', err);
     res.status(500).json({ error: 'Internal server error' });
@@ -588,7 +620,8 @@ const getWorkspace = async (req, res) => {
       where: { id: req.params.id },
       include: { _count: { select: { members: true } } },
     });
-    if (!workspace) return res.status(404).json({ error: 'Workspace not found' });
+    if (!workspace)
+      return res.status(404).json({ error: 'Workspace not found' });
 
     res.status(200).json({
       workspace: {
@@ -648,8 +681,11 @@ const updateWorkspace = async (req, res) => {
  */
 const deleteWorkspace = async (req, res) => {
   try {
-    const workspace = await prisma.workspace.findUnique({ where: { id: req.params.id } });
-    if (!workspace) return res.status(404).json({ error: 'Workspace not found' });
+    const workspace = await prisma.workspace.findUnique({
+      where: { id: req.params.id },
+    });
+    if (!workspace)
+      return res.status(404).json({ error: 'Workspace not found' });
 
     await prisma.workspace.delete({ where: { id: req.params.id } });
     // Best-effort Cloudinary cleanup
@@ -681,7 +717,8 @@ const deleteWorkspace = async (req, res) => {
  *       200: { description: Icon uploaded }
  */
 const uploadIcon = async (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'Icon file is required' });
+  if (!req.file)
+    return res.status(400).json({ error: 'Icon file is required' });
 
   try {
     const url = await uploadBuffer(req.file.buffer, {
@@ -722,6 +759,7 @@ git commit -m "feat(api): workspaces controller with CRUD, icon upload, reusable
 ## Task 6: Workspaces router (with members + invitations sub-mounts)
 
 **Files:**
+
 - Modify: `apps/api/src/routes/workspaces.js` (replace stub)
 
 - [ ] **Step 1: Replace the stub with the real router**
@@ -758,16 +796,25 @@ const upload = multer({
 router.post('/', c.createWorkspace);
 router.get('/', c.listWorkspaces);
 router.get('/:id', requireWorkspaceMembership(), c.getWorkspace);
-router.patch('/:id', requireWorkspaceMembership(ROLES.ADMIN), c.updateWorkspace);
-router.delete('/:id', requireWorkspaceMembership(ROLES.ADMIN), c.deleteWorkspace);
+router.patch(
+  '/:id',
+  requireWorkspaceMembership(ROLES.ADMIN),
+  c.updateWorkspace
+);
+router.delete(
+  '/:id',
+  requireWorkspaceMembership(ROLES.ADMIN),
+  c.deleteWorkspace
+);
 
 router.post(
   '/:id/icon',
   requireWorkspaceMembership(ROLES.ADMIN),
-  (req, res, next) => upload.single('icon')(req, res, (err) => {
-    if (err) return res.status(400).json({ error: err.message });
-    next();
-  }),
+  (req, res, next) =>
+    upload.single('icon')(req, res, (err) => {
+      if (err) return res.status(400).json({ error: err.message });
+      next();
+    }),
   c.uploadIcon
 );
 
@@ -810,6 +857,7 @@ Hold this commit until Task 10 lands so the file references resolve. If you want
 ## Task 7: Auto-create default workspace on registration
 
 **Files:**
+
 - Modify: `apps/api/src/routes/auth.js` (the `/register` handler only)
 
 - [ ] **Step 1: Update `/register` to also create a default workspace**
@@ -822,12 +870,16 @@ router.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ error: 'Name, email, and password are required' });
+      return res
+        .status(400)
+        .json({ error: 'Name, email, and password are required' });
     }
 
     const normalizedEmail = email.trim().toLowerCase();
 
-    const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+    const existingUser = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
     if (existingUser) {
       return res.status(400).json({ error: 'Email already in use' });
     }
@@ -840,7 +892,11 @@ router.post('/register', async (req, res) => {
 
     const user = await prisma.$transaction(async (tx) => {
       const created = await tx.user.create({
-        data: { name: name.trim(), email: normalizedEmail, password: hashedPassword },
+        data: {
+          name: name.trim(),
+          email: normalizedEmail,
+          password: hashedPassword,
+        },
       });
 
       const accessToken = generateAccessToken(created.id);
@@ -903,6 +959,7 @@ git commit -m "feat(api): auto-create default workspace on registration"
 ## Task 8: Members controller and router
 
 **Files:**
+
 - Create: `apps/api/src/controllers/members.js`
 - Create: `apps/api/src/routes/members.js`
 
@@ -946,7 +1003,9 @@ const listMembers = async (req, res) => {
     const members = await prisma.workspaceMember.findMany({
       where: { workspaceId: req.params.workspaceId },
       include: {
-        user: { select: { id: true, name: true, email: true, avatarUrl: true } },
+        user: {
+          select: { id: true, name: true, email: true, avatarUrl: true },
+        },
       },
       orderBy: [{ role: 'asc' }, { joinedAt: 'asc' }],
     });
@@ -1071,7 +1130,13 @@ const leaveWorkspace = async (req, res) => {
   }
 };
 
-module.exports = { listMembers, updateMemberRole, removeMember, leaveWorkspace, assertNotLastAdmin };
+module.exports = {
+  listMembers,
+  updateMemberRole,
+  removeMember,
+  leaveWorkspace,
+  assertNotLastAdmin,
+};
 ```
 
 - [ ] **Step 2: Implement the router**
@@ -1122,6 +1187,7 @@ git commit -m "feat(api): members controller and router with last-admin guard"
 ## Task 9: Invitations controller
 
 **Files:**
+
 - Create: `apps/api/src/controllers/invitations.js`
 
 - [ ] **Step 1: Implement the controller**
@@ -1131,11 +1197,16 @@ Create `apps/api/src/controllers/invitations.js`:
 ```js
 const crypto = require('crypto');
 const prisma = require('../lib/prisma');
-const { ROLES, INVITATION_STATUS, INVITATION_TTL_DAYS } = require('@team-hub/shared');
+const {
+  ROLES,
+  INVITATION_STATUS,
+  INVITATION_TTL_DAYS,
+} = require('@team-hub/shared');
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const normalizeEmail = (s) => String(s).trim().toLowerCase();
-const ttlFromNow = () => new Date(Date.now() + INVITATION_TTL_DAYS * 24 * 60 * 60 * 1000);
+const ttlFromNow = () =>
+  new Date(Date.now() + INVITATION_TTL_DAYS * 24 * 60 * 60 * 1000);
 const inviteUrlFor = (token) => {
   const base = process.env.CLIENT_URL || 'http://localhost:3000';
   return `${base.replace(/\/$/, '')}/invite/${token}`;
@@ -1147,7 +1218,10 @@ const inviteUrlFor = (token) => {
  * a transaction.
  */
 const expireIfNeeded = async (tx, invitation) => {
-  if (invitation.status === INVITATION_STATUS.PENDING && invitation.expiresAt < new Date()) {
+  if (
+    invitation.status === INVITATION_STATUS.PENDING &&
+    invitation.expiresAt < new Date()
+  ) {
     return tx.invitation.update({
       where: { id: invitation.id },
       data: { status: INVITATION_STATUS.EXPIRED },
@@ -1167,8 +1241,10 @@ const createInvitation = async (req, res) => {
   const email = req.body.email && normalizeEmail(req.body.email);
   const role = req.body.role || ROLES.MEMBER;
 
-  if (!email || !EMAIL_RE.test(email)) return res.status(400).json({ error: 'Valid email is required' });
-  if (![ROLES.ADMIN, ROLES.MEMBER].includes(role)) return res.status(400).json({ error: 'Role must be ADMIN or MEMBER' });
+  if (!email || !EMAIL_RE.test(email))
+    return res.status(400).json({ error: 'Valid email is required' });
+  if (![ROLES.ADMIN, ROLES.MEMBER].includes(role))
+    return res.status(400).json({ error: 'Role must be ADMIN or MEMBER' });
 
   try {
     const workspaceId = req.params.workspaceId;
@@ -1180,7 +1256,9 @@ const createInvitation = async (req, res) => {
         where: { userId_workspaceId: { userId: existingUser.id, workspaceId } },
       });
       if (existingMember) {
-        return res.status(409).json({ error: 'User is already a member of this workspace' });
+        return res
+          .status(409)
+          .json({ error: 'User is already a member of this workspace' });
       }
     }
 
@@ -1189,7 +1267,9 @@ const createInvitation = async (req, res) => {
       where: { workspaceId, email, status: INVITATION_STATUS.PENDING },
     });
     if (existingPending) {
-      return res.status(409).json({ error: 'A pending invitation already exists for this email' });
+      return res
+        .status(409)
+        .json({ error: 'A pending invitation already exists for this email' });
     }
 
     const token = crypto.randomBytes(32).toString('hex');
@@ -1225,13 +1305,16 @@ const listInvitations = async (req, res) => {
       where: { workspaceId: req.params.workspaceId },
       orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
       include: {
-        invitedBy:  { select: { id: true, name: true, email: true } },
+        invitedBy: { select: { id: true, name: true, email: true } },
         acceptedBy: { select: { id: true, name: true, email: true } },
       },
     });
     // Lazy-expire any stale rows so the UI stays consistent
     const expiredIds = rows
-      .filter((r) => r.status === INVITATION_STATUS.PENDING && r.expiresAt < new Date())
+      .filter(
+        (r) =>
+          r.status === INVITATION_STATUS.PENDING && r.expiresAt < new Date()
+      )
       .map((r) => r.id);
     if (expiredIds.length) {
       await prisma.invitation.updateMany({
@@ -1258,12 +1341,16 @@ const listInvitations = async (req, res) => {
  */
 const revokeInvitation = async (req, res) => {
   try {
-    const inv = await prisma.invitation.findUnique({ where: { id: req.params.invitationId } });
+    const inv = await prisma.invitation.findUnique({
+      where: { id: req.params.invitationId },
+    });
     if (!inv || inv.workspaceId !== req.params.workspaceId) {
       return res.status(404).json({ error: 'Invitation not found' });
     }
     if (inv.status !== INVITATION_STATUS.PENDING) {
-      return res.status(409).json({ error: 'Only pending invitations can be revoked' });
+      return res
+        .status(409)
+        .json({ error: 'Only pending invitations can be revoked' });
     }
     await prisma.invitation.update({
       where: { id: inv.id },
@@ -1285,18 +1372,27 @@ const revokeInvitation = async (req, res) => {
  */
 const resendInvitation = async (req, res) => {
   try {
-    const inv = await prisma.invitation.findUnique({ where: { id: req.params.invitationId } });
+    const inv = await prisma.invitation.findUnique({
+      where: { id: req.params.invitationId },
+    });
     if (!inv || inv.workspaceId !== req.params.workspaceId) {
       return res.status(404).json({ error: 'Invitation not found' });
     }
-    if (inv.status !== INVITATION_STATUS.PENDING && inv.status !== INVITATION_STATUS.EXPIRED) {
-      return res.status(409).json({ error: 'Only pending or expired invitations can be resent' });
+    if (
+      inv.status !== INVITATION_STATUS.PENDING &&
+      inv.status !== INVITATION_STATUS.EXPIRED
+    ) {
+      return res
+        .status(409)
+        .json({ error: 'Only pending or expired invitations can be resent' });
     }
     const updated = await prisma.invitation.update({
       where: { id: inv.id },
       data: { status: INVITATION_STATUS.PENDING, expiresAt: ttlFromNow() },
     });
-    res.status(200).json({ invitation: updated, inviteUrl: inviteUrlFor(updated.token) });
+    res
+      .status(200)
+      .json({ invitation: updated, inviteUrl: inviteUrlFor(updated.token) });
   } catch (err) {
     console.error('resendInvitation error:', err);
     res.status(500).json({ error: 'Internal server error' });
@@ -1316,10 +1412,15 @@ const getInvitationByToken = async (req, res) => {
     const inv = await prisma.invitation.findUnique({
       where: { token: req.params.token },
       include: {
-        workspace: { select: { id: true, name: true, iconUrl: true, accentColor: true } },
+        workspace: {
+          select: { id: true, name: true, iconUrl: true, accentColor: true },
+        },
       },
     });
-    if (!inv) return res.status(404).json({ error: 'Invitation not found or no longer valid' });
+    if (!inv)
+      return res
+        .status(404)
+        .json({ error: 'Invitation not found or no longer valid' });
 
     const refreshed = await expireIfNeeded(prisma, inv);
 
@@ -1351,27 +1452,43 @@ const acceptInvitation = async (req, res) => {
   try {
     // Re-load user (we only have id from authenticate middleware) to compare email
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
-    if (!user) return res.status(401).json({ error: 'Authentication required' });
+    if (!user)
+      return res.status(401).json({ error: 'Authentication required' });
 
     const result = await prisma.$transaction(async (tx) => {
       const inv = await tx.invitation.findUnique({
         where: { token: req.params.token },
       });
-      if (!inv) return { status: 404, error: 'Invitation not found or no longer valid' };
+      if (!inv)
+        return {
+          status: 404,
+          error: 'Invitation not found or no longer valid',
+        };
 
       // Lazy expire
       const refreshed = await expireIfNeeded(tx, inv);
 
       if (refreshed.status !== INVITATION_STATUS.PENDING) {
-        return { status: 410, error: `Invitation is ${refreshed.status.toLowerCase()}` };
+        return {
+          status: 410,
+          error: `Invitation is ${refreshed.status.toLowerCase()}`,
+        };
       }
       if (refreshed.email !== normalizeEmail(user.email)) {
-        return { status: 403, error: 'This invitation was sent to a different email address' };
+        return {
+          status: 403,
+          error: 'This invitation was sent to a different email address',
+        };
       }
 
       // If already a member, mark accepted and short-circuit
       const existing = await tx.workspaceMember.findUnique({
-        where: { userId_workspaceId: { userId: user.id, workspaceId: refreshed.workspaceId } },
+        where: {
+          userId_workspaceId: {
+            userId: user.id,
+            workspaceId: refreshed.workspaceId,
+          },
+        },
       });
       if (existing) {
         await tx.invitation.update({
@@ -1382,11 +1499,19 @@ const acceptInvitation = async (req, res) => {
             acceptedById: user.id,
           },
         });
-        return { status: 409, error: 'You are already a member of this workspace', workspaceId: refreshed.workspaceId };
+        return {
+          status: 409,
+          error: 'You are already a member of this workspace',
+          workspaceId: refreshed.workspaceId,
+        };
       }
 
       await tx.workspaceMember.create({
-        data: { userId: user.id, workspaceId: refreshed.workspaceId, role: refreshed.role },
+        data: {
+          userId: user.id,
+          workspaceId: refreshed.workspaceId,
+          role: refreshed.role,
+        },
       });
       const accepted = await tx.invitation.update({
         where: { id: refreshed.id },
@@ -1400,10 +1525,14 @@ const acceptInvitation = async (req, res) => {
     });
 
     if (result.status === 200) {
-      const workspace = await prisma.workspace.findUnique({ where: { id: result.workspaceId } });
+      const workspace = await prisma.workspace.findUnique({
+        where: { id: result.workspaceId },
+      });
       return res.status(200).json({ workspace });
     }
-    return res.status(result.status).json({ error: result.error, workspaceId: result.workspaceId });
+    return res
+      .status(result.status)
+      .json({ error: result.error, workspaceId: result.workspaceId });
   } catch (err) {
     console.error('acceptInvitation error:', err);
     res.status(500).json({ error: 'Internal server error' });
@@ -1432,6 +1561,7 @@ git commit -m "feat(api): invitations controller with token-link flow and lazy e
 ## Task 10: Invitation routers (workspace-scoped + public-by-token)
 
 **Files:**
+
 - Create: `apps/api/src/routes/invitations.workspace.js` (mounted under workspaces; admin-only)
 - Create: `apps/api/src/routes/invitations.js` (top-level public-by-token)
 - Modify: `apps/api/src/index.js` (mount the public router)
@@ -1523,6 +1653,7 @@ curl -s -b /tmp/cj.txt -H 'Content-Type: application/json' \
 Expected: `201` with `invitation` object and an `inviteUrl` like `http://localhost:3000/invite/<token>`.
 
 Then look up by token without auth:
+
 ```bash
 TOKEN=$(curl -s -b /tmp/cj.txt "http://localhost:5000/api/workspaces/$WS_ID/invitations" | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>console.log(JSON.parse(d).invitations[0].token))")
 curl -s "http://localhost:5000/api/invitations/$TOKEN"
@@ -1542,6 +1673,7 @@ git commit -m "feat(api): invitation routers and workspaces sub-mounts"
 ## Task 11: Swagger schema additions
 
 **Files:**
+
 - Modify: `apps/api/src/config/swagger.js`
 
 - [ ] **Step 1: Widen the JSDoc glob and add new schemas**
@@ -1626,6 +1758,7 @@ git commit -m "docs(api): add Member/Invitation Swagger schemas; include control
 ## Task 12: Frontend `api.upload` helper
 
 **Files:**
+
 - Modify: `apps/web/src/lib/api.js`
 
 - [ ] **Step 1: Add `upload` to the exported `api` object**
@@ -1664,7 +1797,11 @@ const customFetch = async (url, options = {}, { isFormData = false } = {}) => {
 
   let response = await fetch(`${API_URL}${url}`, finalOptions);
 
-  if (response.status === 401 && !url.includes('/api/auth/refresh') && !url.includes('/api/auth/login')) {
+  if (
+    response.status === 401 &&
+    !url.includes('/api/auth/refresh') &&
+    !url.includes('/api/auth/login')
+  ) {
     if (!isRefreshing) {
       isRefreshing = true;
       try {
@@ -1729,11 +1866,15 @@ const customFetch = async (url, options = {}, { isFormData = false } = {}) => {
 
 export const api = {
   get: (path) => customFetch(path, { method: 'GET' }),
-  post: (path, body) => customFetch(path, { method: 'POST', body: JSON.stringify(body) }),
-  patch: (path, body) => customFetch(path, { method: 'PATCH', body: JSON.stringify(body) }),
-  put: (path, body) => customFetch(path, { method: 'PUT', body: JSON.stringify(body) }),
+  post: (path, body) =>
+    customFetch(path, { method: 'POST', body: JSON.stringify(body) }),
+  patch: (path, body) =>
+    customFetch(path, { method: 'PATCH', body: JSON.stringify(body) }),
+  put: (path, body) =>
+    customFetch(path, { method: 'PUT', body: JSON.stringify(body) }),
   delete: (path) => customFetch(path, { method: 'DELETE' }),
-  upload: (path, formData) => customFetch(path, { method: 'POST', body: formData }, { isFormData: true }),
+  upload: (path, formData) =>
+    customFetch(path, { method: 'POST', body: formData }, { isFormData: true }),
 };
 ```
 
@@ -1751,6 +1892,7 @@ git commit -m "feat(web): api.upload helper, api.patch, 204 handling"
 ## Task 13: Workspace store rewrite
 
 **Files:**
+
 - Modify: `apps/web/src/stores/workspaceStore.js`
 
 - [ ] **Step 1: Replace the skeleton store**
@@ -1809,7 +1951,9 @@ const useWorkspaceStore = create((set, get) => ({
     const data = await api.patch(`/api/workspaces/${id}`, patch);
     const updated = data.workspace;
     set((s) => ({
-      workspaces: s.workspaces.map((w) => (w.id === id ? { ...w, ...updated } : w)),
+      workspaces: s.workspaces.map((w) =>
+        w.id === id ? { ...w, ...updated } : w
+      ),
     }));
     return updated;
   },
@@ -1819,7 +1963,9 @@ const useWorkspaceStore = create((set, get) => ({
     fd.append('icon', file);
     const data = await api.upload(`/api/workspaces/${id}/icon`, fd);
     set((s) => ({
-      workspaces: s.workspaces.map((w) => (w.id === id ? { ...w, iconUrl: data.iconUrl } : w)),
+      workspaces: s.workspaces.map((w) =>
+        w.id === id ? { ...w, iconUrl: data.iconUrl } : w
+      ),
     }));
     return data.iconUrl;
   },
@@ -1834,7 +1980,10 @@ const useWorkspaceStore = create((set, get) => ({
         activeWorkspaceId: activeRemoved ? null : s.activeWorkspaceId,
       };
     });
-    if (typeof window !== 'undefined' && get().getLastActiveWorkspaceId() === id) {
+    if (
+      typeof window !== 'undefined' &&
+      get().getLastActiveWorkspaceId() === id
+    ) {
       window.localStorage.removeItem(LAST_ACTIVE_KEY);
     }
   },
@@ -1855,6 +2004,7 @@ git commit -m "feat(web): workspace store with CRUD, icon upload, last-active pe
 ## Task 14: Workspace members store
 
 **Files:**
+
 - Create: `apps/web/src/stores/workspaceMembersStore.js`
 
 - [ ] **Step 1: Implement the store**
@@ -1884,13 +2034,18 @@ const useWorkspaceMembersStore = create((set, get) => ({
   },
 
   inviteMember: async (workspaceId, { email, role }) => {
-    const data = await api.post(`/api/workspaces/${workspaceId}/invitations`, { email, role });
+    const data = await api.post(`/api/workspaces/${workspaceId}/invitations`, {
+      email,
+      role,
+    });
     set((s) => ({ invitations: [data.invitation, ...s.invitations] }));
     return data;
   },
 
   revokeInvitation: async (workspaceId, invitationId) => {
-    await api.delete(`/api/workspaces/${workspaceId}/invitations/${invitationId}`);
+    await api.delete(
+      `/api/workspaces/${workspaceId}/invitations/${invitationId}`
+    );
     set((s) => ({
       invitations: s.invitations.map((i) =>
         i.id === invitationId ? { ...i, status: 'REVOKED' } : i
@@ -1899,7 +2054,10 @@ const useWorkspaceMembersStore = create((set, get) => ({
   },
 
   resendInvitation: async (workspaceId, invitationId) => {
-    const data = await api.post(`/api/workspaces/${workspaceId}/invitations/${invitationId}/resend`, {});
+    const data = await api.post(
+      `/api/workspaces/${workspaceId}/invitations/${invitationId}/resend`,
+      {}
+    );
     set((s) => ({
       invitations: s.invitations.map((i) =>
         i.id === invitationId ? data.invitation : i
@@ -1909,9 +2067,14 @@ const useWorkspaceMembersStore = create((set, get) => ({
   },
 
   updateMemberRole: async (workspaceId, memberId, role) => {
-    const data = await api.patch(`/api/workspaces/${workspaceId}/members/${memberId}`, { role });
+    const data = await api.patch(
+      `/api/workspaces/${workspaceId}/members/${memberId}`,
+      { role }
+    );
     set((s) => ({
-      members: s.members.map((m) => (m.id === memberId ? { ...m, role: data.member.role } : m)),
+      members: s.members.map((m) =>
+        m.id === memberId ? { ...m, role: data.member.role } : m
+      ),
     }));
     return data.member;
   },
@@ -1941,6 +2104,7 @@ git commit -m "feat(web): workspace members & invitations store"
 ## Task 15: UI primitives (Button, Modal, ConfirmDialog)
 
 **Files:**
+
 - Create: `apps/web/src/components/ui/Button.jsx`
 - Create: `apps/web/src/components/ui/Modal.jsx`
 - Create: `apps/web/src/components/ui/ConfirmDialog.jsx`
@@ -1957,8 +2121,7 @@ const VARIANTS = {
     'bg-primary-600 hover:bg-primary-700 text-white border border-transparent',
   secondary:
     'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 border border-transparent',
-  danger:
-    'bg-red-600 hover:bg-red-700 text-white border border-transparent',
+  danger: 'bg-red-600 hover:bg-red-700 text-white border border-transparent',
   outline:
     'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 border border-gray-300 dark:border-gray-600',
 };
@@ -1995,7 +2158,14 @@ Create `apps/web/src/components/ui/Modal.jsx`:
 
 import { useEffect } from 'react';
 
-export default function Modal({ open, onClose, title, children, footer, size = 'md' }) {
+export default function Modal({
+  open,
+  onClose,
+  title,
+  children,
+  footer,
+  size = 'md',
+}) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === 'Escape' && onClose && onClose();
@@ -2021,7 +2191,9 @@ export default function Modal({ open, onClose, title, children, footer, size = '
       >
         {title && (
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              {title}
+            </h2>
           </div>
         )}
         <div className="px-6 py-4">{children}</div>
@@ -2063,7 +2235,9 @@ export default function ConfirmDialog({
       title={title}
       footer={
         <>
-          <Button variant="secondary" onClick={onClose} disabled={isLoading}>Cancel</Button>
+          <Button variant="secondary" onClick={onClose} disabled={isLoading}>
+            Cancel
+          </Button>
           <Button variant={variant} onClick={onConfirm} disabled={isLoading}>
             {isLoading ? 'Working…' : confirmLabel}
           </Button>
@@ -2088,6 +2262,7 @@ git commit -m "feat(web): Button, Modal, ConfirmDialog UI primitives"
 ## Task 16: Workspace tile and rail components
 
 **Files:**
+
 - Create: `apps/web/src/components/workspace/WorkspaceTile.jsx`
 - Create: `apps/web/src/components/workspace/AccentColorPicker.jsx`
 - Create: `apps/web/src/components/workspace/WorkspaceIconUpload.jsx`
@@ -2104,7 +2279,11 @@ Create `apps/web/src/components/workspace/WorkspaceTile.jsx`:
 import Link from 'next/link';
 
 const initials = (name) =>
-  name.split(/\s+/).slice(0, 2).map((p) => p[0]?.toUpperCase() || '').join('') || '?';
+  name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase() || '')
+    .join('') || '?';
 
 export default function WorkspaceTile({ workspace, isActive, href, title }) {
   const bg = workspace.accentColor || '#3b82f6';
@@ -2119,7 +2298,11 @@ export default function WorkspaceTile({ workspace, isActive, href, title }) {
     >
       {workspace.iconUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={workspace.iconUrl} alt="" className="w-full h-full object-cover" />
+        <img
+          src={workspace.iconUrl}
+          alt=""
+          className="w-full h-full object-cover"
+        />
       ) : (
         <span className="text-base">{initials(workspace.name)}</span>
       )}
@@ -2152,7 +2335,9 @@ export default function AccentColorPicker({ value, onChange }) {
             type="button"
             onClick={() => onChange(c)}
             className={`h-8 w-8 rounded-md border transition-all ${
-              value === c ? 'ring-2 ring-offset-2 ring-gray-900 dark:ring-white' : 'border-gray-300'
+              value === c
+                ? 'ring-2 ring-offset-2 ring-gray-900 dark:ring-white'
+                : 'border-gray-300'
             }`}
             style={{ backgroundColor: c }}
             aria-label={`Use ${c}`}
@@ -2162,7 +2347,9 @@ export default function AccentColorPicker({ value, onChange }) {
       <input
         type="text"
         value={value}
-        onChange={(e) => HEX_RE.test(e.target.value) && onChange(e.target.value)}
+        onChange={(e) =>
+          HEX_RE.test(e.target.value) && onChange(e.target.value)
+        }
         className="mt-2 block w-32 px-2 py-1 text-xs font-mono border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-900 dark:text-white"
         placeholder="#3b82f6"
       />
@@ -2215,7 +2402,11 @@ export default function WorkspaceIconUpload({ workspace, onUpload }) {
       >
         {workspace.iconUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={workspace.iconUrl} alt="" className="w-full h-full object-cover" />
+          <img
+            src={workspace.iconUrl}
+            alt=""
+            className="w-full h-full object-cover"
+          />
         ) : (
           (workspace.name[0] || '?').toUpperCase()
         )}
@@ -2234,7 +2425,11 @@ export default function WorkspaceIconUpload({ workspace, onUpload }) {
           onClick={() => inputRef.current?.click()}
           disabled={isUploading}
         >
-          {isUploading ? 'Uploading…' : workspace.iconUrl ? 'Replace icon' : 'Upload icon'}
+          {isUploading
+            ? 'Uploading…'
+            : workspace.iconUrl
+              ? 'Replace icon'
+              : 'Upload icon'}
         </Button>
         {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
       </div>
@@ -2263,15 +2458,27 @@ export default function CreateWorkspaceModal({ open, onClose, onCreate }) {
   const [submitting, setSubmitting] = useState(false);
 
   const reset = () => {
-    setName(''); setDescription(''); setAccentColor('#3b82f6'); setError(''); setSubmitting(false);
+    setName('');
+    setDescription('');
+    setAccentColor('#3b82f6');
+    setError('');
+    setSubmitting(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name.trim()) { setError('Name is required'); return; }
-    setSubmitting(true); setError('');
+    if (!name.trim()) {
+      setError('Name is required');
+      return;
+    }
+    setSubmitting(true);
+    setError('');
     try {
-      await onCreate({ name: name.trim(), description: description.trim() || undefined, accentColor });
+      await onCreate({
+        name: name.trim(),
+        description: description.trim() || undefined,
+        accentColor,
+      });
       reset();
     } catch (err) {
       setError(err.message || 'Failed to create workspace');
@@ -2282,11 +2489,25 @@ export default function CreateWorkspaceModal({ open, onClose, onCreate }) {
   return (
     <Modal
       open={open}
-      onClose={() => { if (!submitting) { reset(); onClose(); } }}
+      onClose={() => {
+        if (!submitting) {
+          reset();
+          onClose();
+        }
+      }}
       title="Create workspace"
       footer={
         <>
-          <Button variant="secondary" onClick={() => { reset(); onClose(); }} disabled={submitting}>Cancel</Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              reset();
+              onClose();
+            }}
+            disabled={submitting}
+          >
+            Cancel
+          </Button>
           <Button onClick={handleSubmit} disabled={submitting}>
             {submitting ? 'Creating…' : 'Create'}
           </Button>
@@ -2300,7 +2521,9 @@ export default function CreateWorkspaceModal({ open, onClose, onCreate }) {
           </div>
         )}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Name
+          </label>
           <input
             type="text"
             value={name}
@@ -2311,7 +2534,9 @@ export default function CreateWorkspaceModal({ open, onClose, onCreate }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Description (optional)</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Description (optional)
+          </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -2349,7 +2574,9 @@ export default function WorkspaceRail() {
 
   return (
     <aside className="flex flex-col items-center gap-3 py-4 w-20 bg-gray-900 text-white min-h-screen">
-      <div className="text-[10px] uppercase tracking-wide text-gray-500 mb-1">Hubs</div>
+      <div className="text-[10px] uppercase tracking-wide text-gray-500 mb-1">
+        Hubs
+      </div>
       {workspaces.map((w) => (
         <WorkspaceTile
           key={w.id}
@@ -2392,6 +2619,7 @@ git commit -m "feat(web): workspace rail, tile, accent picker, icon upload, crea
 ## Task 17: Members and invitations components
 
 **Files:**
+
 - Create: `apps/web/src/components/members/RoleBadge.jsx`
 - Create: `apps/web/src/components/members/RoleSelect.jsx`
 - Create: `apps/web/src/components/members/MemberList.jsx`
@@ -2436,7 +2664,8 @@ export default function RoleSelect({ value, onChange, disabled }) {
 
   const handle = async (e) => {
     const next = e.target.value;
-    setBusy(true); setError('');
+    setBusy(true);
+    setError('');
     try {
       await onChange(next);
     } catch (err) {
@@ -2476,7 +2705,13 @@ import RoleSelect from './RoleSelect';
 import Button from '../ui/Button';
 import ConfirmDialog from '../ui/ConfirmDialog';
 
-export default function MemberList({ members, currentUserId, isAdmin, onChangeRole, onRemove }) {
+export default function MemberList({
+  members,
+  currentUserId,
+  isAdmin,
+  onChangeRole,
+  onRemove,
+}) {
   const [confirmRemoveId, setConfirmRemoveId] = useState(null);
   const target = members.find((m) => m.id === confirmRemoveId);
 
@@ -2486,26 +2721,39 @@ export default function MemberList({ members, currentUserId, isAdmin, onChangeRo
         {members.map((m) => {
           const isSelf = m.userId === currentUserId;
           return (
-            <li key={m.id} className="flex items-center justify-between px-4 py-3">
+            <li
+              key={m.id}
+              className="flex items-center justify-between px-4 py-3"
+            >
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-xs font-semibold text-gray-700 dark:text-gray-200">
                   {(m.name[0] || '?').toUpperCase()}
                 </div>
                 <div>
                   <div className="font-medium text-gray-900 dark:text-white">
-                    {m.name} {isSelf && <span className="text-xs text-gray-500">(you)</span>}
+                    {m.name}{' '}
+                    {isSelf && (
+                      <span className="text-xs text-gray-500">(you)</span>
+                    )}
                   </div>
                   <div className="text-xs text-gray-500">{m.email}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 {isAdmin ? (
-                  <RoleSelect value={m.role} onChange={(r) => onChangeRole(m.id, r)} />
+                  <RoleSelect
+                    value={m.role}
+                    onChange={(r) => onChangeRole(m.id, r)}
+                  />
                 ) : (
                   <RoleBadge role={m.role} />
                 )}
                 {(isAdmin || isSelf) && (
-                  <Button variant="outline" size="sm" onClick={() => setConfirmRemoveId(m.id)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setConfirmRemoveId(m.id)}
+                  >
                     {isSelf ? 'Leave' : 'Remove'}
                   </Button>
                 )}
@@ -2521,7 +2769,11 @@ export default function MemberList({ members, currentUserId, isAdmin, onChangeRo
           await onRemove(target.id);
           setConfirmRemoveId(null);
         }}
-        title={target?.userId === currentUserId ? 'Leave workspace?' : 'Remove member?'}
+        title={
+          target?.userId === currentUserId
+            ? 'Leave workspace?'
+            : 'Remove member?'
+        }
         message={
           target?.userId === currentUserId
             ? 'You will lose access to this workspace immediately.'
@@ -2540,15 +2792,21 @@ Create `apps/web/src/components/invitations/InvitationStatusBadge.jsx`:
 
 ```jsx
 const STYLES = {
-  PENDING:  'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200',
-  ACCEPTED: 'bg-green-100  text-green-800  dark:bg-green-900/40  dark:text-green-200',
-  REVOKED:  'bg-gray-100   text-gray-700   dark:bg-gray-700      dark:text-gray-200',
-  EXPIRED:  'bg-gray-100   text-gray-700   dark:bg-gray-700      dark:text-gray-200',
+  PENDING:
+    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200',
+  ACCEPTED:
+    'bg-green-100  text-green-800  dark:bg-green-900/40  dark:text-green-200',
+  REVOKED:
+    'bg-gray-100   text-gray-700   dark:bg-gray-700      dark:text-gray-200',
+  EXPIRED:
+    'bg-gray-100   text-gray-700   dark:bg-gray-700      dark:text-gray-200',
 };
 
 export default function InvitationStatusBadge({ status }) {
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${STYLES[status] || STYLES.PENDING}`}>
+    <span
+      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${STYLES[status] || STYLES.PENDING}`}
+    >
       {status}
     </span>
   );
@@ -2576,7 +2834,9 @@ export default function InviteForm({ onInvite }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); setSuccessUrl(''); setCopied(false);
+    setError('');
+    setSuccessUrl('');
+    setCopied(false);
     setSubmitting(true);
     try {
       const { inviteUrl } = await onInvite({ email: email.trim(), role });
@@ -2627,7 +2887,9 @@ export default function InviteForm({ onInvite }) {
       </div>
       {successUrl && (
         <div className="bg-green-50 dark:bg-green-900/30 p-3 rounded flex flex-col sm:flex-row sm:items-center gap-2">
-          <code className="text-xs flex-1 break-all text-gray-800 dark:text-gray-200">{successUrl}</code>
+          <code className="text-xs flex-1 break-all text-gray-800 dark:text-gray-200">
+            {successUrl}
+          </code>
           <Button variant="secondary" size="sm" onClick={copy} type="button">
             {copied ? 'Copied!' : 'Copy link'}
           </Button>
@@ -2655,23 +2917,47 @@ export default function InvitationList({ invitations, onRevoke, onResend }) {
   return (
     <ul className="divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg">
       {invitations.map((inv) => (
-        <li key={inv.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
+        <li
+          key={inv.id}
+          className="flex flex-wrap items-center gap-3 px-4 py-3"
+        >
           <div className="flex-1 min-w-[200px]">
-            <div className="font-medium text-gray-900 dark:text-white">{inv.email}</div>
+            <div className="font-medium text-gray-900 dark:text-white">
+              {inv.email}
+            </div>
             <div className="text-xs text-gray-500">
               {inv.role} · sent {new Date(inv.createdAt).toLocaleDateString()}
-              {inv.status === 'PENDING' && ` · expires ${new Date(inv.expiresAt).toLocaleDateString()}`}
+              {inv.status === 'PENDING' &&
+                ` · expires ${new Date(inv.expiresAt).toLocaleDateString()}`}
             </div>
           </div>
           <InvitationStatusBadge status={inv.status} />
           {inv.status === 'PENDING' && (
             <>
-              <Button variant="secondary" size="sm" onClick={() => onResend(inv.id)}>Resend</Button>
-              <Button variant="outline" size="sm" onClick={() => onRevoke(inv.id)}>Revoke</Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => onResend(inv.id)}
+              >
+                Resend
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onRevoke(inv.id)}
+              >
+                Revoke
+              </Button>
             </>
           )}
           {inv.status === 'EXPIRED' && (
-            <Button variant="secondary" size="sm" onClick={() => onResend(inv.id)}>Resend</Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => onResend(inv.id)}
+            >
+              Resend
+            </Button>
           )}
         </li>
       ))}
@@ -2692,6 +2978,7 @@ git commit -m "feat(web): member list, role select, invite form and list compone
 ## Task 18: Dashboard layout rewrite + redirect page
 
 **Files:**
+
 - Modify: `apps/web/src/app/dashboard/layout.js`
 - Modify: `apps/web/src/app/dashboard/page.js`
 - Create: `apps/web/src/app/onboarding/page.js`
@@ -2712,7 +2999,8 @@ import Button from '@/components/ui/Button';
 
 export default function DashboardLayout({ children }) {
   const router = useRouter();
-  const { user, isAuthenticated, isCheckingAuth, checkAuth, logout } = useAuthStore();
+  const { user, isAuthenticated, isCheckingAuth, checkAuth, logout } =
+    useAuthStore();
   const { fetchWorkspaces, isLoading: wsLoading } = useWorkspaceStore();
 
   useEffect(() => {
@@ -2744,12 +3032,16 @@ export default function DashboardLayout({ children }) {
         <nav className="bg-white dark:bg-gray-800 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16 items-center">
-              <span className="text-xl font-bold text-primary-600">Team Hub</span>
+              <span className="text-xl font-bold text-primary-600">
+                Team Hub
+              </span>
               <div className="flex items-center gap-3">
                 <span className="hidden sm:block text-sm text-gray-600 dark:text-gray-300">
                   {user?.name}
                 </span>
-                <Button variant="secondary" size="sm" onClick={() => logout()}>Logout</Button>
+                <Button variant="secondary" size="sm" onClick={() => logout()}>
+                  Logout
+                </Button>
               </div>
             </div>
           </div>
@@ -2774,7 +3066,8 @@ import useWorkspaceStore from '@/stores/workspaceStore';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { workspaces, isLoading, getLastActiveWorkspaceId } = useWorkspaceStore();
+  const { workspaces, isLoading, getLastActiveWorkspaceId } =
+    useWorkspaceStore();
 
   useEffect(() => {
     if (isLoading) return;
@@ -2836,11 +3129,15 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
       <div className="bg-white dark:bg-gray-800 shadow-xl rounded-xl p-8 max-w-md w-full text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Welcome to Team Hub</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          Welcome to Team Hub
+        </h1>
         <p className="text-gray-600 dark:text-gray-300 mb-6">
           You don't have any workspaces yet. Create one to start collaborating.
         </p>
-        <Button onClick={() => setOpen(true)}>Create your first workspace</Button>
+        <Button onClick={() => setOpen(true)}>
+          Create your first workspace
+        </Button>
         <CreateWorkspaceModal
           open={open}
           onClose={() => setOpen(false)}
@@ -2867,6 +3164,7 @@ git commit -m "feat(web): dashboard layout with workspace rail; onboarding fallb
 ## Task 19: Workspace home + settings (general) page
 
 **Files:**
+
 - Create: `apps/web/src/app/dashboard/[workspaceId]/layout.js`
 - Create: `apps/web/src/app/dashboard/[workspaceId]/page.js`
 - Create: `apps/web/src/app/dashboard/[workspaceId]/settings/page.js`
@@ -2911,9 +3209,15 @@ export default function WorkspaceLayout({ children }) {
   const isAdmin = workspace.myRole === 'ADMIN';
   const tabs = [
     { href: `/dashboard/${workspace.id}`, label: 'Home' },
-    isAdmin && { href: `/dashboard/${workspace.id}/settings`, label: 'Settings' },
+    isAdmin && {
+      href: `/dashboard/${workspace.id}/settings`,
+      label: 'Settings',
+    },
     { href: `/dashboard/${workspace.id}/settings/members`, label: 'Members' },
-    isAdmin && { href: `/dashboard/${workspace.id}/settings/invitations`, label: 'Invitations' },
+    isAdmin && {
+      href: `/dashboard/${workspace.id}/settings/invitations`,
+      label: 'Invitations',
+    },
   ].filter(Boolean);
 
   return (
@@ -2926,7 +3230,11 @@ export default function WorkspaceLayout({ children }) {
           <div className="w-14 h-14 rounded-lg overflow-hidden bg-white/20 flex items-center justify-center text-2xl font-bold">
             {workspace.iconUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={workspace.iconUrl} alt="" className="w-full h-full object-cover" />
+              <img
+                src={workspace.iconUrl}
+                alt=""
+                className="w-full h-full object-cover"
+              />
             ) : (
               (workspace.name[0] || '?').toUpperCase()
             )}
@@ -2975,7 +3283,9 @@ import useWorkspaceStore from '@/stores/workspaceStore';
 
 export default function WorkspaceHome() {
   const { workspaceId } = useParams();
-  const workspace = useWorkspaceStore((s) => s.workspaces.find((w) => w.id === workspaceId));
+  const workspace = useWorkspaceStore((s) =>
+    s.workspaces.find((w) => w.id === workspaceId)
+  );
 
   return (
     <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
@@ -2983,8 +3293,8 @@ export default function WorkspaceHome() {
         {workspace?.name || 'Workspace'}
       </h2>
       <p className="text-gray-600 dark:text-gray-300">
-        Goals, announcements, and action items will live here in upcoming milestones.
-        Use the tabs above to manage members and invitations.
+        Goals, announcements, and action items will live here in upcoming
+        milestones. Use the tabs above to manage members and invitations.
       </p>
     </div>
   );
@@ -3009,7 +3319,8 @@ import ConfirmDialog from '@/components/ui/ConfirmDialog';
 export default function WorkspaceSettings() {
   const router = useRouter();
   const { workspaceId } = useParams();
-  const { workspaces, updateWorkspace, uploadWorkspaceIcon, deleteWorkspace } = useWorkspaceStore();
+  const { workspaces, updateWorkspace, uploadWorkspaceIcon, deleteWorkspace } =
+    useWorkspaceStore();
   const workspace = workspaces.find((w) => w.id === workspaceId);
 
   const [name, setName] = useState('');
@@ -3032,16 +3343,23 @@ export default function WorkspaceSettings() {
   if (workspace.myRole !== 'ADMIN') {
     return (
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <p className="text-gray-600 dark:text-gray-300">Only admins can edit workspace settings.</p>
+        <p className="text-gray-600 dark:text-gray-300">
+          Only admins can edit workspace settings.
+        </p>
       </div>
     );
   }
 
   const onSave = async (e) => {
     e.preventDefault();
-    setSaving(true); setError('');
+    setSaving(true);
+    setError('');
     try {
-      await updateWorkspace(workspace.id, { name: name.trim(), description, accentColor });
+      await updateWorkspace(workspace.id, {
+        name: name.trim(),
+        description,
+        accentColor,
+      });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -3052,7 +3370,9 @@ export default function WorkspaceSettings() {
   return (
     <div className="space-y-8 max-w-2xl">
       <section className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Workspace icon</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          Workspace icon
+        </h2>
         <WorkspaceIconUpload
           workspace={workspace}
           onUpload={(file) => uploadWorkspaceIcon(workspace.id, file)}
@@ -3060,7 +3380,9 @@ export default function WorkspaceSettings() {
       </section>
 
       <section className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">General</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          General
+        </h2>
         <form onSubmit={onSave} className="space-y-4">
           {error && (
             <div className="bg-red-50 dark:bg-red-900/30 p-3 rounded">
@@ -3068,7 +3390,9 @@ export default function WorkspaceSettings() {
             </div>
           )}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Name
+            </label>
             <input
               type="text"
               value={name}
@@ -3077,7 +3401,9 @@ export default function WorkspaceSettings() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Description
+            </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -3086,16 +3412,23 @@ export default function WorkspaceSettings() {
             />
           </div>
           <AccentColorPicker value={accentColor} onChange={setAccentColor} />
-          <Button type="submit" disabled={saving}>{saving ? 'Saving…' : 'Save changes'}</Button>
+          <Button type="submit" disabled={saving}>
+            {saving ? 'Saving…' : 'Save changes'}
+          </Button>
         </form>
       </section>
 
       <section className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border border-red-200 dark:border-red-900">
-        <h2 className="text-lg font-semibold text-red-700 dark:text-red-400 mb-2">Danger zone</h2>
+        <h2 className="text-lg font-semibold text-red-700 dark:text-red-400 mb-2">
+          Danger zone
+        </h2>
         <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-          Deleting a workspace is permanent. All goals, announcements, and members will be removed.
+          Deleting a workspace is permanent. All goals, announcements, and
+          members will be removed.
         </p>
-        <Button variant="danger" onClick={() => setConfirmDelete(true)}>Delete workspace</Button>
+        <Button variant="danger" onClick={() => setConfirmDelete(true)}>
+          Delete workspace
+        </Button>
         <ConfirmDialog
           open={confirmDelete}
           onClose={() => setConfirmDelete(false)}
@@ -3132,6 +3465,7 @@ git commit -m "feat(web): workspace layout, home placeholder, and settings page"
 ## Task 20: Members & invitations settings pages
 
 **Files:**
+
 - Create: `apps/web/src/app/dashboard/[workspaceId]/settings/members/page.js`
 - Create: `apps/web/src/app/dashboard/[workspaceId]/settings/invitations/page.js`
 
@@ -3153,9 +3487,17 @@ export default function MembersPage() {
   const router = useRouter();
   const { workspaceId } = useParams();
   const { user } = useAuthStore();
-  const workspace = useWorkspaceStore((s) => s.workspaces.find((w) => w.id === workspaceId));
+  const workspace = useWorkspaceStore((s) =>
+    s.workspaces.find((w) => w.id === workspaceId)
+  );
   const fetchWorkspaces = useWorkspaceStore((s) => s.fetchWorkspaces);
-  const { members, fetchMembers, updateMemberRole, removeMember, leaveWorkspace } = useWorkspaceMembersStore();
+  const {
+    members,
+    fetchMembers,
+    updateMemberRole,
+    removeMember,
+    leaveWorkspace,
+  } = useWorkspaceMembersStore();
 
   useEffect(() => {
     if (workspaceId) fetchMembers(workspaceId);
@@ -3214,8 +3556,16 @@ import InvitationList from '@/components/invitations/InvitationList';
 
 export default function InvitationsPage() {
   const { workspaceId } = useParams();
-  const workspace = useWorkspaceStore((s) => s.workspaces.find((w) => w.id === workspaceId));
-  const { invitations, fetchInvitations, inviteMember, revokeInvitation, resendInvitation } = useWorkspaceMembersStore();
+  const workspace = useWorkspaceStore((s) =>
+    s.workspaces.find((w) => w.id === workspaceId)
+  );
+  const {
+    invitations,
+    fetchInvitations,
+    inviteMember,
+    revokeInvitation,
+    resendInvitation,
+  } = useWorkspaceMembersStore();
 
   useEffect(() => {
     if (workspaceId) fetchInvitations(workspaceId);
@@ -3225,7 +3575,9 @@ export default function InvitationsPage() {
   if (workspace.myRole !== 'ADMIN') {
     return (
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <p className="text-gray-600 dark:text-gray-300">Only admins can manage invitations.</p>
+        <p className="text-gray-600 dark:text-gray-300">
+          Only admins can manage invitations.
+        </p>
       </div>
     );
   }
@@ -3265,6 +3617,7 @@ git commit -m "feat(web): members and invitations settings pages"
 ## Task 21: Invite landing page
 
 **Files:**
+
 - Create: `apps/web/src/app/invite/[token]/page.js`
 
 - [ ] **Step 1: Implement the landing page**
@@ -3284,13 +3637,16 @@ import Button from '@/components/ui/Button';
 export default function InviteLanding() {
   const router = useRouter();
   const { token } = useParams();
-  const { user, isAuthenticated, isCheckingAuth, checkAuth, logout } = useAuthStore();
+  const { user, isAuthenticated, isCheckingAuth, checkAuth, logout } =
+    useAuthStore();
   const [data, setData] = useState(null);
   const [loadError, setLoadError] = useState('');
   const [accepting, setAccepting] = useState(false);
   const [acceptError, setAcceptError] = useState('');
 
-  useEffect(() => { checkAuth(); }, [checkAuth]);
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   useEffect(() => {
     let cancelled = false;
@@ -3302,11 +3658,14 @@ export default function InviteLanding() {
         if (!cancelled) setLoadError(err.message || 'Invitation not found');
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [token]);
 
   const accept = async () => {
-    setAccepting(true); setAcceptError('');
+    setAccepting(true);
+    setAcceptError('');
     try {
       const r = await api.post(`/api/invitations/${token}/accept`, {});
       router.push(`/dashboard/${r.workspace.id}`);
@@ -3329,7 +3688,9 @@ export default function InviteLanding() {
   if (loadError) {
     return (
       <Shell>
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Invitation unavailable</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+          Invitation unavailable
+        </h1>
         <p className="text-gray-600 dark:text-gray-300">{loadError}</p>
       </Shell>
     );
@@ -3352,7 +3713,8 @@ export default function InviteLanding() {
     return (
       <Shell workspace={workspace}>
         <p className="text-gray-700 dark:text-gray-300">
-          This invitation is {status.toLowerCase()}. Ask an admin to send you a new one.
+          This invitation is {status.toLowerCase()}. Ask an admin to send you a
+          new one.
         </p>
       </Shell>
     );
@@ -3361,9 +3723,14 @@ export default function InviteLanding() {
   if (status === 'ACCEPTED') {
     return (
       <Shell workspace={workspace}>
-        <p className="text-gray-700 dark:text-gray-300 mb-4">This invitation has already been accepted.</p>
+        <p className="text-gray-700 dark:text-gray-300 mb-4">
+          This invitation has already been accepted.
+        </p>
         {isAuthenticated && (
-          <Link href={`/dashboard/${workspace.id}`} className="text-primary-600 hover:underline">
+          <Link
+            href={`/dashboard/${workspace.id}`}
+            className="text-primary-600 hover:underline"
+          >
             Go to {workspace.name}
           </Link>
         )}
@@ -3377,8 +3744,9 @@ export default function InviteLanding() {
     return (
       <Shell workspace={workspace}>
         <p className="text-gray-700 dark:text-gray-300 mb-6">
-          You've been invited to <strong>{workspace.name}</strong> as <strong>{invitation.role}</strong>.
-          Sign in or create an account using <strong>{invitation.email}</strong> to accept.
+          You've been invited to <strong>{workspace.name}</strong> as{' '}
+          <strong>{invitation.role}</strong>. Sign in or create an account using{' '}
+          <strong>{invitation.email}</strong> to accept.
         </p>
         <div className="flex gap-2">
           <Link href={`/login?next=${encodeURIComponent(next)}`}>
@@ -3392,15 +3760,18 @@ export default function InviteLanding() {
     );
   }
 
-  const emailMatches = user?.email?.toLowerCase() === invitation.email.toLowerCase();
+  const emailMatches =
+    user?.email?.toLowerCase() === invitation.email.toLowerCase();
   if (!emailMatches) {
     return (
       <Shell workspace={workspace}>
         <p className="text-gray-700 dark:text-gray-300 mb-4">
-          This invitation was sent to <strong>{invitation.email}</strong> but you're signed in as{' '}
-          <strong>{user.email}</strong>.
+          This invitation was sent to <strong>{invitation.email}</strong> but
+          you're signed in as <strong>{user.email}</strong>.
         </p>
-        <Button variant="secondary" onClick={() => logout()}>Log out and try again</Button>
+        <Button variant="secondary" onClick={() => logout()}>
+          Log out and try again
+        </Button>
       </Shell>
     );
   }
@@ -3408,11 +3779,14 @@ export default function InviteLanding() {
   return (
     <Shell workspace={workspace}>
       <p className="text-gray-700 dark:text-gray-300 mb-6">
-        Accept invitation to <strong>{workspace.name}</strong> as <strong>{invitation.role}</strong>?
+        Accept invitation to <strong>{workspace.name}</strong> as{' '}
+        <strong>{invitation.role}</strong>?
       </p>
       {acceptError && (
         <div className="bg-red-50 dark:bg-red-900/30 p-3 rounded mb-4">
-          <p className="text-sm text-red-700 dark:text-red-400">{acceptError}</p>
+          <p className="text-sm text-red-700 dark:text-red-400">
+            {acceptError}
+          </p>
         </div>
       )}
       <Button onClick={accept} disabled={accepting}>
@@ -3434,12 +3808,18 @@ function Shell({ workspace, children }) {
             >
               {workspace.iconUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={workspace.iconUrl} alt="" className="w-full h-full object-cover" />
+                <img
+                  src={workspace.iconUrl}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 (workspace.name[0] || '?').toUpperCase()
               )}
             </div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{workspace.name}</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              {workspace.name}
+            </h2>
           </div>
         )}
         {children}

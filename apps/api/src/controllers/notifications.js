@@ -18,7 +18,10 @@ async function markRead(req, res) {
     where: { id: req.params.id, userId: req.user.id },
   });
   if (!n) return res.status(404).json({ error: 'Notification not found' });
-  await prisma.notification.update({ where: { id: n.id }, data: { isRead: true } });
+  await prisma.notification.update({
+    where: { id: n.id },
+    data: { isRead: true },
+  });
   res.json({ ok: true });
 }
 

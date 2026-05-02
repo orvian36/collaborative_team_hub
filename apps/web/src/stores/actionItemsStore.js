@@ -15,7 +15,9 @@ const useActionItemsStore = create((set, get) => ({
   fetchAll: async (workspaceId) => {
     set({ isLoading: true });
     try {
-      const { actionItems } = await api.get(`/api/workspaces/${workspaceId}/action-items`);
+      const { actionItems } = await api.get(
+        `/api/workspaces/${workspaceId}/action-items`
+      );
       const buckets = EMPTY_BUCKETS();
       for (const item of actionItems) {
         if (!buckets[item.status]) buckets[item.status] = [];
@@ -32,23 +34,34 @@ const useActionItemsStore = create((set, get) => ({
   },
 
   create: async (workspaceId, payload) => {
-    const { actionItem } = await api.post(`/api/workspaces/${workspaceId}/action-items`, payload);
-    set((s) => ({
-      byStatus: {
-        ...s.byStatus,
-        [actionItem.status]: [...(s.byStatus[actionItem.status] || []), actionItem]
-          .sort((a, b) => a.position - b.position),
-      },
-    }));
+    const { actionItem } = await api.post(
+      `/api/workspaces/${workspaceId}/action-items`,
+      payload
+    );
+    set((s) => {
+      const bucket = s.byStatus[actionItem.status] || [];
+      if (bucket.some((it) => it.id === actionItem.id)) return s;
+      return {
+        byStatus: {
+          ...s.byStatus,
+          [actionItem.status]: [...bucket, actionItem].sort(
+            (a, b) => a.position - b.position
+          ),
+        },
+      };
+    });
     return actionItem;
   },
 
   update: async (workspaceId, id, payload) => {
-    const { actionItem } = await api.put(`/api/workspaces/${workspaceId}/action-items/${id}`, payload);
+    const { actionItem } = await api.put(
+      `/api/workspaces/${workspaceId}/action-items/${id}`,
+      payload
+    );
     set((s) => {
       const buckets = { ...s.byStatus };
       for (const k of Object.keys(buckets)) {
-        buckets[k] = buckets[k].map((it) => it.id === id ? actionItem : it);
+        buckets[k] = buckets[k].map((it) => (it.id === id ? actionItem : it));
       }
       return { byStatus: buckets };
     });
@@ -73,7 +86,11 @@ const useActionItemsStore = create((set, get) => ({
     let fromStatus = null;
     for (const k of Object.keys(before)) {
       const found = before[k].find((it) => it.id === id);
-      if (found) { item = found; fromStatus = k; break; }
+      if (found) {
+        item = found;
+        fromStatus = k;
+        break;
+      }
     }
     if (!item) return;
 
@@ -81,23 +98,30 @@ const useActionItemsStore = create((set, get) => ({
     const next = {};
     for (const k of Object.keys(before)) next[k] = [...before[k]];
     next[fromStatus] = next[fromStatus].filter((it) => it.id !== id);
-    next[toStatus]   = [...next[toStatus]];
+    next[toStatus] = [...next[toStatus]];
     const moved = { ...item, status: toStatus, position: toPosition };
     next[toStatus].splice(toPosition, 0, moved);
     // Recompute positions for both columns
-    next[fromStatus] = next[fromStatus].map((it, i) => ({ ...it, position: i }));
-    next[toStatus]   = next[toStatus].map((it, i) => ({ ...it, position: i }));
+    next[fromStatus] = next[fromStatus].map((it, i) => ({
+      ...it,
+      position: i,
+    }));
+    next[toStatus] = next[toStatus].map((it, i) => ({ ...it, position: i }));
     set({ byStatus: next });
 
     try {
-      const { actionItem } = await api.patch(`/api/workspaces/${workspaceId}/action-items/${id}/move`, {
-        status: toStatus, position: toPosition,
-      });
+      const { actionItem } = await api.patch(
+        `/api/workspaces/${workspaceId}/action-items/${id}/move`,
+        {
+          status: toStatus,
+          position: toPosition,
+        }
+      );
       // Reconcile with authoritative copy
       set((s) => {
         const buckets = { ...s.byStatus };
         for (const k of Object.keys(buckets)) {
-          buckets[k] = buckets[k].map((it) => it.id === id ? actionItem : it);
+          buckets[k] = buckets[k].map((it) => (it.id === id ? actionItem : it));
         }
         return { byStatus: buckets };
       });
@@ -109,21 +133,25 @@ const useActionItemsStore = create((set, get) => ({
   },
 
   // Real-time
-  upsert: (item) => set((s) => {
-    const buckets = { ...s.byStatus };
-    for (const k of Object.keys(buckets)) {
-      buckets[k] = buckets[k].filter((it) => it.id !== item.id);
-    }
-    buckets[item.status] = [...(buckets[item.status] || []), item].sort((a, b) => a.position - b.position);
-    return { byStatus: buckets };
-  }),
-  removeLocal: (id) => set((s) => {
-    const buckets = { ...s.byStatus };
-    for (const k of Object.keys(buckets)) {
-      buckets[k] = buckets[k].filter((it) => it.id !== id);
-    }
-    return { byStatus: buckets };
-  }),
+  upsert: (item) =>
+    set((s) => {
+      const buckets = { ...s.byStatus };
+      for (const k of Object.keys(buckets)) {
+        buckets[k] = buckets[k].filter((it) => it.id !== item.id);
+      }
+      buckets[item.status] = [...(buckets[item.status] || []), item].sort(
+        (a, b) => a.position - b.position
+      );
+      return { byStatus: buckets };
+    }),
+  removeLocal: (id) =>
+    set((s) => {
+      const buckets = { ...s.byStatus };
+      for (const k of Object.keys(buckets)) {
+        buckets[k] = buckets[k].filter((it) => it.id !== id);
+      }
+      return { byStatus: buckets };
+    }),
 }));
 
 export default useActionItemsStore;

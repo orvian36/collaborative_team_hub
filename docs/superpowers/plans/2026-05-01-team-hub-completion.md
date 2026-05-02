@@ -10,7 +10,7 @@
 
 **Note on tests:** This repo has no test runner configured (per `CLAUDE.md`) and the test bonus item was explicitly dropped from scope. Each task has a **manual verification** step instead of a TDD red/green cycle.
 
-**Spec:** `docs/superpowers/specs/2026-05-01-team-hub-completion-design.md`. The spec is the source of truth for *why*; this plan is the source of truth for *how*.
+**Spec:** `docs/superpowers/specs/2026-05-01-team-hub-completion-design.md`. The spec is the source of truth for _why_; this plan is the source of truth for _how_.
 
 ---
 
@@ -52,6 +52,7 @@
 ## Task 1: Apply schema deltas and run migration
 
 **Files:**
+
 - Modify: `apps/api/prisma/schema.prisma`
 - Create: `apps/api/prisma/migrations/20260501100000_add_team_hub_completion_fields/migration.sql`
 
@@ -264,6 +265,7 @@ git commit -m "feat(db): add completion-phase columns and indexes"
 ## Task 2: Add capability matrix to shared
 
 **Files:**
+
 - Modify: `packages/shared/src/index.js`
 
 - [ ] **Step 1: Append capabilities, role matrix, and helper**
@@ -274,29 +276,29 @@ Open `packages/shared/src/index.js`. After the existing `SOCKET_EVENTS` block (a
 // ─── Capabilities ────────────────────────────────────────────
 const CAPABILITIES = {
   WORKSPACE_SETTINGS_WRITE: 'workspace:settings:write',
-  WORKSPACE_DELETE:         'workspace:delete',
-  MEMBER_INVITE:            'member:invite',
-  MEMBER_ROLE_WRITE:        'member:role:write',
-  MEMBER_REMOVE:            'member:remove',
-  GOAL_CREATE:              'goal:create',
-  GOAL_EDIT:                'goal:edit',
-  GOAL_DELETE:              'goal:delete',
-  GOAL_REASSIGN_OWNER:      'goal:reassign-owner',
-  MILESTONE_WRITE:          'milestone:write',
-  ACTION_ITEM_CREATE:       'actionItem:create',
-  ACTION_ITEM_EDIT:         'actionItem:edit',
-  ACTION_ITEM_DELETE:       'actionItem:delete',
-  ACTION_ITEM_REASSIGN:     'actionItem:reassign',
-  ANNOUNCEMENT_CREATE:      'announcement:create',
-  ANNOUNCEMENT_EDIT:        'announcement:edit',
-  ANNOUNCEMENT_DELETE:      'announcement:delete',
-  ANNOUNCEMENT_PIN:         'announcement:pin',
-  COMMENT_CREATE:           'comment:create',
-  COMMENT_DELETE_OWN:       'comment:delete-own',
-  COMMENT_DELETE_ANY:       'comment:delete-any',
-  REACTION_TOGGLE:          'reaction:toggle',
-  AUDIT_READ:               'audit:read',
-  EXPORT_CSV:               'export:csv',
+  WORKSPACE_DELETE: 'workspace:delete',
+  MEMBER_INVITE: 'member:invite',
+  MEMBER_ROLE_WRITE: 'member:role:write',
+  MEMBER_REMOVE: 'member:remove',
+  GOAL_CREATE: 'goal:create',
+  GOAL_EDIT: 'goal:edit',
+  GOAL_DELETE: 'goal:delete',
+  GOAL_REASSIGN_OWNER: 'goal:reassign-owner',
+  MILESTONE_WRITE: 'milestone:write',
+  ACTION_ITEM_CREATE: 'actionItem:create',
+  ACTION_ITEM_EDIT: 'actionItem:edit',
+  ACTION_ITEM_DELETE: 'actionItem:delete',
+  ACTION_ITEM_REASSIGN: 'actionItem:reassign',
+  ANNOUNCEMENT_CREATE: 'announcement:create',
+  ANNOUNCEMENT_EDIT: 'announcement:edit',
+  ANNOUNCEMENT_DELETE: 'announcement:delete',
+  ANNOUNCEMENT_PIN: 'announcement:pin',
+  COMMENT_CREATE: 'comment:create',
+  COMMENT_DELETE_OWN: 'comment:delete-own',
+  COMMENT_DELETE_ANY: 'comment:delete-any',
+  REACTION_TOGGLE: 'reaction:toggle',
+  AUDIT_READ: 'audit:read',
+  EXPORT_CSV: 'export:csv',
 };
 
 const ROLE_CAPABILITIES = {
@@ -348,28 +350,28 @@ In the same file, replace the `ACTIVITY_TYPES` block:
 
 ```js
 const ACTIVITY_TYPES = {
-  GOAL_CREATED:              'GOAL_CREATED',
-  GOAL_UPDATED:              'GOAL_UPDATED',
-  GOAL_DELETED:              'GOAL_DELETED',
-  GOAL_STATUS_CHANGED:       'GOAL_STATUS_CHANGED',
-  MILESTONE_ADDED:           'MILESTONE_ADDED',
-  MILESTONE_UPDATED:         'MILESTONE_UPDATED',
-  MILESTONE_REMOVED:         'MILESTONE_REMOVED',
-  ACTION_ITEM_CREATED:       'ACTION_ITEM_CREATED',
-  ACTION_ITEM_UPDATED:       'ACTION_ITEM_UPDATED',
-  ACTION_ITEM_DELETED:       'ACTION_ITEM_DELETED',
-  ACTION_ITEM_STATUS_CHANGED:'ACTION_ITEM_STATUS_CHANGED',
-  ANNOUNCEMENT_POSTED:       'ANNOUNCEMENT_POSTED',
-  ANNOUNCEMENT_UPDATED:      'ANNOUNCEMENT_UPDATED',
-  ANNOUNCEMENT_PINNED:       'ANNOUNCEMENT_PINNED',
-  ANNOUNCEMENT_DELETED:      'ANNOUNCEMENT_DELETED',
-  COMMENT_ADDED:             'COMMENT_ADDED',
-  COMMENT_DELETED:           'COMMENT_DELETED',
-  MEMBER_JOINED:             'MEMBER_JOINED',
-  MEMBER_INVITED:            'MEMBER_INVITED',
-  MEMBER_ROLE_CHANGED:       'MEMBER_ROLE_CHANGED',
-  MEMBER_REMOVED:            'MEMBER_REMOVED',
-  WORKSPACE_SETTINGS_CHANGED:'WORKSPACE_SETTINGS_CHANGED',
+  GOAL_CREATED: 'GOAL_CREATED',
+  GOAL_UPDATED: 'GOAL_UPDATED',
+  GOAL_DELETED: 'GOAL_DELETED',
+  GOAL_STATUS_CHANGED: 'GOAL_STATUS_CHANGED',
+  MILESTONE_ADDED: 'MILESTONE_ADDED',
+  MILESTONE_UPDATED: 'MILESTONE_UPDATED',
+  MILESTONE_REMOVED: 'MILESTONE_REMOVED',
+  ACTION_ITEM_CREATED: 'ACTION_ITEM_CREATED',
+  ACTION_ITEM_UPDATED: 'ACTION_ITEM_UPDATED',
+  ACTION_ITEM_DELETED: 'ACTION_ITEM_DELETED',
+  ACTION_ITEM_STATUS_CHANGED: 'ACTION_ITEM_STATUS_CHANGED',
+  ANNOUNCEMENT_POSTED: 'ANNOUNCEMENT_POSTED',
+  ANNOUNCEMENT_UPDATED: 'ANNOUNCEMENT_UPDATED',
+  ANNOUNCEMENT_PINNED: 'ANNOUNCEMENT_PINNED',
+  ANNOUNCEMENT_DELETED: 'ANNOUNCEMENT_DELETED',
+  COMMENT_ADDED: 'COMMENT_ADDED',
+  COMMENT_DELETED: 'COMMENT_DELETED',
+  MEMBER_JOINED: 'MEMBER_JOINED',
+  MEMBER_INVITED: 'MEMBER_INVITED',
+  MEMBER_ROLE_CHANGED: 'MEMBER_ROLE_CHANGED',
+  MEMBER_REMOVED: 'MEMBER_REMOVED',
+  WORKSPACE_SETTINGS_CHANGED: 'WORKSPACE_SETTINGS_CHANGED',
 };
 ```
 
@@ -379,33 +381,33 @@ Replace the `SOCKET_EVENTS` block:
 
 ```js
 const SOCKET_EVENTS = {
-  JOIN_WORKSPACE:        'workspace:join',
-  LEAVE_WORKSPACE:       'workspace:leave',
-  WORKSPACE_UPDATED:     'workspace:updated',
-  MEMBER_JOINED:         'member:joined',
-  MEMBER_REMOVED:        'member:removed',
-  GOAL_CREATED:          'goal:created',
-  GOAL_UPDATED:          'goal:updated',
-  GOAL_DELETED:          'goal:deleted',
-  GOAL_STATUS_CHANGED:   'goal:status-changed',
-  MILESTONE_UPSERTED:    'milestone:upserted',
-  MILESTONE_DELETED:     'milestone:deleted',
-  ACTION_ITEM_CREATED:   'actionItem:created',
-  ACTION_ITEM_UPDATED:   'actionItem:updated',
-  ACTION_ITEM_DELETED:   'actionItem:deleted',
-  ACTION_ITEM_MOVED:     'actionItem:moved',
-  ANNOUNCEMENT_NEW:      'announcement:new',
-  ANNOUNCEMENT_UPDATED:  'announcement:updated',
-  ANNOUNCEMENT_PINNED:   'announcement:pinned',
-  ANNOUNCEMENT_DELETED:  'announcement:deleted',
-  COMMENT_NEW:           'comment:new',
-  COMMENT_DELETED:       'comment:deleted',
-  REACTION_NEW:          'reaction:new',
-  REACTION_REMOVED:      'reaction:removed',
-  USER_ONLINE:           'user:online',
-  USER_OFFLINE:          'user:offline',
-  NOTIFICATION_NEW:      'notification:new',
-  ACTIVITY_NEW:          'activity:new',
+  JOIN_WORKSPACE: 'workspace:join',
+  LEAVE_WORKSPACE: 'workspace:leave',
+  WORKSPACE_UPDATED: 'workspace:updated',
+  MEMBER_JOINED: 'member:joined',
+  MEMBER_REMOVED: 'member:removed',
+  GOAL_CREATED: 'goal:created',
+  GOAL_UPDATED: 'goal:updated',
+  GOAL_DELETED: 'goal:deleted',
+  GOAL_STATUS_CHANGED: 'goal:status-changed',
+  MILESTONE_UPSERTED: 'milestone:upserted',
+  MILESTONE_DELETED: 'milestone:deleted',
+  ACTION_ITEM_CREATED: 'actionItem:created',
+  ACTION_ITEM_UPDATED: 'actionItem:updated',
+  ACTION_ITEM_DELETED: 'actionItem:deleted',
+  ACTION_ITEM_MOVED: 'actionItem:moved',
+  ANNOUNCEMENT_NEW: 'announcement:new',
+  ANNOUNCEMENT_UPDATED: 'announcement:updated',
+  ANNOUNCEMENT_PINNED: 'announcement:pinned',
+  ANNOUNCEMENT_DELETED: 'announcement:deleted',
+  COMMENT_NEW: 'comment:new',
+  COMMENT_DELETED: 'comment:deleted',
+  REACTION_NEW: 'reaction:new',
+  REACTION_REMOVED: 'reaction:removed',
+  USER_ONLINE: 'user:online',
+  USER_OFFLINE: 'user:offline',
+  NOTIFICATION_NEW: 'notification:new',
+  ACTIVITY_NEW: 'activity:new',
 };
 ```
 
@@ -435,6 +437,7 @@ git commit -m "feat(shared): add RBAC capability matrix and extend constants"
 ## Task 3: Add `requirePermission` middleware and `lib/socket.js` placeholder
 
 **Files:**
+
 - Create: `apps/api/src/middleware/permission.js`
 - Create: `apps/api/src/lib/socket.js`
 
@@ -458,7 +461,11 @@ const { hasCapability } = require('@team-hub/shared');
  */
 const requirePermission = (capability) => (req, res, next) => {
   if (!req.member) {
-    return res.status(500).json({ error: 'requirePermission used without requireWorkspaceMembership' });
+    return res
+      .status(500)
+      .json({
+        error: 'requirePermission used without requireWorkspaceMembership',
+      });
   }
   if (!hasCapability(req.member.role, capability)) {
     return res.status(403).json({ error: 'Forbidden' });
@@ -496,7 +503,13 @@ function getOnlineUserIds(_workspaceId) {
   return [];
 }
 
-module.exports = { initSocket, broadcastToWorkspace, emitToUser, getOnlineUserIds, getIo: () => io };
+module.exports = {
+  initSocket,
+  broadcastToWorkspace,
+  emitToUser,
+  getOnlineUserIds,
+  getIo: () => io,
+};
 ```
 
 - [ ] **Step 3: Verify the API still boots**
@@ -519,6 +532,7 @@ git commit -m "feat(api): add requirePermission middleware and socket placeholde
 ## Task 4: Add `lib/activity.js` (audit log helper)
 
 **Files:**
+
 - Create: `apps/api/src/lib/activity.js`
 
 - [ ] **Step 1: Implement `logActivity`**
@@ -556,20 +570,22 @@ const { SOCKET_EVENTS } = require('@team-hub/shared');
 async function logActivity(tx, payload) {
   const activity = await tx.activity.create({
     data: {
-      type:        payload.type,
-      message:     payload.message,
-      userId:      payload.userId,
+      type: payload.type,
+      message: payload.message,
+      userId: payload.userId,
       workspaceId: payload.workspaceId,
-      goalId:      payload.goalId      ?? null,
-      entityType:  payload.entityType  ?? null,
-      entityId:    payload.entityId    ?? null,
-      metadata:    payload.metadata    ?? null,
+      goalId: payload.goalId ?? null,
+      entityType: payload.entityType ?? null,
+      entityId: payload.entityId ?? null,
+      metadata: payload.metadata ?? null,
     },
   });
   // Fire after the caller commits — but since this is the same tx,
   // we schedule the broadcast on next tick so any rollback prevents emission.
   process.nextTick(() => {
-    broadcastToWorkspace(payload.workspaceId, SOCKET_EVENTS.ACTIVITY_NEW, { activity });
+    broadcastToWorkspace(payload.workspaceId, SOCKET_EVENTS.ACTIVITY_NEW, {
+      activity,
+    });
   });
   return activity;
 }
@@ -597,6 +613,7 @@ git commit -m "feat(api): add immutable activity log helper"
 ## Task 5: Implement `PUT /api/auth/me` (profile + avatar upload)
 
 **Files:**
+
 - Modify: `apps/api/src/routes/auth.js`
 - Modify: `apps/api/src/lib/cloudinary.js` (verify export shape — read-only check)
 
@@ -617,7 +634,14 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
 const prisma = require('../lib/prisma');
-const { generateAccessToken, generateRefreshToken, verifyRefreshToken, setAuthCookies, clearAuthCookies, REFRESH_TOKEN_EXPIRY_MS } = require('../lib/jwt');
+const {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+  setAuthCookies,
+  clearAuthCookies,
+  REFRESH_TOKEN_EXPIRY_MS,
+} = require('../lib/jwt');
 const { authenticate } = require('../middleware/auth');
 const { uploadBuffer } = require('../lib/cloudinary');
 
@@ -664,7 +688,13 @@ router.put('/me', authenticate, upload.single('avatar'), async (req, res) => {
     const user = await prisma.user.update({
       where: { id: req.user.id },
       data,
-      select: { id: true, email: true, name: true, avatarUrl: true, createdAt: true },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        avatarUrl: true,
+        createdAt: true,
+      },
     });
 
     res.status(200).json({ user });
@@ -712,6 +742,7 @@ git commit -m "feat(api): implement PUT /api/auth/me for profile + avatar upload
 ## Task 6: Add the profile page to the frontend
 
 **Files:**
+
 - Create: `apps/web/src/components/profile/AvatarUpload.jsx`
 - Create: `apps/web/src/app/dashboard/[workspaceId]/profile/page.js`
 - Modify: `apps/web/src/stores/authStore.js` (add `updateProfile` action)
@@ -845,7 +876,10 @@ export default function ProfilePage() {
   const onSubmit = async (e) => {
     e.preventDefault();
     setMsg('');
-    const r = await updateProfile({ name: name !== user?.name ? name : undefined, avatarFile });
+    const r = await updateProfile({
+      name: name !== user?.name ? name : undefined,
+      avatarFile,
+    });
     setMsg(r.success ? 'Saved.' : `Error: ${r.error}`);
     if (r.success) setAvatarFile(null);
   };
@@ -854,14 +888,20 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Your profile</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        Your profile
+      </h1>
       <form className="space-y-6" onSubmit={onSubmit}>
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Avatar</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Avatar
+          </label>
           <AvatarUpload currentUrl={user.avatarUrl} onSelect={setAvatarFile} />
         </div>
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Name
+          </label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -869,11 +909,21 @@ export default function ProfilePage() {
           />
         </div>
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-          <input value={user.email} readOnly className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 text-gray-500 rounded-md" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Email
+          </label>
+          <input
+            value={user.email}
+            readOnly
+            className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 text-gray-500 rounded-md"
+          />
         </div>
-        {msg && <p className="text-sm text-gray-700 dark:text-gray-300">{msg}</p>}
-        <Button type="submit" disabled={isLoading}>{isLoading ? 'Saving…' : 'Save changes'}</Button>
+        {msg && (
+          <p className="text-sm text-gray-700 dark:text-gray-300">{msg}</p>
+        )}
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? 'Saving…' : 'Save changes'}
+        </Button>
       </form>
     </div>
   );
@@ -910,6 +960,7 @@ git commit -m "feat(web): add profile page with avatar upload"
 ## Task 7: Goals controller (list + create + read)
 
 **Files:**
+
 - Create: `apps/api/src/controllers/goals.js`
 
 - [ ] **Step 1: Implement list/create/get**
@@ -920,7 +971,11 @@ git commit -m "feat(web): add profile page with avatar upload"
 const prisma = require('../lib/prisma');
 const { logActivity } = require('../lib/activity');
 const { broadcastToWorkspace } = require('../lib/socket');
-const { ACTIVITY_TYPES, SOCKET_EVENTS, GOAL_STATUS } = require('@team-hub/shared');
+const {
+  ACTIVITY_TYPES,
+  SOCKET_EVENTS,
+  GOAL_STATUS,
+} = require('@team-hub/shared');
 
 async function listGoals(req, res) {
   const goals = await prisma.goal.findMany({
@@ -939,7 +994,7 @@ async function getGoal(req, res) {
   const goal = await prisma.goal.findFirst({
     where: { id: req.params.goalId, workspaceId: req.member.workspaceId },
     include: {
-      owner:   { select: { id: true, name: true, avatarUrl: true } },
+      owner: { select: { id: true, name: true, avatarUrl: true } },
       createdBy: { select: { id: true, name: true } },
       milestones: { orderBy: { createdAt: 'asc' } },
     },
@@ -950,44 +1005,56 @@ async function getGoal(req, res) {
 
 async function createGoal(req, res) {
   const { title, description, ownerId, dueDate, status } = req.body;
-  if (!title?.trim()) return res.status(400).json({ error: 'Title is required' });
+  if (!title?.trim())
+    return res.status(400).json({ error: 'Title is required' });
   if (status && !Object.values(GOAL_STATUS).includes(status)) {
     return res.status(400).json({ error: 'Invalid status' });
   }
 
   const ownerExists = ownerId
     ? await prisma.workspaceMember.findUnique({
-        where: { userId_workspaceId: { userId: ownerId, workspaceId: req.member.workspaceId } },
+        where: {
+          userId_workspaceId: {
+            userId: ownerId,
+            workspaceId: req.member.workspaceId,
+          },
+        },
       })
     : true;
-  if (!ownerExists) return res.status(400).json({ error: 'Owner must be a workspace member' });
+  if (!ownerExists)
+    return res.status(400).json({ error: 'Owner must be a workspace member' });
 
   const goal = await prisma.$transaction(async (tx) => {
     const g = await tx.goal.create({
       data: {
-        title:       title.trim(),
+        title: title.trim(),
         description: description?.trim() || null,
-        ownerId:     ownerId || req.user.id,
+        ownerId: ownerId || req.user.id,
         createdById: req.user.id,
         workspaceId: req.member.workspaceId,
-        dueDate:     dueDate ? new Date(dueDate) : null,
-        status:      status || GOAL_STATUS.NOT_STARTED,
+        dueDate: dueDate ? new Date(dueDate) : null,
+        status: status || GOAL_STATUS.NOT_STARTED,
       },
-      include: { owner: { select: { id: true, name: true, avatarUrl: true } }, milestones: true },
+      include: {
+        owner: { select: { id: true, name: true, avatarUrl: true } },
+        milestones: true,
+      },
     });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.GOAL_CREATED,
-      message:     `created goal "${g.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.GOAL_CREATED,
+      message: `created goal "${g.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      goalId:      g.id,
-      entityType:  'goal',
-      entityId:    g.id,
+      goalId: g.id,
+      entityType: 'goal',
+      entityId: g.id,
     });
     return g;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.GOAL_CREATED, { goal });
+  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.GOAL_CREATED, {
+    goal,
+  });
   res.status(201).json({ goal });
 }
 
@@ -1006,6 +1073,7 @@ git commit -m "feat(api): goals controller — list, get, create"
 ## Task 8: Goals controller (update + delete + status change)
 
 **Files:**
+
 - Modify: `apps/api/src/controllers/goals.js`
 
 - [ ] **Step 1: Append update/delete/status handlers**
@@ -1021,36 +1089,52 @@ async function updateGoal(req, res) {
 
   const { title, description, ownerId, dueDate } = req.body;
   const data = {};
-  if (typeof title === 'string')       data.title = title.trim();
-  if (typeof description === 'string') data.description = description.trim() || null;
-  if (typeof dueDate !== 'undefined')  data.dueDate = dueDate ? new Date(dueDate) : null;
+  if (typeof title === 'string') data.title = title.trim();
+  if (typeof description === 'string')
+    data.description = description.trim() || null;
+  if (typeof dueDate !== 'undefined')
+    data.dueDate = dueDate ? new Date(dueDate) : null;
   if (ownerId && ownerId !== goal.ownerId) {
     const m = await prisma.workspaceMember.findUnique({
-      where: { userId_workspaceId: { userId: ownerId, workspaceId: req.member.workspaceId } },
+      where: {
+        userId_workspaceId: {
+          userId: ownerId,
+          workspaceId: req.member.workspaceId,
+        },
+      },
     });
-    if (!m) return res.status(400).json({ error: 'Owner must be a workspace member' });
+    if (!m)
+      return res
+        .status(400)
+        .json({ error: 'Owner must be a workspace member' });
     data.ownerId = ownerId;
   }
-  if (Object.keys(data).length === 0) return res.status(400).json({ error: 'No changes provided' });
+  if (Object.keys(data).length === 0)
+    return res.status(400).json({ error: 'No changes provided' });
 
   const updated = await prisma.$transaction(async (tx) => {
     const g = await tx.goal.update({
       where: { id: goal.id },
       data,
-      include: { owner: { select: { id: true, name: true, avatarUrl: true } }, milestones: true },
+      include: {
+        owner: { select: { id: true, name: true, avatarUrl: true } },
+        milestones: true,
+      },
     });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.GOAL_UPDATED,
-      message:     `updated goal "${g.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.GOAL_UPDATED,
+      message: `updated goal "${g.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      goalId:      g.id,
-      entityType:  'goal',
-      entityId:    g.id,
+      goalId: g.id,
+      entityType: 'goal',
+      entityId: g.id,
     });
     return g;
   });
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.GOAL_UPDATED, { goal: updated });
+  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.GOAL_UPDATED, {
+    goal: updated,
+  });
   res.json({ goal: updated });
 }
 
@@ -1067,25 +1151,31 @@ async function changeGoalStatus(req, res) {
   const updated = await prisma.$transaction(async (tx) => {
     const g = await tx.goal.update({
       where: { id: goal.id },
-      data:  { status },
+      data: { status },
       include: { owner: { select: { id: true, name: true, avatarUrl: true } } },
     });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.GOAL_STATUS_CHANGED,
-      message:     `changed status of "${g.title}" to ${status}`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.GOAL_STATUS_CHANGED,
+      message: `changed status of "${g.title}" to ${status}`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      goalId:      g.id,
-      entityType:  'goal',
-      entityId:    g.id,
-      metadata:    { from: goal.status, to: status },
+      goalId: g.id,
+      entityType: 'goal',
+      entityId: g.id,
+      metadata: { from: goal.status, to: status },
     });
     return g;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.GOAL_STATUS_CHANGED, {
-    goalId: updated.id, status: updated.status, by: req.user.id,
-  });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.GOAL_STATUS_CHANGED,
+    {
+      goalId: updated.id,
+      status: updated.status,
+      by: req.user.id,
+    }
+  );
 
   // Notify the goal owner if they didn't change it themselves (Phase 5 wires real notification dispatch).
   res.json({ goal: updated });
@@ -1100,16 +1190,18 @@ async function deleteGoal(req, res) {
   await prisma.$transaction(async (tx) => {
     await tx.goal.delete({ where: { id: goal.id } });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.GOAL_DELETED,
-      message:     `deleted goal "${goal.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.GOAL_DELETED,
+      message: `deleted goal "${goal.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      entityType:  'goal',
-      entityId:    goal.id,
+      entityType: 'goal',
+      entityId: goal.id,
     });
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.GOAL_DELETED, { goalId: goal.id });
+  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.GOAL_DELETED, {
+    goalId: goal.id,
+  });
   res.status(204).end();
 }
 
@@ -1129,7 +1221,15 @@ async function getGoalActivity(req, res) {
   res.json({ activities });
 }
 
-module.exports = { listGoals, getGoal, createGoal, updateGoal, changeGoalStatus, deleteGoal, getGoalActivity };
+module.exports = {
+  listGoals,
+  getGoal,
+  createGoal,
+  updateGoal,
+  changeGoalStatus,
+  deleteGoal,
+  getGoalActivity,
+};
 ```
 
 - [ ] **Step 2: Commit**
@@ -1144,6 +1244,7 @@ git commit -m "feat(api): goals controller — update, status change, delete, ac
 ## Task 9: Milestones controller
 
 **Files:**
+
 - Create: `apps/api/src/controllers/milestones.js`
 
 - [ ] **Step 1: Implement upsert/update/delete**
@@ -1177,31 +1278,36 @@ async function createMilestone(req, res) {
   if (!goal) return res.status(404).json({ error: 'Goal not found' });
 
   const { title, progress, dueDate } = req.body;
-  if (!title?.trim()) return res.status(400).json({ error: 'Title is required' });
+  if (!title?.trim())
+    return res.status(400).json({ error: 'Title is required' });
 
   const milestone = await prisma.$transaction(async (tx) => {
     const m = await tx.milestone.create({
       data: {
-        title:    title.trim(),
+        title: title.trim(),
         progress: clampProgress(progress),
-        dueDate:  dueDate ? new Date(dueDate) : null,
+        dueDate: dueDate ? new Date(dueDate) : null,
         completedAt: clampProgress(progress) === 100 ? new Date() : null,
-        goalId:   goal.id,
+        goalId: goal.id,
       },
     });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.MILESTONE_ADDED,
-      message:     `added milestone "${m.title}" to "${goal.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.MILESTONE_ADDED,
+      message: `added milestone "${m.title}" to "${goal.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      goalId:      goal.id,
-      entityType:  'milestone',
-      entityId:    m.id,
+      goalId: goal.id,
+      entityType: 'milestone',
+      entityId: m.id,
     });
     return m;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.MILESTONE_UPSERTED, { milestone });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.MILESTONE_UPSERTED,
+    { milestone }
+  );
   res.status(201).json({ milestone });
 }
 
@@ -1221,23 +1327,29 @@ async function updateMilestone(req, res) {
     data.progress = clampProgress(progress);
     data.completedAt = data.progress === 100 ? new Date() : null;
   }
-  if (typeof dueDate !== 'undefined') data.dueDate = dueDate ? new Date(dueDate) : null;
-  if (Object.keys(data).length === 0) return res.status(400).json({ error: 'No changes provided' });
+  if (typeof dueDate !== 'undefined')
+    data.dueDate = dueDate ? new Date(dueDate) : null;
+  if (Object.keys(data).length === 0)
+    return res.status(400).json({ error: 'No changes provided' });
 
   const updated = await prisma.$transaction(async (tx) => {
     const m = await tx.milestone.update({ where: { id: milestone.id }, data });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.MILESTONE_UPDATED,
-      message:     `updated milestone "${m.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.MILESTONE_UPDATED,
+      message: `updated milestone "${m.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      goalId:      milestone.goal.id,
-      entityType:  'milestone',
-      entityId:    m.id,
+      goalId: milestone.goal.id,
+      entityType: 'milestone',
+      entityId: m.id,
     });
     return m;
   });
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.MILESTONE_UPSERTED, { milestone: updated });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.MILESTONE_UPSERTED,
+    { milestone: updated }
+  );
   res.json({ milestone: updated });
 }
 
@@ -1253,19 +1365,24 @@ async function deleteMilestone(req, res) {
   await prisma.$transaction(async (tx) => {
     await tx.milestone.delete({ where: { id: milestone.id } });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.MILESTONE_REMOVED,
-      message:     `removed milestone "${milestone.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.MILESTONE_REMOVED,
+      message: `removed milestone "${milestone.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      goalId:      milestone.goal.id,
-      entityType:  'milestone',
-      entityId:    milestone.id,
+      goalId: milestone.goal.id,
+      entityType: 'milestone',
+      entityId: milestone.id,
     });
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.MILESTONE_DELETED, {
-    milestoneId: milestone.id, goalId: milestone.goal.id,
-  });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.MILESTONE_DELETED,
+    {
+      milestoneId: milestone.id,
+      goalId: milestone.goal.id,
+    }
+  );
   res.status(204).end();
 }
 
@@ -1275,7 +1392,12 @@ function clampProgress(p) {
   return Math.max(0, Math.min(100, Math.round(n)));
 }
 
-module.exports = { listMilestones, createMilestone, updateMilestone, deleteMilestone };
+module.exports = {
+  listMilestones,
+  createMilestone,
+  updateMilestone,
+  deleteMilestone,
+};
 ```
 
 - [ ] **Step 2: Commit**
@@ -1290,6 +1412,7 @@ git commit -m "feat(api): milestones controller — CRUD with progress clamp"
 ## Task 10: Goals + milestones routers
 
 **Files:**
+
 - Create: `apps/api/src/routes/milestones.js`
 - Modify: `apps/api/src/routes/goals.js` (replace stub)
 - Modify: `apps/api/src/index.js` (path correction)
@@ -1311,10 +1434,25 @@ const router = express.Router({ mergeParams: true });
 router.use(authenticate);
 
 // /api/workspaces/:workspaceId/goals/:goalId/milestones
-router.get('/',     requireWorkspaceMembership(),                                  c.listMilestones);
-router.post('/',    requireWorkspaceMembership(), requirePermission(CAPABILITIES.MILESTONE_WRITE), c.createMilestone);
-router.put('/:milestoneId',    requireWorkspaceMembership(), requirePermission(CAPABILITIES.MILESTONE_WRITE), c.updateMilestone);
-router.delete('/:milestoneId', requireWorkspaceMembership(), requirePermission(CAPABILITIES.MILESTONE_WRITE), c.deleteMilestone);
+router.get('/', requireWorkspaceMembership(), c.listMilestones);
+router.post(
+  '/',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.MILESTONE_WRITE),
+  c.createMilestone
+);
+router.put(
+  '/:milestoneId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.MILESTONE_WRITE),
+  c.updateMilestone
+);
+router.delete(
+  '/:milestoneId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.MILESTONE_WRITE),
+  c.deleteMilestone
+);
 
 module.exports = router;
 ```
@@ -1337,14 +1475,38 @@ const router = express.Router({ mergeParams: true });
 router.use(authenticate);
 
 // /api/workspaces/:workspaceId/goals
-router.get('/',  requireWorkspaceMembership(),                                  c.listGoals);
-router.post('/', requireWorkspaceMembership(), requirePermission(CAPABILITIES.GOAL_CREATE), c.createGoal);
+router.get('/', requireWorkspaceMembership(), c.listGoals);
+router.post(
+  '/',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.GOAL_CREATE),
+  c.createGoal
+);
 
-router.get('/:goalId',          requireWorkspaceMembership(), c.getGoal);
-router.put('/:goalId',          requireWorkspaceMembership(), requirePermission(CAPABILITIES.GOAL_EDIT),   c.updateGoal);
-router.patch('/:goalId/status', requireWorkspaceMembership(), requirePermission(CAPABILITIES.GOAL_EDIT),   c.changeGoalStatus);
-router.delete('/:goalId',       requireWorkspaceMembership(), requirePermission(CAPABILITIES.GOAL_DELETE), c.deleteGoal);
-router.get('/:goalId/activity', requireWorkspaceMembership(), c.getGoalActivity);
+router.get('/:goalId', requireWorkspaceMembership(), c.getGoal);
+router.put(
+  '/:goalId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.GOAL_EDIT),
+  c.updateGoal
+);
+router.patch(
+  '/:goalId/status',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.GOAL_EDIT),
+  c.changeGoalStatus
+);
+router.delete(
+  '/:goalId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.GOAL_DELETE),
+  c.deleteGoal
+);
+router.get(
+  '/:goalId/activity',
+  requireWorkspaceMembership(),
+  c.getGoalActivity
+);
 
 router.use('/:goalId/milestones', milestonesRouter);
 
@@ -1395,6 +1557,7 @@ git commit -m "feat(api): mount goals + milestones under /api/workspaces/:worksp
 ## Task 11: Frontend goals + milestones stores
 
 **Files:**
+
 - Create: `apps/web/src/stores/goalsStore.js`
 - Create: `apps/web/src/stores/milestonesStore.js`
 
@@ -1425,7 +1588,9 @@ const useGoalsStore = create((set, get) => ({
   fetchGoal: async (workspaceId, goalId) => {
     set({ isLoading: true, error: null });
     try {
-      const { goal } = await api.get(`/api/workspaces/${workspaceId}/goals/${goalId}`);
+      const { goal } = await api.get(
+        `/api/workspaces/${workspaceId}/goals/${goalId}`
+      );
       set({ currentGoal: goal, isLoading: false });
       return goal;
     } catch (err) {
@@ -1435,13 +1600,19 @@ const useGoalsStore = create((set, get) => ({
   },
 
   createGoal: async (workspaceId, payload) => {
-    const { goal } = await api.post(`/api/workspaces/${workspaceId}/goals`, payload);
+    const { goal } = await api.post(
+      `/api/workspaces/${workspaceId}/goals`,
+      payload
+    );
     set((s) => ({ goals: [goal, ...s.goals] }));
     return goal;
   },
 
   updateGoal: async (workspaceId, goalId, payload) => {
-    const { goal } = await api.put(`/api/workspaces/${workspaceId}/goals/${goalId}`, payload);
+    const { goal } = await api.put(
+      `/api/workspaces/${workspaceId}/goals/${goalId}`,
+      payload
+    );
     set((s) => ({
       goals: s.goals.map((g) => (g.id === goalId ? goal : g)),
       currentGoal: s.currentGoal?.id === goalId ? goal : s.currentGoal,
@@ -1450,10 +1621,18 @@ const useGoalsStore = create((set, get) => ({
   },
 
   changeStatus: async (workspaceId, goalId, status) => {
-    const { goal } = await api.patch(`/api/workspaces/${workspaceId}/goals/${goalId}/status`, { status });
+    const { goal } = await api.patch(
+      `/api/workspaces/${workspaceId}/goals/${goalId}/status`,
+      { status }
+    );
     set((s) => ({
-      goals: s.goals.map((g) => (g.id === goalId ? { ...g, status: goal.status } : g)),
-      currentGoal: s.currentGoal?.id === goalId ? { ...s.currentGoal, status: goal.status } : s.currentGoal,
+      goals: s.goals.map((g) =>
+        g.id === goalId ? { ...g, status: goal.status } : g
+      ),
+      currentGoal:
+        s.currentGoal?.id === goalId
+          ? { ...s.currentGoal, status: goal.status }
+          : s.currentGoal,
     }));
     return goal;
   },
@@ -1467,21 +1646,32 @@ const useGoalsStore = create((set, get) => ({
   },
 
   // Real-time hooks (Phase 5 wires these in)
-  upsertGoal: (goal) => set((s) => {
-    const exists = s.goals.some((g) => g.id === goal.id);
-    return {
-      goals: exists ? s.goals.map((g) => (g.id === goal.id ? goal : g)) : [goal, ...s.goals],
-      currentGoal: s.currentGoal?.id === goal.id ? { ...s.currentGoal, ...goal } : s.currentGoal,
-    };
-  }),
-  removeGoal: (goalId) => set((s) => ({
-    goals: s.goals.filter((g) => g.id !== goalId),
-    currentGoal: s.currentGoal?.id === goalId ? null : s.currentGoal,
-  })),
-  patchGoal: (goalId, patch) => set((s) => ({
-    goals: s.goals.map((g) => (g.id === goalId ? { ...g, ...patch } : g)),
-    currentGoal: s.currentGoal?.id === goalId ? { ...s.currentGoal, ...patch } : s.currentGoal,
-  })),
+  upsertGoal: (goal) =>
+    set((s) => {
+      const exists = s.goals.some((g) => g.id === goal.id);
+      return {
+        goals: exists
+          ? s.goals.map((g) => (g.id === goal.id ? goal : g))
+          : [goal, ...s.goals],
+        currentGoal:
+          s.currentGoal?.id === goal.id
+            ? { ...s.currentGoal, ...goal }
+            : s.currentGoal,
+      };
+    }),
+  removeGoal: (goalId) =>
+    set((s) => ({
+      goals: s.goals.filter((g) => g.id !== goalId),
+      currentGoal: s.currentGoal?.id === goalId ? null : s.currentGoal,
+    })),
+  patchGoal: (goalId, patch) =>
+    set((s) => ({
+      goals: s.goals.map((g) => (g.id === goalId ? { ...g, ...patch } : g)),
+      currentGoal:
+        s.currentGoal?.id === goalId
+          ? { ...s.currentGoal, ...patch }
+          : s.currentGoal,
+    })),
 }));
 
 export default useGoalsStore;
@@ -1502,8 +1692,13 @@ const useMilestonesStore = create((set, get) => ({
   fetchForGoal: async (workspaceId, goalId) => {
     set({ isLoading: true });
     try {
-      const { milestones } = await api.get(`/api/workspaces/${workspaceId}/goals/${goalId}/milestones`);
-      set((s) => ({ byGoalId: { ...s.byGoalId, [goalId]: milestones }, isLoading: false }));
+      const { milestones } = await api.get(
+        `/api/workspaces/${workspaceId}/goals/${goalId}/milestones`
+      );
+      set((s) => ({
+        byGoalId: { ...s.byGoalId, [goalId]: milestones },
+        isLoading: false,
+      }));
     } catch (err) {
       set({ isLoading: false });
       throw err;
@@ -1511,53 +1706,72 @@ const useMilestonesStore = create((set, get) => ({
   },
 
   create: async (workspaceId, goalId, payload) => {
-    const { milestone } = await api.post(`/api/workspaces/${workspaceId}/goals/${goalId}/milestones`, payload);
+    const { milestone } = await api.post(
+      `/api/workspaces/${workspaceId}/goals/${goalId}/milestones`,
+      payload
+    );
     set((s) => ({
-      byGoalId: { ...s.byGoalId, [goalId]: [...(s.byGoalId[goalId] || []), milestone] },
+      byGoalId: {
+        ...s.byGoalId,
+        [goalId]: [...(s.byGoalId[goalId] || []), milestone],
+      },
     }));
     return milestone;
   },
 
   update: async (workspaceId, goalId, milestoneId, payload) => {
-    const { milestone } = await api.put(`/api/workspaces/${workspaceId}/goals/${goalId}/milestones/${milestoneId}`, payload);
+    const { milestone } = await api.put(
+      `/api/workspaces/${workspaceId}/goals/${goalId}/milestones/${milestoneId}`,
+      payload
+    );
     set((s) => ({
       byGoalId: {
         ...s.byGoalId,
-        [goalId]: (s.byGoalId[goalId] || []).map((m) => (m.id === milestoneId ? milestone : m)),
+        [goalId]: (s.byGoalId[goalId] || []).map((m) =>
+          m.id === milestoneId ? milestone : m
+        ),
       },
     }));
     return milestone;
   },
 
   remove: async (workspaceId, goalId, milestoneId) => {
-    await api.delete(`/api/workspaces/${workspaceId}/goals/${goalId}/milestones/${milestoneId}`);
+    await api.delete(
+      `/api/workspaces/${workspaceId}/goals/${goalId}/milestones/${milestoneId}`
+    );
     set((s) => ({
       byGoalId: {
         ...s.byGoalId,
-        [goalId]: (s.byGoalId[goalId] || []).filter((m) => m.id !== milestoneId),
+        [goalId]: (s.byGoalId[goalId] || []).filter(
+          (m) => m.id !== milestoneId
+        ),
       },
     }));
   },
 
   // Real-time
-  upsert: (milestone) => set((s) => {
-    const list = s.byGoalId[milestone.goalId] || [];
-    const exists = list.some((m) => m.id === milestone.id);
-    return {
+  upsert: (milestone) =>
+    set((s) => {
+      const list = s.byGoalId[milestone.goalId] || [];
+      const exists = list.some((m) => m.id === milestone.id);
+      return {
+        byGoalId: {
+          ...s.byGoalId,
+          [milestone.goalId]: exists
+            ? list.map((m) => (m.id === milestone.id ? milestone : m))
+            : [...list, milestone],
+        },
+      };
+    }),
+  removeLocal: (goalId, milestoneId) =>
+    set((s) => ({
       byGoalId: {
         ...s.byGoalId,
-        [milestone.goalId]: exists
-          ? list.map((m) => (m.id === milestone.id ? milestone : m))
-          : [...list, milestone],
+        [goalId]: (s.byGoalId[goalId] || []).filter(
+          (m) => m.id !== milestoneId
+        ),
       },
-    };
-  }),
-  removeLocal: (goalId, milestoneId) => set((s) => ({
-    byGoalId: {
-      ...s.byGoalId,
-      [goalId]: (s.byGoalId[goalId] || []).filter((m) => m.id !== milestoneId),
-    },
-  })),
+    })),
 }));
 
 export default useMilestonesStore;
@@ -1587,6 +1801,7 @@ git commit -m "feat(web): goals + milestones Zustand stores"
 ## Task 12: Status pill + goal card components
 
 **Files:**
+
 - Create: `apps/web/src/components/goals/StatusPill.jsx`
 - Create: `apps/web/src/components/goals/GoalCard.jsx`
 
@@ -1598,20 +1813,25 @@ git commit -m "feat(web): goals + milestones Zustand stores"
 import { GOAL_STATUS } from '@team-hub/shared';
 
 const STYLES = {
-  [GOAL_STATUS.NOT_STARTED]: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200',
-  [GOAL_STATUS.IN_PROGRESS]: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  [GOAL_STATUS.COMPLETED]:   'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
+  [GOAL_STATUS.NOT_STARTED]:
+    'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200',
+  [GOAL_STATUS.IN_PROGRESS]:
+    'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
+  [GOAL_STATUS.COMPLETED]:
+    'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
 };
 
 const LABELS = {
   [GOAL_STATUS.NOT_STARTED]: 'Not started',
   [GOAL_STATUS.IN_PROGRESS]: 'In progress',
-  [GOAL_STATUS.COMPLETED]:   'Completed',
+  [GOAL_STATUS.COMPLETED]: 'Completed',
 };
 
 export default function StatusPill({ status }) {
   return (
-    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${STYLES[status] || STYLES[GOAL_STATUS.NOT_STARTED]}`}>
+    <span
+      className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${STYLES[status] || STYLES[GOAL_STATUS.NOT_STARTED]}`}
+    >
       {LABELS[status] || status}
     </span>
   );
@@ -1627,7 +1847,8 @@ import Link from 'next/link';
 import StatusPill from './StatusPill';
 
 export default function GoalCard({ goal, workspaceId }) {
-  const completed = goal.milestones?.filter((m) => m.progress === 100).length || 0;
+  const completed =
+    goal.milestones?.filter((m) => m.progress === 100).length || 0;
   const total = goal.milestones?.length || 0;
 
   return (
@@ -1636,25 +1857,39 @@ export default function GoalCard({ goal, workspaceId }) {
       className="block bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
     >
       <div className="flex items-start justify-between gap-2 mb-2">
-        <h3 className="font-semibold text-gray-900 dark:text-white truncate">{goal.title}</h3>
+        <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+          {goal.title}
+        </h3>
         <StatusPill status={goal.status} />
       </div>
       {goal.description && (
-        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">{goal.description}</p>
+        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
+          {goal.description}
+        </p>
       )}
       <div className="flex items-center justify-between text-xs text-gray-500">
         <div className="flex items-center gap-2">
           {goal.owner?.avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={goal.owner.avatarUrl} alt="" className="w-5 h-5 rounded-full" />
+            <img
+              src={goal.owner.avatarUrl}
+              alt=""
+              className="w-5 h-5 rounded-full"
+            />
           ) : (
             <div className="w-5 h-5 rounded-full bg-gray-300" />
           )}
           <span>{goal.owner?.name || 'Unassigned'}</span>
         </div>
         <div>
-          {total > 0 && <span className="mr-2">{completed}/{total} milestones</span>}
-          {goal.dueDate && <span>Due {new Date(goal.dueDate).toLocaleDateString()}</span>}
+          {total > 0 && (
+            <span className="mr-2">
+              {completed}/{total} milestones
+            </span>
+          )}
+          {goal.dueDate && (
+            <span>Due {new Date(goal.dueDate).toLocaleDateString()}</span>
+          )}
         </div>
       </div>
     </Link>
@@ -1674,6 +1909,7 @@ git commit -m "feat(web): StatusPill and GoalCard components"
 ## Task 13: Goal form modal + create flow
 
 **Files:**
+
 - Create: `apps/web/src/components/goals/GoalFormModal.jsx`
 
 - [ ] **Step 1: Implement the modal**
@@ -1689,13 +1925,23 @@ import Button from '../ui/Button';
 import { GOAL_STATUS } from '@team-hub/shared';
 import useWorkspaceMembersStore from '@/stores/workspaceMembersStore';
 
-export default function GoalFormModal({ open, onClose, onSubmit, initial, workspaceId }) {
+export default function GoalFormModal({
+  open,
+  onClose,
+  onSubmit,
+  initial,
+  workspaceId,
+}) {
   const { members, fetchMembers } = useWorkspaceMembersStore();
   const [title, setTitle] = useState(initial?.title || '');
   const [description, setDescription] = useState(initial?.description || '');
   const [ownerId, setOwnerId] = useState(initial?.ownerId || '');
-  const [dueDate, setDueDate] = useState(initial?.dueDate ? initial.dueDate.slice(0, 10) : '');
-  const [status, setStatus] = useState(initial?.status || GOAL_STATUS.NOT_STARTED);
+  const [dueDate, setDueDate] = useState(
+    initial?.dueDate ? initial.dueDate.slice(0, 10) : ''
+  );
+  const [status, setStatus] = useState(
+    initial?.status || GOAL_STATUS.NOT_STARTED
+  );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -1705,7 +1951,8 @@ export default function GoalFormModal({ open, onClose, onSubmit, initial, worksp
 
   const submit = async (e) => {
     e.preventDefault();
-    setSubmitting(true); setError('');
+    setSubmitting(true);
+    setError('');
     try {
       await onSubmit({
         title: title.trim(),
@@ -1723,48 +1970,88 @@ export default function GoalFormModal({ open, onClose, onSubmit, initial, worksp
   };
 
   return (
-    <Modal open={open} onClose={onClose} title={initial ? 'Edit goal' : 'New goal'}>
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initial ? 'Edit goal' : 'New goal'}
+    >
       <form onSubmit={submit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} required
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Title
+          </label>
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+          />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Description
+          </label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+          />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Owner</label>
-            <select value={ownerId} onChange={(e) => setOwnerId(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Owner
+            </label>
+            <select
+              value={ownerId}
+              onChange={(e) => setOwnerId(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+            >
               <option value="">(myself)</option>
               {members.map((m) => (
-                <option key={m.id} value={m.user.id}>{m.user.name}</option>
+                <option key={m.id} value={m.user.id}>
+                  {m.user.name}
+                </option>
               ))}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Due date</label>
-            <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white" />
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Due date
+            </label>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+            />
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Status
+          </label>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+          >
             <option value={GOAL_STATUS.NOT_STARTED}>Not started</option>
             <option value={GOAL_STATUS.IN_PROGRESS}>In progress</option>
             <option value={GOAL_STATUS.COMPLETED}>Completed</option>
           </select>
         </div>
-        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+        {error && (
+          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        )}
         <div className="flex justify-end gap-2">
-          <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
-          <Button type="submit" disabled={submitting}>{submitting ? 'Saving…' : 'Save'}</Button>
+          <Button variant="outline" type="button" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={submitting}>
+            {submitting ? 'Saving…' : 'Save'}
+          </Button>
         </div>
       </form>
     </Modal>
@@ -1784,6 +2071,7 @@ git commit -m "feat(web): GoalFormModal for create/edit"
 ## Task 14: Goals list page
 
 **Files:**
+
 - Create: `apps/web/src/app/dashboard/[workspaceId]/goals/page.js`
 
 - [ ] **Step 1: Create the page**
@@ -1811,22 +2099,30 @@ export default function GoalsPage() {
     fetchGoals(workspaceId);
   }, [workspaceId, fetchGoals]);
 
-  const filtered = goals.filter((g) => statusFilter === 'ALL' || g.status === statusFilter);
+  const filtered = goals.filter(
+    (g) => statusFilter === 'ALL' || g.status === statusFilter
+  );
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Goals</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Goals
+        </h1>
         {canCreate && <Button onClick={() => setOpen(true)}>New goal</Button>}
       </div>
 
       <div className="flex gap-2 mb-6">
         {['ALL', 'NOT_STARTED', 'IN_PROGRESS', 'COMPLETED'].map((s) => (
-          <button key={s}
+          <button
+            key={s}
             onClick={() => setStatusFilter(s)}
-            className={`px-3 py-1 text-sm rounded-full border ${statusFilter === s
-              ? 'bg-primary-600 text-white border-primary-600'
-              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700'}`}>
+            className={`px-3 py-1 text-sm rounded-full border ${
+              statusFilter === s
+                ? 'bg-primary-600 text-white border-primary-600'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700'
+            }`}
+          >
             {s === 'ALL' ? 'All' : s.replace('_', ' ').toLowerCase()}
           </button>
         ))}
@@ -1838,7 +2134,9 @@ export default function GoalsPage() {
         <p className="text-gray-500">No goals yet.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((g) => <GoalCard key={g.id} goal={g} workspaceId={workspaceId} />)}
+          {filtered.map((g) => (
+            <GoalCard key={g.id} goal={g} workspaceId={workspaceId} />
+          ))}
         </div>
       )}
 
@@ -1865,6 +2163,7 @@ git commit -m "feat(web): goals list page with filters and create modal"
 ## Task 15: Milestone list + activity feed components
 
 **Files:**
+
 - Create: `apps/web/src/components/goals/MilestoneList.jsx`
 - Create: `apps/web/src/components/goals/GoalActivityFeed.jsx`
 
@@ -1880,7 +2179,12 @@ import { CAPABILITIES } from '@team-hub/shared';
 import { useCapability } from '@/hooks/useCapability';
 import Button from '../ui/Button';
 
-export default function MilestoneList({ milestones, onCreate, onUpdate, onRemove }) {
+export default function MilestoneList({
+  milestones,
+  onCreate,
+  onUpdate,
+  onRemove,
+}) {
   const canWrite = useCapability(CAPABILITIES.MILESTONE_WRITE);
   const [adding, setAdding] = useState(false);
   const [title, setTitle] = useState('');
@@ -1889,15 +2193,20 @@ export default function MilestoneList({ milestones, onCreate, onUpdate, onRemove
     e.preventDefault();
     if (!title.trim()) return;
     await onCreate({ title: title.trim(), progress: 0 });
-    setTitle(''); setAdding(false);
+    setTitle('');
+    setAdding(false);
   };
 
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Milestones</h3>
+        <h3 className="font-semibold text-gray-900 dark:text-white">
+          Milestones
+        </h3>
         {canWrite && !adding && (
-          <Button size="sm" variant="secondary" onClick={() => setAdding(true)}>Add milestone</Button>
+          <Button size="sm" variant="secondary" onClick={() => setAdding(true)}>
+            Add milestone
+          </Button>
         )}
       </div>
 
@@ -1910,8 +2219,20 @@ export default function MilestoneList({ milestones, onCreate, onUpdate, onRemove
             placeholder="Milestone title"
             className="flex-1 px-3 py-1.5 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white text-sm"
           />
-          <Button size="sm" type="submit">Add</Button>
-          <Button size="sm" variant="outline" type="button" onClick={() => { setAdding(false); setTitle(''); }}>Cancel</Button>
+          <Button size="sm" type="submit">
+            Add
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            type="button"
+            onClick={() => {
+              setAdding(false);
+              setTitle('');
+            }}
+          >
+            Cancel
+          </Button>
         </form>
       )}
 
@@ -1921,7 +2242,9 @@ export default function MilestoneList({ milestones, onCreate, onUpdate, onRemove
         <ul className="space-y-2">
           {milestones.map((m) => (
             <li key={m.id} className="flex items-center gap-3">
-              <span className="flex-1 text-sm text-gray-900 dark:text-gray-100">{m.title}</span>
+              <span className="flex-1 text-sm text-gray-900 dark:text-gray-100">
+                {m.title}
+              </span>
               <input
                 type="range"
                 min={0}
@@ -1929,15 +2252,21 @@ export default function MilestoneList({ milestones, onCreate, onUpdate, onRemove
                 step={5}
                 value={m.progress}
                 disabled={!canWrite}
-                onChange={(e) => onUpdate(m.id, { progress: Number(e.target.value) })}
+                onChange={(e) =>
+                  onUpdate(m.id, { progress: Number(e.target.value) })
+                }
                 className="w-32 disabled:opacity-50"
               />
-              <span className="w-12 text-xs text-right text-gray-500">{m.progress}%</span>
+              <span className="w-12 text-xs text-right text-gray-500">
+                {m.progress}%
+              </span>
               {canWrite && (
                 <button
                   onClick={() => onRemove(m.id)}
                   className="text-xs text-red-600 hover:underline"
-                >Remove</button>
+                >
+                  Remove
+                </button>
               )}
             </li>
           ))}
@@ -1968,7 +2297,9 @@ export default function GoalActivityFeed({ goalId }) {
     let cancelled = false;
     (async () => {
       try {
-        const { activities } = await api.get(`/api/workspaces/${workspaceId}/goals/${goalId}/activity`);
+        const { activities } = await api.get(
+          `/api/workspaces/${workspaceId}/goals/${goalId}/activity`
+        );
         if (!cancelled) setActivities(activities);
       } catch {
         // ignore for now
@@ -1976,11 +2307,15 @@ export default function GoalActivityFeed({ goalId }) {
         if (!cancelled) setLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [workspaceId, goalId]);
 
-  if (loading) return <p className="text-sm text-gray-500">Loading activity…</p>;
-  if (activities.length === 0) return <p className="text-sm text-gray-500">No activity yet.</p>;
+  if (loading)
+    return <p className="text-sm text-gray-500">Loading activity…</p>;
+  if (activities.length === 0)
+    return <p className="text-sm text-gray-500">No activity yet.</p>;
 
   return (
     <ul className="space-y-3">
@@ -1988,14 +2323,25 @@ export default function GoalActivityFeed({ goalId }) {
         <li key={a.id} className="flex gap-3 text-sm">
           {a.user?.avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={a.user.avatarUrl} alt="" className="w-7 h-7 rounded-full mt-0.5 flex-shrink-0" />
+            <img
+              src={a.user.avatarUrl}
+              alt=""
+              className="w-7 h-7 rounded-full mt-0.5 flex-shrink-0"
+            />
           ) : (
             <div className="w-7 h-7 rounded-full bg-gray-300 mt-0.5 flex-shrink-0" />
           )}
           <div>
-            <span className="font-medium text-gray-900 dark:text-white">{a.user?.name || 'Someone'}</span>
-            <span className="text-gray-700 dark:text-gray-300"> {a.message}</span>
-            <div className="text-xs text-gray-500">{new Date(a.createdAt).toLocaleString()}</div>
+            <span className="font-medium text-gray-900 dark:text-white">
+              {a.user?.name || 'Someone'}
+            </span>
+            <span className="text-gray-700 dark:text-gray-300">
+              {' '}
+              {a.message}
+            </span>
+            <div className="text-xs text-gray-500">
+              {new Date(a.createdAt).toLocaleString()}
+            </div>
           </div>
         </li>
       ))}
@@ -2016,6 +2362,7 @@ git commit -m "feat(web): MilestoneList and GoalActivityFeed components"
 ## Task 16: Goal detail page + `useCapability` hook
 
 **Files:**
+
 - Create: `apps/web/src/hooks/useCapability.js`
 - Create: `apps/web/src/components/ui/PermissionGate.jsx`
 - Create: `apps/web/src/app/dashboard/[workspaceId]/goals/[goalId]/page.js`
@@ -2080,42 +2427,65 @@ import { useCapability } from '@/hooks/useCapability';
 export default function GoalDetailPage() {
   const router = useRouter();
   const { workspaceId, goalId } = useParams();
-  const { currentGoal, fetchGoal, updateGoal, changeStatus, deleteGoal } = useGoalsStore();
+  const { currentGoal, fetchGoal, updateGoal, changeStatus, deleteGoal } =
+    useGoalsStore();
   const ms = useMilestonesStore();
   const milestones = ms.byGoalId[goalId] || [];
-  const canEdit   = useCapability(CAPABILITIES.GOAL_EDIT);
+  const canEdit = useCapability(CAPABILITIES.GOAL_EDIT);
   const canDelete = useCapability(CAPABILITIES.GOAL_DELETE);
   const [editOpen, setEditOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
-    fetchGoal(workspaceId, goalId).catch(() => router.push(`/dashboard/${workspaceId}/goals`));
+    fetchGoal(workspaceId, goalId).catch(() =>
+      router.push(`/dashboard/${workspaceId}/goals`)
+    );
     ms.fetchForGoal(workspaceId, goalId);
   }, [workspaceId, goalId, fetchGoal, ms, router]);
 
-  if (!currentGoal) return <div className="p-6"><p className="text-gray-500">Loading…</p></div>;
+  if (!currentGoal)
+    return (
+      <div className="p-6">
+        <p className="text-gray-500">Loading…</p>
+      </div>
+    );
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
-      <Link href={`/dashboard/${workspaceId}/goals`} className="text-sm text-primary-600 hover:underline">← All goals</Link>
+      <Link
+        href={`/dashboard/${workspaceId}/goals`}
+        className="text-sm text-primary-600 hover:underline"
+      >
+        ← All goals
+      </Link>
 
       <header className="flex items-start justify-between gap-4">
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{currentGoal.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            {currentGoal.title}
+          </h1>
           <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
             <StatusPill status={currentGoal.status} />
             {currentGoal.owner && <span>Owner: {currentGoal.owner.name}</span>}
-            {currentGoal.dueDate && <span>Due {new Date(currentGoal.dueDate).toLocaleDateString()}</span>}
+            {currentGoal.dueDate && (
+              <span>
+                Due {new Date(currentGoal.dueDate).toLocaleDateString()}
+              </span>
+            )}
           </div>
           {currentGoal.description && (
-            <p className="mt-3 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{currentGoal.description}</p>
+            <p className="mt-3 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+              {currentGoal.description}
+            </p>
           )}
         </div>
         <div className="flex gap-2">
           {canEdit && (
             <select
               value={currentGoal.status}
-              onChange={(e) => changeStatus(workspaceId, goalId, e.target.value)}
+              onChange={(e) =>
+                changeStatus(workspaceId, goalId, e.target.value)
+              }
               className="text-sm px-2 py-1.5 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
             >
               <option value={GOAL_STATUS.NOT_STARTED}>Not started</option>
@@ -2123,8 +2493,16 @@ export default function GoalDetailPage() {
               <option value={GOAL_STATUS.COMPLETED}>Completed</option>
             </select>
           )}
-          {canEdit  && <Button variant="secondary" onClick={() => setEditOpen(true)}>Edit</Button>}
-          {canDelete && <Button variant="outline" onClick={() => setConfirmDelete(true)}>Delete</Button>}
+          {canEdit && (
+            <Button variant="secondary" onClick={() => setEditOpen(true)}>
+              Edit
+            </Button>
+          )}
+          {canDelete && (
+            <Button variant="outline" onClick={() => setConfirmDelete(true)}>
+              Delete
+            </Button>
+          )}
         </div>
       </header>
 
@@ -2138,7 +2516,9 @@ export default function GoalDetailPage() {
       </section>
 
       <section>
-        <h2 className="font-semibold text-gray-900 dark:text-white mb-3">Activity</h2>
+        <h2 className="font-semibold text-gray-900 dark:text-white mb-3">
+          Activity
+        </h2>
         <GoalActivityFeed goalId={goalId} />
       </section>
 
@@ -2195,6 +2575,7 @@ git commit -m "feat(web): goal detail page, useCapability hook, PermissionGate"
 ## Task 17: Install TipTap and sanitize-html
 
 **Files:**
+
 - Modify: `apps/web/package.json`
 - Modify: `apps/api/package.json`
 
@@ -2234,6 +2615,7 @@ git commit -m "chore(deps): add TipTap (web) and sanitize-html (api) for announc
 ## Task 18: Sanitize-html wrapper
 
 **Files:**
+
 - Create: `apps/api/src/lib/sanitize.js`
 
 - [ ] **Step 1: Implement allowlist**
@@ -2244,11 +2626,21 @@ git commit -m "chore(deps): add TipTap (web) and sanitize-html (api) for announc
 const sanitizeHtml = require('sanitize-html');
 
 const ALLOWED_TAGS = [
-  'p', 'br',
-  'strong', 'em', 'u', 's', 'code',
-  'h1', 'h2', 'h3',
-  'ul', 'ol', 'li',
-  'blockquote', 'pre',
+  'p',
+  'br',
+  'strong',
+  'em',
+  'u',
+  's',
+  'code',
+  'h1',
+  'h2',
+  'h3',
+  'ul',
+  'ol',
+  'li',
+  'blockquote',
+  'pre',
   'a',
   'span',
 ];
@@ -2305,6 +2697,7 @@ git commit -m "feat(api): sanitize-html wrapper with TipTap-mention allowlist"
 ## Task 19: Mentions parser
 
 **Files:**
+
 - Create: `apps/api/src/lib/mentions.js`
 
 - [ ] **Step 1: Implement parser**
@@ -2327,7 +2720,8 @@ git commit -m "feat(api): sanitize-html wrapper with TipTap-mention allowlist"
 function extractFromHtml(html) {
   if (!html) return [];
   const ids = [];
-  const re = /<span[^>]*\bdata-type=["']mention["'][^>]*\bdata-id=["']([a-f0-9-]{36})["']/gi;
+  const re =
+    /<span[^>]*\bdata-type=["']mention["'][^>]*\bdata-id=["']([a-f0-9-]{36})["']/gi;
   let m;
   while ((m = re.exec(html))) ids.push(m[1]);
   return Array.from(new Set(ids));
@@ -2371,6 +2765,7 @@ git commit -m "feat(api): mentions parser for HTML + markdown"
 ## Task 20: Notifications helper (Phase 1 stub of socket/email)
 
 **Files:**
+
 - Create: `apps/api/src/lib/notifications.js`
 
 - [ ] **Step 1: Implement createNotification**
@@ -2403,24 +2798,28 @@ async function createNotification(tx, payload) {
 
   const notification = await tx.notification.create({
     data: {
-      userId:     payload.userId,
-      type:       payload.type,
-      message:    payload.message,
-      actorId:    payload.actorId    ?? null,
+      userId: payload.userId,
+      type: payload.type,
+      message: payload.message,
+      actorId: payload.actorId ?? null,
       entityType: payload.entityType ?? null,
-      entityId:   payload.entityId   ?? null,
-      metadata:   payload.metadata   ?? null,
+      entityId: payload.entityId ?? null,
+      metadata: payload.metadata ?? null,
     },
   });
 
   process.nextTick(() => {
-    emitToUser(payload.userId, SOCKET_EVENTS.NOTIFICATION_NEW, { notification });
+    emitToUser(payload.userId, SOCKET_EVENTS.NOTIFICATION_NEW, {
+      notification,
+    });
     if (payload.type === NOTIFICATION_TYPES.MENTION) {
       // Phase 5 plugs in the email module; for now this is a forward-compatible no-op.
       try {
         const { sendMentionEmail } = require('./email');
         if (typeof sendMentionEmail === 'function') {
-          sendMentionEmail({ notification }).catch((err) => console.error('email error', err));
+          sendMentionEmail({ notification }).catch((err) =>
+            console.error('email error', err)
+          );
         }
       } catch {
         // email lib not wired yet (Phase 5)
@@ -2446,6 +2845,7 @@ git commit -m "feat(api): createNotification helper with socket+email stubs"
 ## Task 21: Announcements controller
 
 **Files:**
+
 - Create: `apps/api/src/controllers/announcements.js`
 
 - [ ] **Step 1: Implement CRUD + pin**
@@ -2459,7 +2859,11 @@ const { extractFromHtml } = require('../lib/mentions');
 const { logActivity } = require('../lib/activity');
 const { broadcastToWorkspace } = require('../lib/socket');
 const { createNotification } = require('../lib/notifications');
-const { ACTIVITY_TYPES, SOCKET_EVENTS, NOTIFICATION_TYPES } = require('@team-hub/shared');
+const {
+  ACTIVITY_TYPES,
+  SOCKET_EVENTS,
+  NOTIFICATION_TYPES,
+} = require('@team-hub/shared');
 
 async function listAnnouncements(req, res) {
   const items = await prisma.announcement.findMany({
@@ -2468,20 +2872,29 @@ async function listAnnouncements(req, res) {
       author: { select: { id: true, name: true, avatarUrl: true } },
       _count: { select: { comments: true, reactions: true } },
     },
-    orderBy: [{ isPinned: 'desc' }, { pinnedAt: 'desc' }, { createdAt: 'desc' }],
+    orderBy: [
+      { isPinned: 'desc' },
+      { pinnedAt: 'desc' },
+      { createdAt: 'desc' },
+    ],
   });
   res.json({ announcements: items });
 }
 
 async function getAnnouncement(req, res) {
   const a = await prisma.announcement.findFirst({
-    where: { id: req.params.announcementId, workspaceId: req.member.workspaceId },
+    where: {
+      id: req.params.announcementId,
+      workspaceId: req.member.workspaceId,
+    },
     include: {
       author: { select: { id: true, name: true, avatarUrl: true } },
       reactions: { include: { user: { select: { id: true, name: true } } } },
       comments: {
         orderBy: { createdAt: 'asc' },
-        include: { author: { select: { id: true, name: true, avatarUrl: true } } },
+        include: {
+          author: { select: { id: true, name: true, avatarUrl: true } },
+        },
       },
     },
   });
@@ -2491,8 +2904,10 @@ async function getAnnouncement(req, res) {
 
 async function createAnnouncement(req, res) {
   const { title, content } = req.body;
-  if (!title?.trim()) return res.status(400).json({ error: 'Title is required' });
-  if (!content?.trim()) return res.status(400).json({ error: 'Content is required' });
+  if (!title?.trim())
+    return res.status(400).json({ error: 'Title is required' });
+  if (!content?.trim())
+    return res.status(400).json({ error: 'Content is required' });
 
   const safeContent = sanitizeAnnouncementHtml(content);
   const mentionedIds = extractFromHtml(safeContent);
@@ -2500,101 +2915,128 @@ async function createAnnouncement(req, res) {
   const announcement = await prisma.$transaction(async (tx) => {
     const a = await tx.announcement.create({
       data: {
-        title:       title.trim(),
-        content:     safeContent,
-        authorId:    req.user.id,
+        title: title.trim(),
+        content: safeContent,
+        authorId: req.user.id,
         workspaceId: req.member.workspaceId,
       },
-      include: { author: { select: { id: true, name: true, avatarUrl: true } } },
+      include: {
+        author: { select: { id: true, name: true, avatarUrl: true } },
+      },
     });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.ANNOUNCEMENT_POSTED,
-      message:     `posted announcement "${a.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.ANNOUNCEMENT_POSTED,
+      message: `posted announcement "${a.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      entityType:  'announcement',
-      entityId:    a.id,
+      entityType: 'announcement',
+      entityId: a.id,
     });
     for (const userId of mentionedIds) {
       if (userId === req.user.id) continue;
       const member = await tx.workspaceMember.findUnique({
-        where: { userId_workspaceId: { userId, workspaceId: req.member.workspaceId } },
+        where: {
+          userId_workspaceId: { userId, workspaceId: req.member.workspaceId },
+        },
       });
       if (!member) continue;
       await createNotification(tx, {
         userId,
-        type:       NOTIFICATION_TYPES.MENTION,
-        message:    `${req.user.name || 'Someone'} mentioned you in "${a.title}"`,
-        actorId:    req.user.id,
+        type: NOTIFICATION_TYPES.MENTION,
+        message: `${req.user.name || 'Someone'} mentioned you in "${a.title}"`,
+        actorId: req.user.id,
         entityType: 'announcement',
-        entityId:   a.id,
+        entityId: a.id,
       });
     }
     return a;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ANNOUNCEMENT_NEW, { announcement });
+  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ANNOUNCEMENT_NEW, {
+    announcement,
+  });
   res.status(201).json({ announcement });
 }
 
 async function updateAnnouncement(req, res) {
   const a = await prisma.announcement.findFirst({
-    where: { id: req.params.announcementId, workspaceId: req.member.workspaceId },
+    where: {
+      id: req.params.announcementId,
+      workspaceId: req.member.workspaceId,
+    },
   });
   if (!a) return res.status(404).json({ error: 'Announcement not found' });
 
   const { title, content } = req.body;
   const data = {};
-  if (typeof title === 'string')   data.title = title.trim();
-  if (typeof content === 'string') data.content = sanitizeAnnouncementHtml(content);
-  if (Object.keys(data).length === 0) return res.status(400).json({ error: 'No changes provided' });
+  if (typeof title === 'string') data.title = title.trim();
+  if (typeof content === 'string')
+    data.content = sanitizeAnnouncementHtml(content);
+  if (Object.keys(data).length === 0)
+    return res.status(400).json({ error: 'No changes provided' });
 
   const updated = await prisma.$transaction(async (tx) => {
     const u = await tx.announcement.update({
       where: { id: a.id },
       data,
-      include: { author: { select: { id: true, name: true, avatarUrl: true } } },
+      include: {
+        author: { select: { id: true, name: true, avatarUrl: true } },
+      },
     });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.ANNOUNCEMENT_UPDATED,
-      message:     `updated announcement "${u.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.ANNOUNCEMENT_UPDATED,
+      message: `updated announcement "${u.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      entityType:  'announcement',
-      entityId:    u.id,
+      entityType: 'announcement',
+      entityId: u.id,
     });
     return u;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ANNOUNCEMENT_UPDATED, { announcement: updated });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.ANNOUNCEMENT_UPDATED,
+    { announcement: updated }
+  );
   res.json({ announcement: updated });
 }
 
 async function deleteAnnouncement(req, res) {
   const a = await prisma.announcement.findFirst({
-    where: { id: req.params.announcementId, workspaceId: req.member.workspaceId },
+    where: {
+      id: req.params.announcementId,
+      workspaceId: req.member.workspaceId,
+    },
   });
   if (!a) return res.status(404).json({ error: 'Announcement not found' });
 
   await prisma.$transaction(async (tx) => {
     await tx.announcement.delete({ where: { id: a.id } });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.ANNOUNCEMENT_DELETED,
-      message:     `deleted announcement "${a.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.ANNOUNCEMENT_DELETED,
+      message: `deleted announcement "${a.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      entityType:  'announcement',
-      entityId:    a.id,
+      entityType: 'announcement',
+      entityId: a.id,
     });
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ANNOUNCEMENT_DELETED, { announcementId: a.id });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.ANNOUNCEMENT_DELETED,
+    { announcementId: a.id }
+  );
   res.status(204).end();
 }
 
 async function togglePin(req, res) {
   const a = await prisma.announcement.findFirst({
-    where: { id: req.params.announcementId, workspaceId: req.member.workspaceId },
+    where: {
+      id: req.params.announcementId,
+      workspaceId: req.member.workspaceId,
+    },
   });
   if (!a) return res.status(404).json({ error: 'Announcement not found' });
 
@@ -2602,25 +3044,38 @@ async function togglePin(req, res) {
   const updated = await prisma.$transaction(async (tx) => {
     const u = await tx.announcement.update({
       where: { id: a.id },
-      data:  { isPinned: next, pinnedAt: next ? new Date() : null },
-      include: { author: { select: { id: true, name: true, avatarUrl: true } } },
+      data: { isPinned: next, pinnedAt: next ? new Date() : null },
+      include: {
+        author: { select: { id: true, name: true, avatarUrl: true } },
+      },
     });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.ANNOUNCEMENT_PINNED,
-      message:     `${next ? 'pinned' : 'unpinned'} "${u.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.ANNOUNCEMENT_PINNED,
+      message: `${next ? 'pinned' : 'unpinned'} "${u.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      entityType:  'announcement',
-      entityId:    u.id,
+      entityType: 'announcement',
+      entityId: u.id,
     });
     return u;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ANNOUNCEMENT_PINNED, { announcement: updated });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.ANNOUNCEMENT_PINNED,
+    { announcement: updated }
+  );
   res.json({ announcement: updated });
 }
 
-module.exports = { listAnnouncements, getAnnouncement, createAnnouncement, updateAnnouncement, deleteAnnouncement, togglePin };
+module.exports = {
+  listAnnouncements,
+  getAnnouncement,
+  createAnnouncement,
+  updateAnnouncement,
+  deleteAnnouncement,
+  togglePin,
+};
 ```
 
 - [ ] **Step 2: Commit**
@@ -2635,6 +3090,7 @@ git commit -m "feat(api): announcements controller with sanitize + mention parsi
 ## Task 22: Comments + reactions controllers
 
 **Files:**
+
 - Create: `apps/api/src/controllers/comments.js`
 - Create: `apps/api/src/controllers/reactions.js`
 
@@ -2644,7 +3100,13 @@ git commit -m "feat(api): announcements controller with sanitize + mention parsi
 
 ```js
 const prisma = require('../lib/prisma');
-const { hasCapability, ACTIVITY_TYPES, SOCKET_EVENTS, NOTIFICATION_TYPES, CAPABILITIES } = require('@team-hub/shared');
+const {
+  hasCapability,
+  ACTIVITY_TYPES,
+  SOCKET_EVENTS,
+  NOTIFICATION_TYPES,
+  CAPABILITIES,
+} = require('@team-hub/shared');
 const { extractFromMarkdown } = require('../lib/mentions');
 const { logActivity } = require('../lib/activity');
 const { broadcastToWorkspace } = require('../lib/socket');
@@ -2652,10 +3114,14 @@ const { createNotification } = require('../lib/notifications');
 
 async function listComments(req, res) {
   const announcement = await prisma.announcement.findFirst({
-    where: { id: req.params.announcementId, workspaceId: req.member.workspaceId },
+    where: {
+      id: req.params.announcementId,
+      workspaceId: req.member.workspaceId,
+    },
     select: { id: true },
   });
-  if (!announcement) return res.status(404).json({ error: 'Announcement not found' });
+  if (!announcement)
+    return res.status(404).json({ error: 'Announcement not found' });
 
   const comments = await prisma.comment.findMany({
     where: { announcementId: announcement.id },
@@ -2667,60 +3133,73 @@ async function listComments(req, res) {
 
 async function createComment(req, res) {
   const { content } = req.body;
-  if (!content?.trim()) return res.status(400).json({ error: 'Content is required' });
+  if (!content?.trim())
+    return res.status(400).json({ error: 'Content is required' });
 
   const announcement = await prisma.announcement.findFirst({
-    where: { id: req.params.announcementId, workspaceId: req.member.workspaceId },
+    where: {
+      id: req.params.announcementId,
+      workspaceId: req.member.workspaceId,
+    },
     select: { id: true, title: true },
   });
-  if (!announcement) return res.status(404).json({ error: 'Announcement not found' });
+  if (!announcement)
+    return res.status(404).json({ error: 'Announcement not found' });
 
   const mentionedIds = extractFromMarkdown(content);
 
   const comment = await prisma.$transaction(async (tx) => {
     const c = await tx.comment.create({
       data: {
-        content:          content.trim(),
+        content: content.trim(),
         mentionedUserIds: mentionedIds,
-        authorId:         req.user.id,
-        announcementId:   announcement.id,
+        authorId: req.user.id,
+        announcementId: announcement.id,
       },
-      include: { author: { select: { id: true, name: true, avatarUrl: true } } },
+      include: {
+        author: { select: { id: true, name: true, avatarUrl: true } },
+      },
     });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.COMMENT_ADDED,
-      message:     `commented on "${announcement.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.COMMENT_ADDED,
+      message: `commented on "${announcement.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      entityType:  'comment',
-      entityId:    c.id,
+      entityType: 'comment',
+      entityId: c.id,
     });
     for (const userId of mentionedIds) {
       if (userId === req.user.id) continue;
       const member = await tx.workspaceMember.findUnique({
-        where: { userId_workspaceId: { userId, workspaceId: req.member.workspaceId } },
+        where: {
+          userId_workspaceId: { userId, workspaceId: req.member.workspaceId },
+        },
       });
       if (!member) continue;
       await createNotification(tx, {
         userId,
-        type:       NOTIFICATION_TYPES.MENTION,
-        message:    `${req.user.name || 'Someone'} mentioned you in a comment on "${announcement.title}"`,
-        actorId:    req.user.id,
+        type: NOTIFICATION_TYPES.MENTION,
+        message: `${req.user.name || 'Someone'} mentioned you in a comment on "${announcement.title}"`,
+        actorId: req.user.id,
         entityType: 'announcement',
-        entityId:   announcement.id,
+        entityId: announcement.id,
       });
     }
     return c;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.COMMENT_NEW, { comment });
+  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.COMMENT_NEW, {
+    comment,
+  });
   res.status(201).json({ comment });
 }
 
 async function deleteComment(req, res) {
   const comment = await prisma.comment.findUnique({
     where: { id: req.params.commentId },
-    include: { announcement: { select: { id: true, workspaceId: true, title: true } } },
+    include: {
+      announcement: { select: { id: true, workspaceId: true, title: true } },
+    },
   });
   if (!comment || comment.announcement.workspaceId !== req.member.workspaceId) {
     return res.status(404).json({ error: 'Comment not found' });
@@ -2728,24 +3207,26 @@ async function deleteComment(req, res) {
 
   const isOwn = comment.authorId === req.user.id;
   const allowed =
-    (isOwn && hasCapability(req.member.role, CAPABILITIES.COMMENT_DELETE_OWN)) ||
+    (isOwn &&
+      hasCapability(req.member.role, CAPABILITIES.COMMENT_DELETE_OWN)) ||
     hasCapability(req.member.role, CAPABILITIES.COMMENT_DELETE_ANY);
   if (!allowed) return res.status(403).json({ error: 'Forbidden' });
 
   await prisma.$transaction(async (tx) => {
     await tx.comment.delete({ where: { id: comment.id } });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.COMMENT_DELETED,
-      message:     `deleted a comment on "${comment.announcement.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.COMMENT_DELETED,
+      message: `deleted a comment on "${comment.announcement.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      entityType:  'comment',
-      entityId:    comment.id,
+      entityType: 'comment',
+      entityId: comment.id,
     });
   });
 
   broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.COMMENT_DELETED, {
-    commentId: comment.id, announcementId: comment.announcement.id,
+    commentId: comment.id,
+    announcementId: comment.announcement.id,
   });
   res.status(204).end();
 }
@@ -2768,24 +3249,37 @@ async function toggleReaction(req, res) {
     return res.status(400).json({ error: 'Invalid emoji' });
   }
   const announcement = await prisma.announcement.findFirst({
-    where: { id: req.params.announcementId, workspaceId: req.member.workspaceId },
+    where: {
+      id: req.params.announcementId,
+      workspaceId: req.member.workspaceId,
+    },
     select: { id: true },
   });
-  if (!announcement) return res.status(404).json({ error: 'Announcement not found' });
+  if (!announcement)
+    return res.status(404).json({ error: 'Announcement not found' });
 
   const existing = await prisma.reaction.findUnique({
     where: {
       userId_announcementId_emoji: {
-        userId: req.user.id, announcementId: announcement.id, emoji,
+        userId: req.user.id,
+        announcementId: announcement.id,
+        emoji,
       },
     },
   });
 
   if (existing) {
     await prisma.reaction.delete({ where: { id: existing.id } });
-    broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.REACTION_REMOVED, {
-      reactionId: existing.id, announcementId: announcement.id, userId: req.user.id, emoji,
-    });
+    broadcastToWorkspace(
+      req.member.workspaceId,
+      SOCKET_EVENTS.REACTION_REMOVED,
+      {
+        reactionId: existing.id,
+        announcementId: announcement.id,
+        userId: req.user.id,
+        emoji,
+      }
+    );
     return res.json({ removed: true });
   }
 
@@ -2793,7 +3287,9 @@ async function toggleReaction(req, res) {
     data: { userId: req.user.id, announcementId: announcement.id, emoji },
     include: { user: { select: { id: true, name: true } } },
   });
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.REACTION_NEW, { reaction });
+  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.REACTION_NEW, {
+    reaction,
+  });
   res.status(201).json({ reaction });
 }
 
@@ -2812,6 +3308,7 @@ git commit -m "feat(api): comments + reactions controllers with mention notifica
 ## Task 23: Announcements + comments + reactions routers
 
 **Files:**
+
 - Create: `apps/api/src/routes/comments.js`
 - Create: `apps/api/src/routes/reactions.js`
 - Modify: `apps/api/src/routes/announcements.js` (replace stub)
@@ -2832,9 +3329,14 @@ const c = require('../controllers/comments');
 const router = express.Router({ mergeParams: true });
 router.use(authenticate);
 
-router.get('/',                            requireWorkspaceMembership(), c.listComments);
-router.post('/',                           requireWorkspaceMembership(), requirePermission(CAPABILITIES.COMMENT_CREATE), c.createComment);
-router.delete('/:commentId',               requireWorkspaceMembership(), c.deleteComment); // capability check inline
+router.get('/', requireWorkspaceMembership(), c.listComments);
+router.post(
+  '/',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.COMMENT_CREATE),
+  c.createComment
+);
+router.delete('/:commentId', requireWorkspaceMembership(), c.deleteComment); // capability check inline
 
 module.exports = router;
 ```
@@ -2855,7 +3357,12 @@ const router = express.Router({ mergeParams: true });
 router.use(authenticate);
 
 // POST /api/workspaces/:workspaceId/announcements/:announcementId/reactions  body: { emoji }
-router.post('/', requireWorkspaceMembership(), requirePermission(CAPABILITIES.REACTION_TOGGLE), c.toggleReaction);
+router.post(
+  '/',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.REACTION_TOGGLE),
+  c.toggleReaction
+);
 
 module.exports = router;
 ```
@@ -2877,15 +3384,35 @@ const reactionsRouter = require('./reactions');
 const router = express.Router({ mergeParams: true });
 router.use(authenticate);
 
-router.get('/',  requireWorkspaceMembership(), c.listAnnouncements);
-router.post('/', requireWorkspaceMembership(), requirePermission(CAPABILITIES.ANNOUNCEMENT_CREATE), c.createAnnouncement);
+router.get('/', requireWorkspaceMembership(), c.listAnnouncements);
+router.post(
+  '/',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.ANNOUNCEMENT_CREATE),
+  c.createAnnouncement
+);
 
-router.get('/:announcementId',         requireWorkspaceMembership(), c.getAnnouncement);
-router.put('/:announcementId',         requireWorkspaceMembership(), requirePermission(CAPABILITIES.ANNOUNCEMENT_EDIT),   c.updateAnnouncement);
-router.delete('/:announcementId',      requireWorkspaceMembership(), requirePermission(CAPABILITIES.ANNOUNCEMENT_DELETE), c.deleteAnnouncement);
-router.patch('/:announcementId/pin',   requireWorkspaceMembership(), requirePermission(CAPABILITIES.ANNOUNCEMENT_PIN),    c.togglePin);
+router.get('/:announcementId', requireWorkspaceMembership(), c.getAnnouncement);
+router.put(
+  '/:announcementId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.ANNOUNCEMENT_EDIT),
+  c.updateAnnouncement
+);
+router.delete(
+  '/:announcementId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.ANNOUNCEMENT_DELETE),
+  c.deleteAnnouncement
+);
+router.patch(
+  '/:announcementId/pin',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.ANNOUNCEMENT_PIN),
+  c.togglePin
+);
 
-router.use('/:announcementId/comments',  commentsRouter);
+router.use('/:announcementId/comments', commentsRouter);
 router.use('/:announcementId/reactions', reactionsRouter);
 
 module.exports = router;
@@ -2902,7 +3429,10 @@ app.use('/api/announcements', require('./routes/announcements'));
 to:
 
 ```js
-app.use('/api/workspaces/:workspaceId/announcements', require('./routes/announcements'));
+app.use(
+  '/api/workspaces/:workspaceId/announcements',
+  require('./routes/announcements')
+);
 ```
 
 - [ ] **Step 5: Smoke test**
@@ -2931,6 +3461,7 @@ git commit -m "feat(api): mount announcements + comments + reactions routers"
 ## Task 24: Frontend announcements stores
 
 **Files:**
+
 - Create: `apps/web/src/stores/announcementsStore.js`
 - Create: `apps/web/src/stores/commentsStore.js`
 - Create: `apps/web/src/stores/reactionsStore.js`
@@ -2951,7 +3482,9 @@ const useAnnouncementsStore = create((set, get) => ({
   fetchAll: async (workspaceId) => {
     set({ isLoading: true });
     try {
-      const { announcements } = await api.get(`/api/workspaces/${workspaceId}/announcements`);
+      const { announcements } = await api.get(
+        `/api/workspaces/${workspaceId}/announcements`
+      );
       set({ announcements, isLoading: false });
     } catch (err) {
       set({ isLoading: false });
@@ -2959,19 +3492,29 @@ const useAnnouncementsStore = create((set, get) => ({
     }
   },
   fetchOne: async (workspaceId, id) => {
-    const { announcement } = await api.get(`/api/workspaces/${workspaceId}/announcements/${id}`);
+    const { announcement } = await api.get(
+      `/api/workspaces/${workspaceId}/announcements/${id}`
+    );
     set({ current: announcement });
     return announcement;
   },
   create: async (workspaceId, payload) => {
-    const { announcement } = await api.post(`/api/workspaces/${workspaceId}/announcements`, payload);
+    const { announcement } = await api.post(
+      `/api/workspaces/${workspaceId}/announcements`,
+      payload
+    );
     set((s) => ({ announcements: [announcement, ...s.announcements] }));
     return announcement;
   },
   update: async (workspaceId, id, payload) => {
-    const { announcement } = await api.put(`/api/workspaces/${workspaceId}/announcements/${id}`, payload);
+    const { announcement } = await api.put(
+      `/api/workspaces/${workspaceId}/announcements/${id}`,
+      payload
+    );
     set((s) => ({
-      announcements: s.announcements.map((a) => a.id === id ? announcement : a),
+      announcements: s.announcements.map((a) =>
+        a.id === id ? announcement : a
+      ),
       current: s.current?.id === id ? announcement : s.current,
     }));
     return announcement;
@@ -2984,27 +3527,36 @@ const useAnnouncementsStore = create((set, get) => ({
     }));
   },
   togglePin: async (workspaceId, id) => {
-    const { announcement } = await api.patch(`/api/workspaces/${workspaceId}/announcements/${id}/pin`, {});
+    const { announcement } = await api.patch(
+      `/api/workspaces/${workspaceId}/announcements/${id}/pin`,
+      {}
+    );
     set((s) => ({
-      announcements: sortAnnouncements(s.announcements.map((a) => a.id === id ? announcement : a)),
+      announcements: sortAnnouncements(
+        s.announcements.map((a) => (a.id === id ? announcement : a))
+      ),
       current: s.current?.id === id ? announcement : s.current,
     }));
     return announcement;
   },
 
   // Real-time hooks
-  upsert: (a) => set((s) => {
-    const exists = s.announcements.some((x) => x.id === a.id);
-    return {
-      announcements: sortAnnouncements(exists
-        ? s.announcements.map((x) => x.id === a.id ? a : x)
-        : [a, ...s.announcements]),
-    };
-  }),
-  removeLocal: (id) => set((s) => ({
-    announcements: s.announcements.filter((a) => a.id !== id),
-    current: s.current?.id === id ? null : s.current,
-  })),
+  upsert: (a) =>
+    set((s) => {
+      const exists = s.announcements.some((x) => x.id === a.id);
+      return {
+        announcements: sortAnnouncements(
+          exists
+            ? s.announcements.map((x) => (x.id === a.id ? a : x))
+            : [a, ...s.announcements]
+        ),
+      };
+    }),
+  removeLocal: (id) =>
+    set((s) => ({
+      announcements: s.announcements.filter((a) => a.id !== id),
+      current: s.current?.id === id ? null : s.current,
+    })),
 }));
 
 function sortAnnouncements(list) {
@@ -3032,51 +3584,66 @@ const useCommentsStore = create((set, get) => ({
   byAnnouncementId: {}, // { [id]: Comment[] }
 
   fetchFor: async (workspaceId, announcementId) => {
-    const { comments } = await api.get(`/api/workspaces/${workspaceId}/announcements/${announcementId}/comments`);
-    set((s) => ({ byAnnouncementId: { ...s.byAnnouncementId, [announcementId]: comments } }));
+    const { comments } = await api.get(
+      `/api/workspaces/${workspaceId}/announcements/${announcementId}/comments`
+    );
+    set((s) => ({
+      byAnnouncementId: { ...s.byAnnouncementId, [announcementId]: comments },
+    }));
   },
   add: async (workspaceId, announcementId, content) => {
     const { comment } = await api.post(
       `/api/workspaces/${workspaceId}/announcements/${announcementId}/comments`,
-      { content },
+      { content }
     );
     set((s) => ({
       byAnnouncementId: {
         ...s.byAnnouncementId,
-        [announcementId]: [...(s.byAnnouncementId[announcementId] || []), comment],
+        [announcementId]: [
+          ...(s.byAnnouncementId[announcementId] || []),
+          comment,
+        ],
       },
     }));
     return comment;
   },
   remove: async (workspaceId, announcementId, commentId) => {
-    await api.delete(`/api/workspaces/${workspaceId}/announcements/${announcementId}/comments/${commentId}`);
+    await api.delete(
+      `/api/workspaces/${workspaceId}/announcements/${announcementId}/comments/${commentId}`
+    );
     set((s) => ({
       byAnnouncementId: {
         ...s.byAnnouncementId,
-        [announcementId]: (s.byAnnouncementId[announcementId] || []).filter((c) => c.id !== commentId),
+        [announcementId]: (s.byAnnouncementId[announcementId] || []).filter(
+          (c) => c.id !== commentId
+        ),
       },
     }));
   },
 
   // Real-time
-  upsert: (comment) => set((s) => {
-    const list = s.byAnnouncementId[comment.announcementId] || [];
-    const exists = list.some((c) => c.id === comment.id);
-    return {
+  upsert: (comment) =>
+    set((s) => {
+      const list = s.byAnnouncementId[comment.announcementId] || [];
+      const exists = list.some((c) => c.id === comment.id);
+      return {
+        byAnnouncementId: {
+          ...s.byAnnouncementId,
+          [comment.announcementId]: exists
+            ? list.map((c) => (c.id === comment.id ? comment : c))
+            : [...list, comment],
+        },
+      };
+    }),
+  removeLocal: (announcementId, commentId) =>
+    set((s) => ({
       byAnnouncementId: {
         ...s.byAnnouncementId,
-        [comment.announcementId]: exists
-          ? list.map((c) => c.id === comment.id ? comment : c)
-          : [...list, comment],
+        [announcementId]: (s.byAnnouncementId[announcementId] || []).filter(
+          (c) => c.id !== commentId
+        ),
       },
-    };
-  }),
-  removeLocal: (announcementId, commentId) => set((s) => ({
-    byAnnouncementId: {
-      ...s.byAnnouncementId,
-      [announcementId]: (s.byAnnouncementId[announcementId] || []).filter((c) => c.id !== commentId),
-    },
-  })),
+    })),
 }));
 
 export default useCommentsStore;
@@ -3093,14 +3660,20 @@ import { api } from '@/lib/api';
 const useReactionsStore = create((set, get) => ({
   byAnnouncementId: {}, // { [id]: Reaction[] }
 
-  setForAnnouncement: (announcementId, reactions) => set((s) => ({
-    byAnnouncementId: { ...s.byAnnouncementId, [announcementId]: reactions || [] },
-  })),
+  setForAnnouncement: (announcementId, reactions) =>
+    set((s) => ({
+      byAnnouncementId: {
+        ...s.byAnnouncementId,
+        [announcementId]: reactions || [],
+      },
+    })),
 
   toggle: async (workspaceId, announcementId, emoji, currentUserId) => {
     // Optimistic toggle (used in Phase 7 too)
     const list = get().byAnnouncementId[announcementId] || [];
-    const existing = list.find((r) => r.userId === currentUserId && r.emoji === emoji);
+    const existing = list.find(
+      (r) => r.userId === currentUserId && r.emoji === emoji
+    );
     if (existing) {
       set((s) => ({
         byAnnouncementId: {
@@ -3113,45 +3686,66 @@ const useReactionsStore = create((set, get) => ({
       set((s) => ({
         byAnnouncementId: {
           ...s.byAnnouncementId,
-          [announcementId]: [...list, { id: tmpId, emoji, userId: currentUserId, announcementId }],
+          [announcementId]: [
+            ...list,
+            { id: tmpId, emoji, userId: currentUserId, announcementId },
+          ],
         },
       }));
     }
     try {
       const result = await api.post(
         `/api/workspaces/${workspaceId}/announcements/${announcementId}/reactions`,
-        { emoji },
+        { emoji }
       );
       // Reconcile with server result
       set((s) => {
-        const cur = (s.byAnnouncementId[announcementId] || []).filter((r) => !String(r.id).startsWith('tmp-'));
-        if (result.removed) return { byAnnouncementId: { ...s.byAnnouncementId, [announcementId]: cur } };
-        return { byAnnouncementId: { ...s.byAnnouncementId, [announcementId]: [...cur, result.reaction] } };
+        const cur = (s.byAnnouncementId[announcementId] || []).filter(
+          (r) => !String(r.id).startsWith('tmp-')
+        );
+        if (result.removed)
+          return {
+            byAnnouncementId: { ...s.byAnnouncementId, [announcementId]: cur },
+          };
+        return {
+          byAnnouncementId: {
+            ...s.byAnnouncementId,
+            [announcementId]: [...cur, result.reaction],
+          },
+        };
       });
     } catch (err) {
       // Rollback
-      set((s) => ({ byAnnouncementId: { ...s.byAnnouncementId, [announcementId]: list } }));
+      set((s) => ({
+        byAnnouncementId: { ...s.byAnnouncementId, [announcementId]: list },
+      }));
       throw err;
     }
   },
 
-  upsert: (reaction) => set((s) => {
-    const list = s.byAnnouncementId[reaction.announcementId] || [];
-    const exists = list.some((r) => r.id === reaction.id);
-    return {
+  upsert: (reaction) =>
+    set((s) => {
+      const list = s.byAnnouncementId[reaction.announcementId] || [];
+      const exists = list.some((r) => r.id === reaction.id);
+      return {
+        byAnnouncementId: {
+          ...s.byAnnouncementId,
+          [reaction.announcementId]: exists ? list : [...list, reaction],
+        },
+      };
+    }),
+  removeLocal: ({ announcementId, reactionId, userId, emoji }) =>
+    set((s) => ({
       byAnnouncementId: {
         ...s.byAnnouncementId,
-        [reaction.announcementId]: exists ? list : [...list, reaction],
+        [announcementId]: (s.byAnnouncementId[announcementId] || []).filter(
+          (r) =>
+            reactionId
+              ? r.id !== reactionId
+              : !(r.userId === userId && r.emoji === emoji)
+        ),
       },
-    };
-  }),
-  removeLocal: ({ announcementId, reactionId, userId, emoji }) => set((s) => ({
-    byAnnouncementId: {
-      ...s.byAnnouncementId,
-      [announcementId]: (s.byAnnouncementId[announcementId] || []).filter((r) =>
-        reactionId ? r.id !== reactionId : !(r.userId === userId && r.emoji === emoji)),
-    },
-  })),
+    })),
 }));
 
 export default useReactionsStore;
@@ -3169,6 +3763,7 @@ git commit -m "feat(web): announcements + comments + reactions Zustand stores"
 ## Task 25: TipTap composer + RichTextRenderer + ReactionBar + CommentList
 
 **Files:**
+
 - Create: `apps/web/src/components/announcements/AnnouncementComposer.jsx`
 - Create: `apps/web/src/components/announcements/RichTextRenderer.jsx`
 - Create: `apps/web/src/components/announcements/ReactionBar.jsx`
@@ -3193,7 +3788,12 @@ import Modal from '../ui/Modal';
 import Button from '../ui/Button';
 import { api } from '@/lib/api';
 
-export default function AnnouncementComposer({ open, onClose, onSubmit, initial }) {
+export default function AnnouncementComposer({
+  open,
+  onClose,
+  onSubmit,
+  initial,
+}) {
   const { workspaceId } = useParams();
   const [title, setTitle] = useState(initial?.title || '');
   const [submitting, setSubmitting] = useState(false);
@@ -3202,17 +3802,35 @@ export default function AnnouncementComposer({ open, onClose, onSubmit, initial 
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Link.configure({ openOnClick: false, HTMLAttributes: { rel: 'noopener noreferrer', target: '_blank' } }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: { rel: 'noopener noreferrer', target: '_blank' },
+      }),
       Mention.configure({
-        HTMLAttributes: { 'data-type': 'mention', class: 'bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 px-1 rounded' },
-        renderHTML: ({ options, node }) =>
-          ['span', { ...options.HTMLAttributes, 'data-id': node.attrs.id, 'data-label': node.attrs.label }, `@${node.attrs.label}`],
+        HTMLAttributes: {
+          'data-type': 'mention',
+          class:
+            'bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 px-1 rounded',
+        },
+        renderHTML: ({ options, node }) => [
+          'span',
+          {
+            ...options.HTMLAttributes,
+            'data-id': node.attrs.id,
+            'data-label': node.attrs.label,
+          },
+          `@${node.attrs.label}`,
+        ],
         suggestion: {
           char: '@',
           items: async ({ query }) => {
             try {
-              const res = await api.get(`/api/workspaces/${workspaceId}/members?search=${encodeURIComponent(query || '')}`);
-              return (res.members || []).slice(0, 5).map((m) => ({ id: m.user.id, label: m.user.name }));
+              const res = await api.get(
+                `/api/workspaces/${workspaceId}/members?search=${encodeURIComponent(query || '')}`
+              );
+              return (res.members || [])
+                .slice(0, 5)
+                .map((m) => ({ id: m.user.id, label: m.user.name }));
             } catch {
               return [];
             }
@@ -3236,13 +3854,15 @@ export default function AnnouncementComposer({ open, onClose, onSubmit, initial 
   });
 
   useEffect(() => {
-    if (open && editor) editor.commands.setContent(initial?.content || '<p></p>');
+    if (open && editor)
+      editor.commands.setContent(initial?.content || '<p></p>');
     if (open) setTitle(initial?.title || '');
   }, [open, initial, editor]);
 
   const submit = async (e) => {
     e.preventDefault();
-    setSubmitting(true); setError('');
+    setSubmitting(true);
+    setError('');
     try {
       await onSubmit({ title: title.trim(), content: editor?.getHTML() || '' });
       onClose();
@@ -3254,23 +3874,41 @@ export default function AnnouncementComposer({ open, onClose, onSubmit, initial 
   };
 
   return (
-    <Modal open={open} onClose={onClose} title={initial ? 'Edit announcement' : 'New announcement'}>
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initial ? 'Edit announcement' : 'New announcement'}
+    >
       <form onSubmit={submit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} required
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Title
+          </label>
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+          />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Content</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Content
+          </label>
           <div className="border border-gray-300 dark:border-gray-700 rounded-md p-3 min-h-[150px] prose prose-sm max-w-none dark:prose-invert dark:bg-gray-900">
             <EditorContent editor={editor} />
           </div>
         </div>
-        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+        {error && (
+          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        )}
         <div className="flex justify-end gap-2">
-          <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
-          <Button type="submit" disabled={submitting}>{submitting ? 'Saving…' : 'Publish'}</Button>
+          <Button variant="outline" type="button" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={submitting}>
+            {submitting ? 'Saving…' : 'Publish'}
+          </Button>
         </div>
       </form>
     </Modal>
@@ -3353,7 +3991,11 @@ export default function ReactionBar({ announcementId }) {
             } ${!canReact ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <span>{emoji}</span>
-            {count > 0 && <span className="ml-1 text-xs text-gray-600 dark:text-gray-400">{count}</span>}
+            {count > 0 && (
+              <span className="ml-1 text-xs text-gray-600 dark:text-gray-400">
+                {count}
+              </span>
+            )}
           </button>
         );
       })}
@@ -3381,20 +4023,35 @@ import { api } from '@/lib/api';
  * this for goal updates). The TipTap editor handles announcement bodies
  * with its own mention extension.
  */
-export default function MentionTextarea({ value, onChange, placeholder, rows = 3 }) {
+export default function MentionTextarea({
+  value,
+  onChange,
+  placeholder,
+  rows = 3,
+}) {
   const { workspaceId } = useParams();
   const ref = useRef(null);
   const [suggestions, setSuggestions] = useState([]);
   const [showAt, setShowAt] = useState(null);
 
   useEffect(() => {
-    if (!showAt) { setSuggestions([]); return; }
+    if (!showAt) {
+      setSuggestions([]);
+      return;
+    }
     const term = value.slice(showAt.start + 1, showAt.caret);
     let cancelled = false;
-    api.get(`/api/workspaces/${workspaceId}/members?search=${encodeURIComponent(term)}`).then((r) => {
-      if (!cancelled) setSuggestions((r.members || []).slice(0, 5));
-    }).catch(() => {});
-    return () => { cancelled = true; };
+    api
+      .get(
+        `/api/workspaces/${workspaceId}/members?search=${encodeURIComponent(term)}`
+      )
+      .then((r) => {
+        if (!cancelled) setSuggestions((r.members || []).slice(0, 5));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
   }, [value, showAt, workspaceId]);
 
   const onKeyUp = (e) => {
@@ -3411,7 +4068,8 @@ export default function MentionTextarea({ value, onChange, placeholder, rows = 3
   const insertMention = (member) => {
     if (!showAt) return;
     const token = `@[${member.user.name}](${member.user.id})`;
-    const next = value.slice(0, showAt.start) + token + value.slice(showAt.caret);
+    const next =
+      value.slice(0, showAt.start) + token + value.slice(showAt.caret);
     onChange(next);
     setShowAt(null);
     setTimeout(() => ref.current?.focus(), 0);
@@ -3495,27 +4153,40 @@ export default function CommentList({ announcementId }) {
     <div className="space-y-3">
       <ul className="space-y-3">
         {comments.map((c) => {
-          const canDelete = canDeleteAny || (canDeleteOwn && c.authorId === user?.id);
+          const canDelete =
+            canDeleteAny || (canDeleteOwn && c.authorId === user?.id);
           return (
             <li key={c.id} className="flex gap-3">
               {c.author?.avatarUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={c.author.avatarUrl} alt="" className="w-7 h-7 rounded-full mt-0.5 flex-shrink-0" />
+                <img
+                  src={c.author.avatarUrl}
+                  alt=""
+                  className="w-7 h-7 rounded-full mt-0.5 flex-shrink-0"
+                />
               ) : (
                 <div className="w-7 h-7 rounded-full bg-gray-300 mt-0.5 flex-shrink-0" />
               )}
               <div className="flex-1">
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium text-gray-900 dark:text-white">{c.author?.name}</span>
-                  <span className="text-xs text-gray-500">{new Date(c.createdAt).toLocaleString()}</span>
+                  <span className="font-medium text-gray-900 dark:text-white">
+                    {c.author?.name}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {new Date(c.createdAt).toLocaleString()}
+                  </span>
                   {canDelete && (
                     <button
                       onClick={() => remove(workspaceId, announcementId, c.id)}
                       className="text-xs text-red-600 hover:underline ml-auto"
-                    >Delete</button>
+                    >
+                      Delete
+                    </button>
                   )}
                 </div>
-                <p className="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap">{renderMentions(c.content)}</p>
+                <p className="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap">
+                  {renderMentions(c.content)}
+                </p>
               </div>
             </li>
           );
@@ -3524,9 +4195,17 @@ export default function CommentList({ announcementId }) {
 
       {canComment && (
         <form onSubmit={submit} className="flex flex-col gap-2">
-          <MentionTextarea value={content} onChange={setContent} placeholder="Add a comment… (use @ to mention)" />
+          <MentionTextarea
+            value={content}
+            onChange={setContent}
+            placeholder="Add a comment… (use @ to mention)"
+          />
           <div className="flex justify-end">
-            <Button type="submit" size="sm" disabled={submitting || !content.trim()}>
+            <Button
+              type="submit"
+              size="sm"
+              disabled={submitting || !content.trim()}
+            >
               {submitting ? 'Posting…' : 'Post comment'}
             </Button>
           </div>
@@ -3540,10 +4219,18 @@ function renderMentions(text) {
   // Replaces @[Name](id) tokens with styled inline spans for display.
   const parts = [];
   const re = /@\[([^\]]+)\]\(([a-f0-9-]{36})\)/g;
-  let last = 0; let m;
+  let last = 0;
+  let m;
   while ((m = re.exec(text))) {
     if (m.index > last) parts.push(text.slice(last, m.index));
-    parts.push(<span key={m.index} className="bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 px-1 rounded">@{m[1]}</span>);
+    parts.push(
+      <span
+        key={m.index}
+        className="bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 px-1 rounded"
+      >
+        @{m[1]}
+      </span>
+    );
     last = m.index + m[0].length;
   }
   if (last < text.length) parts.push(text.slice(last));
@@ -3566,39 +4253,82 @@ import Button from '../ui/Button';
 import { CAPABILITIES } from '@team-hub/shared';
 import { useCapability } from '@/hooks/useCapability';
 
-export default function AnnouncementCard({ announcement, onTogglePin, onEdit, onDelete }) {
-  const canPin    = useCapability(CAPABILITIES.ANNOUNCEMENT_PIN);
-  const canEdit   = useCapability(CAPABILITIES.ANNOUNCEMENT_EDIT);
+export default function AnnouncementCard({
+  announcement,
+  onTogglePin,
+  onEdit,
+  onDelete,
+}) {
+  const canPin = useCapability(CAPABILITIES.ANNOUNCEMENT_PIN);
+  const canEdit = useCapability(CAPABILITIES.ANNOUNCEMENT_EDIT);
   const canDelete = useCapability(CAPABILITIES.ANNOUNCEMENT_DELETE);
   const [showComments, setShowComments] = useState(false);
 
   return (
-    <article className={`bg-white dark:bg-gray-800 border rounded-lg p-5 ${
-      announcement.isPinned ? 'border-primary-300 dark:border-primary-700' : 'border-gray-200 dark:border-gray-700'
-    }`}>
+    <article
+      className={`bg-white dark:bg-gray-800 border rounded-lg p-5 ${
+        announcement.isPinned
+          ? 'border-primary-300 dark:border-primary-700'
+          : 'border-gray-200 dark:border-gray-700'
+      }`}
+    >
       <header className="flex items-start justify-between gap-3 mb-3">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white">{announcement.title}</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+              {announcement.title}
+            </h2>
             {announcement.isPinned && (
-              <span className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 px-2 py-0.5 rounded-full">Pinned</span>
+              <span className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 px-2 py-0.5 rounded-full">
+                Pinned
+              </span>
             )}
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-500">
             {announcement.author?.avatarUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={announcement.author.avatarUrl} alt="" className="w-5 h-5 rounded-full" />
+              <img
+                src={announcement.author.avatarUrl}
+                alt=""
+                className="w-5 h-5 rounded-full"
+              />
             ) : (
               <div className="w-5 h-5 rounded-full bg-gray-300" />
             )}
             <span>{announcement.author?.name}</span>
-            <span>· {new Date(announcement.createdAt).toLocaleDateString()}</span>
+            <span>
+              · {new Date(announcement.createdAt).toLocaleDateString()}
+            </span>
           </div>
         </div>
         <div className="flex items-center gap-1">
-          {canPin    && <Button size="sm" variant="outline" onClick={() => onTogglePin(announcement.id)}>{announcement.isPinned ? 'Unpin' : 'Pin'}</Button>}
-          {canEdit   && <Button size="sm" variant="outline" onClick={() => onEdit(announcement)}>Edit</Button>}
-          {canDelete && <Button size="sm" variant="outline" onClick={() => onDelete(announcement.id)}>Delete</Button>}
+          {canPin && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => onTogglePin(announcement.id)}
+            >
+              {announcement.isPinned ? 'Unpin' : 'Pin'}
+            </Button>
+          )}
+          {canEdit && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => onEdit(announcement)}
+            >
+              Edit
+            </Button>
+          )}
+          {canDelete && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => onDelete(announcement.id)}
+            >
+              Delete
+            </Button>
+          )}
         </div>
       </header>
 
@@ -3608,8 +4338,12 @@ export default function AnnouncementCard({ announcement, onTogglePin, onEdit, on
 
       <div className="flex items-center justify-between mb-3">
         <ReactionBar announcementId={announcement.id} />
-        <button onClick={() => setShowComments(!showComments)} className="text-sm text-primary-600 hover:underline">
-          {announcement._count?.comments || 0} comment{(announcement._count?.comments || 0) === 1 ? '' : 's'}
+        <button
+          onClick={() => setShowComments(!showComments)}
+          className="text-sm text-primary-600 hover:underline"
+        >
+          {announcement._count?.comments || 0} comment
+          {(announcement._count?.comments || 0) === 1 ? '' : 's'}
         </button>
       </div>
 
@@ -3635,6 +4369,7 @@ git commit -m "feat(web): TipTap composer, rich-text renderer, reactions, commen
 ## Task 26: Announcements page + nav link
 
 **Files:**
+
 - Create: `apps/web/src/app/dashboard/[workspaceId]/announcements/page.js`
 - Modify: `apps/web/src/app/dashboard/[workspaceId]/layout.js` (add nav link)
 
@@ -3657,7 +4392,15 @@ import { api } from '@/lib/api';
 
 export default function AnnouncementsPage() {
   const { workspaceId } = useParams();
-  const { announcements, isLoading, fetchAll, create, update, remove, togglePin } = useAnnouncementsStore();
+  const {
+    announcements,
+    isLoading,
+    fetchAll,
+    create,
+    update,
+    remove,
+    togglePin,
+  } = useAnnouncementsStore();
   const { setForAnnouncement } = useReactionsStore();
   const canCreate = useCapability(CAPABILITIES.ANNOUNCEMENT_CREATE);
   const [composerOpen, setComposerOpen] = useState(false);
@@ -3671,18 +4414,30 @@ export default function AnnouncementsPage() {
   // Hydrate reactions per visible announcement (one extra request each).
   useEffect(() => {
     for (const a of announcements) {
-      api.get(`/api/workspaces/${workspaceId}/announcements/${a.id}`).then(({ announcement }) => {
-        setForAnnouncement(a.id, announcement.reactions || []);
-      }).catch(() => {});
+      api
+        .get(`/api/workspaces/${workspaceId}/announcements/${a.id}`)
+        .then(({ announcement }) => {
+          setForAnnouncement(a.id, announcement.reactions || []);
+        })
+        .catch(() => {});
     }
   }, [announcements, workspaceId, setForAnnouncement]);
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Announcements</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Announcements
+        </h1>
         {canCreate && (
-          <Button onClick={() => { setEditing(null); setComposerOpen(true); }}>New announcement</Button>
+          <Button
+            onClick={() => {
+              setEditing(null);
+              setComposerOpen(true);
+            }}
+          >
+            New announcement
+          </Button>
         )}
       </div>
 
@@ -3697,7 +4452,10 @@ export default function AnnouncementsPage() {
               key={a.id}
               announcement={a}
               onTogglePin={(id) => togglePin(workspaceId, id)}
-              onEdit={(item) => { setEditing(item); setComposerOpen(true); }}
+              onEdit={(item) => {
+                setEditing(item);
+                setComposerOpen(true);
+              }}
               onDelete={(id) => setConfirmDelete(id)}
             />
           ))}
@@ -3706,7 +4464,10 @@ export default function AnnouncementsPage() {
 
       <AnnouncementComposer
         open={composerOpen}
-        onClose={() => { setComposerOpen(false); setEditing(null); }}
+        onClose={() => {
+          setComposerOpen(false);
+          setEditing(null);
+        }}
         initial={editing}
         onSubmit={async (data) => {
           if (editing) await update(workspaceId, editing.id, data);
@@ -3760,6 +4521,7 @@ git commit -m "feat(web): announcements feed page with TipTap composer"
 ## Task 27: Install @dnd-kit
 
 **Files:**
+
 - Modify: `apps/web/package.json`
 
 - [ ] **Step 1: Install**
@@ -3780,6 +4542,7 @@ git commit -m "chore(deps): add @dnd-kit for action item kanban"
 ## Task 28: Action items controller (list + create + read)
 
 **Files:**
+
 - Create: `apps/api/src/controllers/actionItems.js`
 
 - [ ] **Step 1: Implement list/create/get**
@@ -3791,14 +4554,20 @@ const prisma = require('../lib/prisma');
 const { logActivity } = require('../lib/activity');
 const { broadcastToWorkspace } = require('../lib/socket');
 const { createNotification } = require('../lib/notifications');
-const { ACTIVITY_TYPES, SOCKET_EVENTS, NOTIFICATION_TYPES, ACTION_ITEM_STATUS, PRIORITY } = require('@team-hub/shared');
+const {
+  ACTIVITY_TYPES,
+  SOCKET_EVENTS,
+  NOTIFICATION_TYPES,
+  ACTION_ITEM_STATUS,
+  PRIORITY,
+} = require('@team-hub/shared');
 
 async function listActionItems(req, res) {
   const items = await prisma.actionItem.findMany({
     where: { workspaceId: req.member.workspaceId },
     include: {
       assignee: { select: { id: true, name: true, avatarUrl: true } },
-      goal:     { select: { id: true, title: true } },
+      goal: { select: { id: true, title: true } },
     },
     orderBy: [{ status: 'asc' }, { position: 'asc' }, { createdAt: 'desc' }],
   });
@@ -3810,7 +4579,7 @@ async function getActionItem(req, res) {
     where: { id: req.params.actionItemId, workspaceId: req.member.workspaceId },
     include: {
       assignee: { select: { id: true, name: true, avatarUrl: true } },
-      goal:     { select: { id: true, title: true } },
+      goal: { select: { id: true, title: true } },
     },
   });
   if (!item) return res.status(404).json({ error: 'Action item not found' });
@@ -3818,8 +4587,10 @@ async function getActionItem(req, res) {
 }
 
 async function createActionItem(req, res) {
-  const { title, description, priority, status, dueDate, assigneeId, goalId } = req.body;
-  if (!title?.trim()) return res.status(400).json({ error: 'Title is required' });
+  const { title, description, priority, status, dueDate, assigneeId, goalId } =
+    req.body;
+  if (!title?.trim())
+    return res.status(400).json({ error: 'Title is required' });
   if (priority && !Object.values(PRIORITY).includes(priority)) {
     return res.status(400).json({ error: 'Invalid priority' });
   }
@@ -3828,13 +4599,26 @@ async function createActionItem(req, res) {
   }
   if (assigneeId) {
     const m = await prisma.workspaceMember.findUnique({
-      where: { userId_workspaceId: { userId: assigneeId, workspaceId: req.member.workspaceId } },
+      where: {
+        userId_workspaceId: {
+          userId: assigneeId,
+          workspaceId: req.member.workspaceId,
+        },
+      },
     });
-    if (!m) return res.status(400).json({ error: 'Assignee must be a workspace member' });
+    if (!m)
+      return res
+        .status(400)
+        .json({ error: 'Assignee must be a workspace member' });
   }
   if (goalId) {
-    const g = await prisma.goal.findFirst({ where: { id: goalId, workspaceId: req.member.workspaceId } });
-    if (!g) return res.status(400).json({ error: 'Goal must belong to this workspace' });
+    const g = await prisma.goal.findFirst({
+      where: { id: goalId, workspaceId: req.member.workspaceId },
+    });
+    if (!g)
+      return res
+        .status(400)
+        .json({ error: 'Goal must belong to this workspace' });
   }
 
   const targetStatus = status || ACTION_ITEM_STATUS.TODO;
@@ -3850,44 +4634,48 @@ async function createActionItem(req, res) {
 
     const created = await tx.actionItem.create({
       data: {
-        title:       title.trim(),
+        title: title.trim(),
         description: description?.trim() || null,
-        priority:    priority || PRIORITY.MEDIUM,
-        status:      targetStatus,
-        dueDate:     dueDate ? new Date(dueDate) : null,
-        assigneeId:  assigneeId || null,
-        goalId:      goalId || null,
+        priority: priority || PRIORITY.MEDIUM,
+        status: targetStatus,
+        dueDate: dueDate ? new Date(dueDate) : null,
+        assigneeId: assigneeId || null,
+        goalId: goalId || null,
         workspaceId: req.member.workspaceId,
         position,
       },
       include: {
         assignee: { select: { id: true, name: true, avatarUrl: true } },
-        goal:     { select: { id: true, title: true } },
+        goal: { select: { id: true, title: true } },
       },
     });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.ACTION_ITEM_CREATED,
-      message:     `created action item "${created.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.ACTION_ITEM_CREATED,
+      message: `created action item "${created.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      goalId:      created.goalId || null,
-      entityType:  'actionItem',
-      entityId:    created.id,
+      goalId: created.goalId || null,
+      entityType: 'actionItem',
+      entityId: created.id,
     });
     if (assigneeId && assigneeId !== req.user.id) {
       await createNotification(tx, {
-        userId:     assigneeId,
-        type:       NOTIFICATION_TYPES.ASSIGNMENT,
-        message:    `${req.user.name || 'Someone'} assigned you "${created.title}"`,
-        actorId:    req.user.id,
+        userId: assigneeId,
+        type: NOTIFICATION_TYPES.ASSIGNMENT,
+        message: `${req.user.name || 'Someone'} assigned you "${created.title}"`,
+        actorId: req.user.id,
         entityType: 'actionItem',
-        entityId:   created.id,
+        entityId: created.id,
       });
     }
     return created;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ACTION_ITEM_CREATED, { actionItem: item });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.ACTION_ITEM_CREATED,
+    { actionItem: item }
+  );
   res.status(201).json({ actionItem: item });
 }
 
@@ -3906,6 +4694,7 @@ git commit -m "feat(api): action items controller — list, get, create"
 ## Task 29: Action items controller (update + delete + move)
 
 **Files:**
+
 - Modify: `apps/api/src/controllers/actionItems.js`
 
 - [ ] **Step 1: Append update/delete/move**
@@ -3919,19 +4708,28 @@ async function updateActionItem(req, res) {
   });
   if (!item) return res.status(404).json({ error: 'Action item not found' });
 
-  const { title, description, priority, dueDate, assigneeId, goalId } = req.body;
+  const { title, description, priority, dueDate, assigneeId, goalId } =
+    req.body;
   const data = {};
-  if (typeof title === 'string')       data.title = title.trim();
-  if (typeof description === 'string') data.description = description.trim() || null;
+  if (typeof title === 'string') data.title = title.trim();
+  if (typeof description === 'string')
+    data.description = description.trim() || null;
   if (priority) {
-    if (!Object.values(PRIORITY).includes(priority)) return res.status(400).json({ error: 'Invalid priority' });
+    if (!Object.values(PRIORITY).includes(priority))
+      return res.status(400).json({ error: 'Invalid priority' });
     data.priority = priority;
   }
-  if (typeof dueDate !== 'undefined') data.dueDate = dueDate ? new Date(dueDate) : null;
+  if (typeof dueDate !== 'undefined')
+    data.dueDate = dueDate ? new Date(dueDate) : null;
   if (typeof goalId !== 'undefined') {
     if (goalId) {
-      const g = await prisma.goal.findFirst({ where: { id: goalId, workspaceId: req.member.workspaceId } });
-      if (!g) return res.status(400).json({ error: 'Goal must belong to this workspace' });
+      const g = await prisma.goal.findFirst({
+        where: { id: goalId, workspaceId: req.member.workspaceId },
+      });
+      if (!g)
+        return res
+          .status(400)
+          .json({ error: 'Goal must belong to this workspace' });
       data.goalId = goalId;
     } else {
       data.goalId = null;
@@ -3940,13 +4738,22 @@ async function updateActionItem(req, res) {
   if (typeof assigneeId !== 'undefined' && assigneeId !== item.assigneeId) {
     if (assigneeId) {
       const m = await prisma.workspaceMember.findUnique({
-        where: { userId_workspaceId: { userId: assigneeId, workspaceId: req.member.workspaceId } },
+        where: {
+          userId_workspaceId: {
+            userId: assigneeId,
+            workspaceId: req.member.workspaceId,
+          },
+        },
       });
-      if (!m) return res.status(400).json({ error: 'Assignee must be a workspace member' });
+      if (!m)
+        return res
+          .status(400)
+          .json({ error: 'Assignee must be a workspace member' });
     }
     data.assigneeId = assigneeId || null;
   }
-  if (Object.keys(data).length === 0) return res.status(400).json({ error: 'No changes provided' });
+  if (Object.keys(data).length === 0)
+    return res.status(400).json({ error: 'No changes provided' });
 
   const updated = await prisma.$transaction(async (tx) => {
     const u = await tx.actionItem.update({
@@ -3954,32 +4761,40 @@ async function updateActionItem(req, res) {
       data,
       include: {
         assignee: { select: { id: true, name: true, avatarUrl: true } },
-        goal:     { select: { id: true, title: true } },
+        goal: { select: { id: true, title: true } },
       },
     });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.ACTION_ITEM_UPDATED,
-      message:     `updated action item "${u.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.ACTION_ITEM_UPDATED,
+      message: `updated action item "${u.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      goalId:      u.goalId || null,
-      entityType:  'actionItem',
-      entityId:    u.id,
+      goalId: u.goalId || null,
+      entityType: 'actionItem',
+      entityId: u.id,
     });
-    if ('assigneeId' in data && data.assigneeId && data.assigneeId !== req.user.id) {
+    if (
+      'assigneeId' in data &&
+      data.assigneeId &&
+      data.assigneeId !== req.user.id
+    ) {
       await createNotification(tx, {
-        userId:     data.assigneeId,
-        type:       NOTIFICATION_TYPES.ASSIGNMENT,
-        message:    `${req.user.name || 'Someone'} assigned you "${u.title}"`,
-        actorId:    req.user.id,
+        userId: data.assigneeId,
+        type: NOTIFICATION_TYPES.ASSIGNMENT,
+        message: `${req.user.name || 'Someone'} assigned you "${u.title}"`,
+        actorId: req.user.id,
         entityType: 'actionItem',
-        entityId:   u.id,
+        entityId: u.id,
       });
     }
     return u;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ACTION_ITEM_UPDATED, { actionItem: updated });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.ACTION_ITEM_UPDATED,
+    { actionItem: updated }
+  );
   res.json({ actionItem: updated });
 }
 
@@ -3992,17 +4807,21 @@ async function deleteActionItem(req, res) {
   await prisma.$transaction(async (tx) => {
     await tx.actionItem.delete({ where: { id: item.id } });
     await logActivity(tx, {
-      type:        ACTIVITY_TYPES.ACTION_ITEM_DELETED,
-      message:     `deleted action item "${item.title}"`,
-      userId:      req.user.id,
+      type: ACTIVITY_TYPES.ACTION_ITEM_DELETED,
+      message: `deleted action item "${item.title}"`,
+      userId: req.user.id,
       workspaceId: req.member.workspaceId,
-      goalId:      item.goalId || null,
-      entityType:  'actionItem',
-      entityId:    item.id,
+      goalId: item.goalId || null,
+      entityType: 'actionItem',
+      entityId: item.id,
     });
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ACTION_ITEM_DELETED, { actionItemId: item.id });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.ACTION_ITEM_DELETED,
+    { actionItemId: item.id }
+  );
   res.status(204).end();
 }
 
@@ -4065,34 +4884,47 @@ async function moveActionItem(req, res) {
     }
     const u = await tx.actionItem.update({
       where: { id: item.id },
-      data:  { status, position },
+      data: { status, position },
       include: {
         assignee: { select: { id: true, name: true, avatarUrl: true } },
-        goal:     { select: { id: true, title: true } },
+        goal: { select: { id: true, title: true } },
       },
     });
     if (item.status !== status) {
       await logActivity(tx, {
-        type:        ACTIVITY_TYPES.ACTION_ITEM_STATUS_CHANGED,
-        message:     `moved "${u.title}" to ${status}`,
-        userId:      req.user.id,
+        type: ACTIVITY_TYPES.ACTION_ITEM_STATUS_CHANGED,
+        message: `moved "${u.title}" to ${status}`,
+        userId: req.user.id,
         workspaceId: req.member.workspaceId,
-        goalId:      u.goalId || null,
-        entityType:  'actionItem',
-        entityId:    u.id,
-        metadata:    { from: item.status, to: status },
+        goalId: u.goalId || null,
+        entityType: 'actionItem',
+        entityId: u.id,
+        metadata: { from: item.status, to: status },
       });
     }
     return u;
   });
 
-  broadcastToWorkspace(req.member.workspaceId, SOCKET_EVENTS.ACTION_ITEM_MOVED, {
-    actionItem: updated, previousStatus: item.status, previousPosition: item.position,
-  });
+  broadcastToWorkspace(
+    req.member.workspaceId,
+    SOCKET_EVENTS.ACTION_ITEM_MOVED,
+    {
+      actionItem: updated,
+      previousStatus: item.status,
+      previousPosition: item.position,
+    }
+  );
   res.json({ actionItem: updated });
 }
 
-module.exports = { listActionItems, getActionItem, createActionItem, updateActionItem, deleteActionItem, moveActionItem };
+module.exports = {
+  listActionItems,
+  getActionItem,
+  createActionItem,
+  updateActionItem,
+  deleteActionItem,
+  moveActionItem,
+};
 ```
 
 - [ ] **Step 2: Commit**
@@ -4107,6 +4939,7 @@ git commit -m "feat(api): action items controller — update, delete, transactio
 ## Task 30: Action items router
 
 **Files:**
+
 - Modify: `apps/api/src/routes/actionItems.js`
 - Modify: `apps/api/src/index.js`
 
@@ -4125,13 +4958,33 @@ const c = require('../controllers/actionItems');
 const router = express.Router({ mergeParams: true });
 router.use(authenticate);
 
-router.get('/',  requireWorkspaceMembership(), c.listActionItems);
-router.post('/', requireWorkspaceMembership(), requirePermission(CAPABILITIES.ACTION_ITEM_CREATE), c.createActionItem);
+router.get('/', requireWorkspaceMembership(), c.listActionItems);
+router.post(
+  '/',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.ACTION_ITEM_CREATE),
+  c.createActionItem
+);
 
-router.get('/:actionItemId',         requireWorkspaceMembership(), c.getActionItem);
-router.put('/:actionItemId',         requireWorkspaceMembership(), requirePermission(CAPABILITIES.ACTION_ITEM_EDIT),   c.updateActionItem);
-router.patch('/:actionItemId/move',  requireWorkspaceMembership(), requirePermission(CAPABILITIES.ACTION_ITEM_EDIT),   c.moveActionItem);
-router.delete('/:actionItemId',      requireWorkspaceMembership(), requirePermission(CAPABILITIES.ACTION_ITEM_DELETE), c.deleteActionItem);
+router.get('/:actionItemId', requireWorkspaceMembership(), c.getActionItem);
+router.put(
+  '/:actionItemId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.ACTION_ITEM_EDIT),
+  c.updateActionItem
+);
+router.patch(
+  '/:actionItemId/move',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.ACTION_ITEM_EDIT),
+  c.moveActionItem
+);
+router.delete(
+  '/:actionItemId',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.ACTION_ITEM_DELETE),
+  c.deleteActionItem
+);
 
 module.exports = router;
 ```
@@ -4147,7 +5000,10 @@ app.use('/api/actionItems', require('./routes/actionItems'));
 to:
 
 ```js
-app.use('/api/workspaces/:workspaceId/action-items', require('./routes/actionItems'));
+app.use(
+  '/api/workspaces/:workspaceId/action-items',
+  require('./routes/actionItems')
+);
 ```
 
 (The PDF and frontend URL use `action-items`; backend follows the same convention.)
@@ -4183,6 +5039,7 @@ git commit -m "feat(api): mount action items under /api/workspaces/:workspaceId/
 ## Task 31: Action items store
 
 **Files:**
+
 - Create: `apps/web/src/stores/actionItemsStore.js`
 
 - [ ] **Step 1: Implement**
@@ -4207,7 +5064,9 @@ const useActionItemsStore = create((set, get) => ({
   fetchAll: async (workspaceId) => {
     set({ isLoading: true });
     try {
-      const { actionItems } = await api.get(`/api/workspaces/${workspaceId}/action-items`);
+      const { actionItems } = await api.get(
+        `/api/workspaces/${workspaceId}/action-items`
+      );
       const buckets = EMPTY_BUCKETS();
       for (const item of actionItems) {
         if (!buckets[item.status]) buckets[item.status] = [];
@@ -4224,23 +5083,31 @@ const useActionItemsStore = create((set, get) => ({
   },
 
   create: async (workspaceId, payload) => {
-    const { actionItem } = await api.post(`/api/workspaces/${workspaceId}/action-items`, payload);
+    const { actionItem } = await api.post(
+      `/api/workspaces/${workspaceId}/action-items`,
+      payload
+    );
     set((s) => ({
       byStatus: {
         ...s.byStatus,
-        [actionItem.status]: [...(s.byStatus[actionItem.status] || []), actionItem]
-          .sort((a, b) => a.position - b.position),
+        [actionItem.status]: [
+          ...(s.byStatus[actionItem.status] || []),
+          actionItem,
+        ].sort((a, b) => a.position - b.position),
       },
     }));
     return actionItem;
   },
 
   update: async (workspaceId, id, payload) => {
-    const { actionItem } = await api.put(`/api/workspaces/${workspaceId}/action-items/${id}`, payload);
+    const { actionItem } = await api.put(
+      `/api/workspaces/${workspaceId}/action-items/${id}`,
+      payload
+    );
     set((s) => {
       const buckets = { ...s.byStatus };
       for (const k of Object.keys(buckets)) {
-        buckets[k] = buckets[k].map((it) => it.id === id ? actionItem : it);
+        buckets[k] = buckets[k].map((it) => (it.id === id ? actionItem : it));
       }
       return { byStatus: buckets };
     });
@@ -4265,7 +5132,11 @@ const useActionItemsStore = create((set, get) => ({
     let fromStatus = null;
     for (const k of Object.keys(before)) {
       const found = before[k].find((it) => it.id === id);
-      if (found) { item = found; fromStatus = k; break; }
+      if (found) {
+        item = found;
+        fromStatus = k;
+        break;
+      }
     }
     if (!item) return;
 
@@ -4273,23 +5144,30 @@ const useActionItemsStore = create((set, get) => ({
     const next = {};
     for (const k of Object.keys(before)) next[k] = [...before[k]];
     next[fromStatus] = next[fromStatus].filter((it) => it.id !== id);
-    next[toStatus]   = [...next[toStatus]];
+    next[toStatus] = [...next[toStatus]];
     const moved = { ...item, status: toStatus, position: toPosition };
     next[toStatus].splice(toPosition, 0, moved);
     // Recompute positions for both columns
-    next[fromStatus] = next[fromStatus].map((it, i) => ({ ...it, position: i }));
-    next[toStatus]   = next[toStatus].map((it, i) => ({ ...it, position: i }));
+    next[fromStatus] = next[fromStatus].map((it, i) => ({
+      ...it,
+      position: i,
+    }));
+    next[toStatus] = next[toStatus].map((it, i) => ({ ...it, position: i }));
     set({ byStatus: next });
 
     try {
-      const { actionItem } = await api.patch(`/api/workspaces/${workspaceId}/action-items/${id}/move`, {
-        status: toStatus, position: toPosition,
-      });
+      const { actionItem } = await api.patch(
+        `/api/workspaces/${workspaceId}/action-items/${id}/move`,
+        {
+          status: toStatus,
+          position: toPosition,
+        }
+      );
       // Reconcile with authoritative copy
       set((s) => {
         const buckets = { ...s.byStatus };
         for (const k of Object.keys(buckets)) {
-          buckets[k] = buckets[k].map((it) => it.id === id ? actionItem : it);
+          buckets[k] = buckets[k].map((it) => (it.id === id ? actionItem : it));
         }
         return { byStatus: buckets };
       });
@@ -4301,21 +5179,25 @@ const useActionItemsStore = create((set, get) => ({
   },
 
   // Real-time
-  upsert: (item) => set((s) => {
-    const buckets = { ...s.byStatus };
-    for (const k of Object.keys(buckets)) {
-      buckets[k] = buckets[k].filter((it) => it.id !== item.id);
-    }
-    buckets[item.status] = [...(buckets[item.status] || []), item].sort((a, b) => a.position - b.position);
-    return { byStatus: buckets };
-  }),
-  removeLocal: (id) => set((s) => {
-    const buckets = { ...s.byStatus };
-    for (const k of Object.keys(buckets)) {
-      buckets[k] = buckets[k].filter((it) => it.id !== id);
-    }
-    return { byStatus: buckets };
-  }),
+  upsert: (item) =>
+    set((s) => {
+      const buckets = { ...s.byStatus };
+      for (const k of Object.keys(buckets)) {
+        buckets[k] = buckets[k].filter((it) => it.id !== item.id);
+      }
+      buckets[item.status] = [...(buckets[item.status] || []), item].sort(
+        (a, b) => a.position - b.position
+      );
+      return { byStatus: buckets };
+    }),
+  removeLocal: (id) =>
+    set((s) => {
+      const buckets = { ...s.byStatus };
+      for (const k of Object.keys(buckets)) {
+        buckets[k] = buckets[k].filter((it) => it.id !== id);
+      }
+      return { byStatus: buckets };
+    }),
 }));
 
 export default useActionItemsStore;
@@ -4333,6 +5215,7 @@ git commit -m "feat(web): action items store with optimistic move"
 ## Task 32: Action item form modal
 
 **Files:**
+
 - Create: `apps/web/src/components/actionItems/ActionItemFormModal.jsx`
 
 - [ ] **Step 1: Implement**
@@ -4349,14 +5232,26 @@ import { ACTION_ITEM_STATUS, PRIORITY } from '@team-hub/shared';
 import useWorkspaceMembersStore from '@/stores/workspaceMembersStore';
 import useGoalsStore from '@/stores/goalsStore';
 
-export default function ActionItemFormModal({ open, onClose, onSubmit, initial, workspaceId }) {
+export default function ActionItemFormModal({
+  open,
+  onClose,
+  onSubmit,
+  initial,
+  workspaceId,
+}) {
   const { members, fetchMembers } = useWorkspaceMembersStore();
   const { goals, fetchGoals } = useGoalsStore();
   const [title, setTitle] = useState(initial?.title || '');
   const [description, setDescription] = useState(initial?.description || '');
-  const [priority, setPriority] = useState(initial?.priority || PRIORITY.MEDIUM);
-  const [status, setStatus] = useState(initial?.status || ACTION_ITEM_STATUS.TODO);
-  const [dueDate, setDueDate] = useState(initial?.dueDate ? initial.dueDate.slice(0, 10) : '');
+  const [priority, setPriority] = useState(
+    initial?.priority || PRIORITY.MEDIUM
+  );
+  const [status, setStatus] = useState(
+    initial?.status || ACTION_ITEM_STATUS.TODO
+  );
+  const [dueDate, setDueDate] = useState(
+    initial?.dueDate ? initial.dueDate.slice(0, 10) : ''
+  );
   const [assigneeId, setAssigneeId] = useState(initial?.assigneeId || '');
   const [goalId, setGoalId] = useState(initial?.goalId || '');
   const [submitting, setSubmitting] = useState(false);
@@ -4371,7 +5266,8 @@ export default function ActionItemFormModal({ open, onClose, onSubmit, initial, 
 
   const submit = async (e) => {
     e.preventDefault();
-    setSubmitting(true); setError('');
+    setSubmitting(true);
+    setError('');
     try {
       await onSubmit({
         title: title.trim(),
@@ -4391,63 +5287,127 @@ export default function ActionItemFormModal({ open, onClose, onSubmit, initial, 
   };
 
   return (
-    <Modal open={open} onClose={onClose} title={initial ? 'Edit action item' : 'New action item'}>
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initial ? 'Edit action item' : 'New action item'}
+    >
       <form onSubmit={submit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} required
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Title
+          </label>
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+          />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Description
+          </label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+          />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Assignee</label>
-            <select value={assigneeId} onChange={(e) => setAssigneeId(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Assignee
+            </label>
+            <select
+              value={assigneeId}
+              onChange={(e) => setAssigneeId(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+            >
               <option value="">(unassigned)</option>
-              {members.map((m) => <option key={m.id} value={m.user.id}>{m.user.name}</option>)}
+              {members.map((m) => (
+                <option key={m.id} value={m.user.id}>
+                  {m.user.name}
+                </option>
+              ))}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Linked goal</label>
-            <select value={goalId} onChange={(e) => setGoalId(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Linked goal
+            </label>
+            <select
+              value={goalId}
+              onChange={(e) => setGoalId(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+            >
               <option value="">(none)</option>
-              {goals.map((g) => <option key={g.id} value={g.id}>{g.title}</option>)}
+              {goals.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.title}
+                </option>
+              ))}
             </select>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
-            <select value={priority} onChange={(e) => setPriority(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white">
-              {Object.values(PRIORITY).map((p) => <option key={p} value={p}>{p}</option>)}
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Priority
+            </label>
+            <select
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+            >
+              {Object.values(PRIORITY).map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
             </select>
           </div>
           {!initial && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-              <select value={status} onChange={(e) => setStatus(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white">
-                {Object.values(ACTION_ITEM_STATUS).map((s) => <option key={s} value={s}>{s}</option>)}
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Status
+              </label>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+              >
+                {Object.values(ACTION_ITEM_STATUS).map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
               </select>
             </div>
           )}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Due date</label>
-            <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white" />
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Due date
+            </label>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+            />
           </div>
         </div>
-        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+        {error && (
+          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        )}
         <div className="flex justify-end gap-2">
-          <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
-          <Button type="submit" disabled={submitting}>{submitting ? 'Saving…' : 'Save'}</Button>
+          <Button variant="outline" type="button" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={submitting}>
+            {submitting ? 'Saving…' : 'Save'}
+          </Button>
         </div>
       </form>
     </Modal>
@@ -4467,6 +5427,7 @@ git commit -m "feat(web): ActionItemFormModal"
 ## Task 33: Action item card + list view
 
 **Files:**
+
 - Create: `apps/web/src/components/actionItems/ActionItemCard.jsx`
 - Create: `apps/web/src/components/actionItems/ActionItemList.jsx`
 
@@ -4481,9 +5442,9 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 const PRIORITY_STYLES = {
-  LOW:    'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
+  LOW: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
   MEDIUM: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  HIGH:   'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
+  HIGH: 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
   URGENT: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
 };
 
@@ -4496,8 +5457,12 @@ export default function ActionItemCard({ item, dragHandleProps, onClick }) {
       className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-3 cursor-pointer hover:shadow-md transition-shadow text-left"
     >
       <div className="flex items-start justify-between gap-2">
-        <h4 className="text-sm font-medium text-gray-900 dark:text-white">{item.title}</h4>
-        <span className={`text-xs px-2 py-0.5 rounded-full ${PRIORITY_STYLES[item.priority] || PRIORITY_STYLES.MEDIUM}`}>
+        <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+          {item.title}
+        </h4>
+        <span
+          className={`text-xs px-2 py-0.5 rounded-full ${PRIORITY_STYLES[item.priority] || PRIORITY_STYLES.MEDIUM}`}
+        >
           {item.priority}
         </span>
       </div>
@@ -4514,15 +5479,23 @@ export default function ActionItemCard({ item, dragHandleProps, onClick }) {
         <div className="flex items-center gap-1">
           {item.assignee?.avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={item.assignee.avatarUrl} alt="" className="w-5 h-5 rounded-full" />
+            <img
+              src={item.assignee.avatarUrl}
+              alt=""
+              className="w-5 h-5 rounded-full"
+            />
           ) : item.assignee ? (
             <div className="w-5 h-5 rounded-full bg-gray-300" />
           ) : (
             <span className="text-gray-400">Unassigned</span>
           )}
-          {item.assignee && <span className="truncate max-w-[120px]">{item.assignee.name}</span>}
+          {item.assignee && (
+            <span className="truncate max-w-[120px]">{item.assignee.name}</span>
+          )}
         </div>
-        {item.dueDate && <span>{new Date(item.dueDate).toLocaleDateString()}</span>}
+        {item.dueDate && (
+          <span>{new Date(item.dueDate).toLocaleDateString()}</span>
+        )}
       </div>
     </div>
   );
@@ -4540,9 +5513,14 @@ import useActionItemsStore from '@/stores/actionItemsStore';
 
 export default function ActionItemList({ onEdit }) {
   const { byStatus } = useActionItemsStore();
-  const all = [...(byStatus.TODO || []), ...(byStatus.IN_PROGRESS || []), ...(byStatus.DONE || [])];
+  const all = [
+    ...(byStatus.TODO || []),
+    ...(byStatus.IN_PROGRESS || []),
+    ...(byStatus.DONE || []),
+  ];
 
-  if (all.length === 0) return <p className="text-gray-500">No action items.</p>;
+  if (all.length === 0)
+    return <p className="text-gray-500">No action items.</p>;
 
   return (
     <table className="w-full text-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md">
@@ -4558,16 +5536,21 @@ export default function ActionItemList({ onEdit }) {
       </thead>
       <tbody>
         {all.map((it) => (
-          <tr key={it.id}
+          <tr
+            key={it.id}
             onClick={() => onEdit(it)}
             className="border-t border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900/50"
           >
-            <td className="px-3 py-2 text-gray-900 dark:text-white">{it.title}</td>
+            <td className="px-3 py-2 text-gray-900 dark:text-white">
+              {it.title}
+            </td>
             <td className="px-3 py-2">{it.status}</td>
             <td className="px-3 py-2">{it.priority}</td>
             <td className="px-3 py-2">{it.assignee?.name || '—'}</td>
             <td className="px-3 py-2">{it.goal?.title || '—'}</td>
-            <td className="px-3 py-2">{it.dueDate ? new Date(it.dueDate).toLocaleDateString() : '—'}</td>
+            <td className="px-3 py-2">
+              {it.dueDate ? new Date(it.dueDate).toLocaleDateString() : '—'}
+            </td>
           </tr>
         ))}
       </tbody>
@@ -4588,6 +5571,7 @@ git commit -m "feat(web): ActionItemCard and ActionItemList"
 ## Task 34: Kanban board (DnD)
 
 **Files:**
+
 - Create: `apps/web/src/components/actionItems/KanbanBoard.jsx`
 - Create: `apps/web/src/components/actionItems/KanbanColumn.jsx`
 
@@ -4598,14 +5582,25 @@ git commit -m "feat(web): ActionItemCard and ActionItemList"
 ```jsx
 'use client';
 
-import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import ActionItemCard from './ActionItemCard';
 
 const TITLES = { TODO: 'To do', IN_PROGRESS: 'In progress', DONE: 'Done' };
 
 function SortableCard({ item, onClick }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item.id });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -4622,12 +5617,20 @@ export default function KanbanColumn({ status, items, onCardClick }) {
   return (
     <div className="flex-1 min-w-[260px] bg-gray-100 dark:bg-gray-900/50 rounded-lg p-3">
       <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-        {TITLES[status] || status} <span className="text-xs text-gray-500">({items.length})</span>
+        {TITLES[status] || status}{' '}
+        <span className="text-xs text-gray-500">({items.length})</span>
       </h3>
-      <SortableContext items={items.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+      <SortableContext
+        items={items.map((i) => i.id)}
+        strategy={verticalListSortingStrategy}
+      >
         <div className="space-y-2 min-h-[40px]">
           {items.map((it) => (
-            <SortableCard key={it.id} item={it} onClick={() => onCardClick(it)} />
+            <SortableCard
+              key={it.id}
+              item={it}
+              onClick={() => onCardClick(it)}
+            />
           ))}
         </div>
       </SortableContext>
@@ -4644,7 +5647,14 @@ export default function KanbanColumn({ status, items, onCardClick }) {
 'use client';
 
 import { useState } from 'react';
-import { DndContext, PointerSensor, useSensor, useSensors, closestCenter, DragOverlay } from '@dnd-kit/core';
+import {
+  DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  closestCenter,
+  DragOverlay,
+} from '@dnd-kit/core';
 import { useParams } from 'next/navigation';
 import useActionItemsStore from '@/stores/actionItemsStore';
 import { ACTION_ITEM_STATUS } from '@team-hub/shared';
@@ -4654,10 +5664,16 @@ import ActionItemCard from './ActionItemCard';
 export default function KanbanBoard({ onCardClick }) {
   const { workspaceId } = useParams();
   const { byStatus, move } = useActionItemsStore();
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+  );
   const [active, setActive] = useState(null);
 
-  const columns = [ACTION_ITEM_STATUS.TODO, ACTION_ITEM_STATUS.IN_PROGRESS, ACTION_ITEM_STATUS.DONE];
+  const columns = [
+    ACTION_ITEM_STATUS.TODO,
+    ACTION_ITEM_STATUS.IN_PROGRESS,
+    ACTION_ITEM_STATUS.DONE,
+  ];
 
   const findContainer = (id) => {
     for (const k of columns) {
@@ -4700,10 +5716,20 @@ export default function KanbanBoard({ onCardClick }) {
   };
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={onDragStart} onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+    >
       <div className="flex gap-4 overflow-x-auto">
         {columns.map((status) => (
-          <KanbanColumn key={status} status={status} items={byStatus[status] || []} onCardClick={onCardClick} />
+          <KanbanColumn
+            key={status}
+            status={status}
+            items={byStatus[status] || []}
+            onCardClick={onCardClick}
+          />
         ))}
       </div>
       <DragOverlay>
@@ -4726,6 +5752,7 @@ git commit -m "feat(web): kanban board with @dnd-kit and DragOverlay"
 ## Task 35: Action items page + view toggle
 
 **Files:**
+
 - Create: `apps/web/src/components/actionItems/ViewToggle.jsx`
 - Create: `apps/web/src/app/dashboard/[workspaceId]/action-items/page.js`
 - Modify: `apps/web/src/app/dashboard/[workspaceId]/layout.js` (add nav link)
@@ -4752,13 +5779,17 @@ export default function ViewToggle({ value }) {
   return (
     <div className="inline-flex rounded-md border border-gray-300 dark:border-gray-700 overflow-hidden">
       {['kanban', 'list'].map((v) => (
-        <button key={v}
+        <button
+          key={v}
           onClick={() => set(v)}
           className={`px-3 py-1 text-sm capitalize ${
             value === v
               ? 'bg-primary-600 text-white'
               : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-          }`}>{v}</button>
+          }`}
+        >
+          {v}
+        </button>
       ))}
     </div>
   );
@@ -4792,29 +5823,55 @@ export default function ActionItemsPage() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(null);
 
-  useEffect(() => { fetchAll(workspaceId); }, [workspaceId, fetchAll]);
+  useEffect(() => {
+    fetchAll(workspaceId);
+  }, [workspaceId, fetchAll]);
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Action items</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Action items
+        </h1>
         <div className="flex items-center gap-3">
           <ViewToggle value={view} />
-          {canCreate && <Button onClick={() => { setEditing(null); setOpen(true); }}>New action item</Button>}
+          {canCreate && (
+            <Button
+              onClick={() => {
+                setEditing(null);
+                setOpen(true);
+              }}
+            >
+              New action item
+            </Button>
+          )}
         </div>
       </div>
 
       {isLoading ? (
         <p className="text-gray-500">Loading…</p>
       ) : view === 'kanban' ? (
-        <KanbanBoard onCardClick={(it) => { setEditing(it); setOpen(true); }} />
+        <KanbanBoard
+          onCardClick={(it) => {
+            setEditing(it);
+            setOpen(true);
+          }}
+        />
       ) : (
-        <ActionItemList onEdit={(it) => { setEditing(it); setOpen(true); }} />
+        <ActionItemList
+          onEdit={(it) => {
+            setEditing(it);
+            setOpen(true);
+          }}
+        />
       )}
 
       <ActionItemFormModal
         open={open}
-        onClose={() => { setOpen(false); setEditing(null); }}
+        onClose={() => {
+          setOpen(false);
+          setEditing(null);
+        }}
         initial={editing}
         workspaceId={workspaceId}
         onSubmit={async (data) => {
@@ -4857,6 +5914,7 @@ git commit -m "feat(web): action items page with kanban DnD + list view toggle"
 ## Task 36: Install email + cookie deps
 
 **Files:**
+
 - Modify: `apps/api/package.json`
 
 - [ ] **Step 1: Install**
@@ -4879,6 +5937,7 @@ git commit -m "chore(deps): add nodemailer + cookie for socket auth"
 ## Task 37: Replace `lib/socket.js` with the real implementation
 
 **Files:**
+
 - Modify: `apps/api/src/lib/socket.js`
 - Modify: `apps/api/src/index.js`
 
@@ -4928,7 +5987,10 @@ function getOnlineUserIds(workspaceId) {
 
 function initSocket(httpServer) {
   io = new Server(httpServer, {
-    cors: { origin: process.env.CLIENT_URL || 'http://localhost:3000', credentials: true },
+    cors: {
+      origin: process.env.CLIENT_URL || 'http://localhost:3000',
+      credentials: true,
+    },
   });
 
   io.use(async (socket, next) => {
@@ -4948,19 +6010,29 @@ function initSocket(httpServer) {
 
   io.on('connection', (socket) => {
     socket.on(SOCKET_EVENTS.JOIN_WORKSPACE, async ({ workspaceId }, ack) => {
-      if (!workspaceId) return typeof ack === 'function' && ack({ ok: false, error: 'workspaceId required' });
+      if (!workspaceId)
+        return (
+          typeof ack === 'function' &&
+          ack({ ok: false, error: 'workspaceId required' })
+        );
       const member = await prisma.workspaceMember.findUnique({
         where: { userId_workspaceId: { userId: socket.userId, workspaceId } },
       });
-      if (!member) return typeof ack === 'function' && ack({ ok: false, error: 'Not a member' });
+      if (!member)
+        return (
+          typeof ack === 'function' && ack({ ok: false, error: 'Not a member' })
+        );
 
       socket.join(`workspace:${workspaceId}`);
       socket.data.workspaceId = workspaceId;
       const wasEmpty = presenceAdd(workspaceId, socket.userId, socket.id);
       if (wasEmpty) {
-        io.to(`workspace:${workspaceId}`).emit(SOCKET_EVENTS.USER_ONLINE, { userId: socket.userId });
+        io.to(`workspace:${workspaceId}`).emit(SOCKET_EVENTS.USER_ONLINE, {
+          userId: socket.userId,
+        });
       }
-      if (typeof ack === 'function') ack({ ok: true, onlineUserIds: getOnlineUserIds(workspaceId) });
+      if (typeof ack === 'function')
+        ack({ ok: true, onlineUserIds: getOnlineUserIds(workspaceId) });
     });
 
     socket.on(SOCKET_EVENTS.LEAVE_WORKSPACE, () => {
@@ -4968,7 +6040,10 @@ function initSocket(httpServer) {
       if (!wsId) return;
       socket.leave(`workspace:${wsId}`);
       const lastGone = presenceRemove(wsId, socket.userId, socket.id);
-      if (lastGone) io.to(`workspace:${wsId}`).emit(SOCKET_EVENTS.USER_OFFLINE, { userId: socket.userId });
+      if (lastGone)
+        io.to(`workspace:${wsId}`).emit(SOCKET_EVENTS.USER_OFFLINE, {
+          userId: socket.userId,
+        });
       socket.data.workspaceId = null;
     });
 
@@ -4976,7 +6051,10 @@ function initSocket(httpServer) {
       const wsId = socket.data.workspaceId;
       if (!wsId) return;
       const lastGone = presenceRemove(wsId, socket.userId, socket.id);
-      if (lastGone) io.to(`workspace:${wsId}`).emit(SOCKET_EVENTS.USER_OFFLINE, { userId: socket.userId });
+      if (lastGone)
+        io.to(`workspace:${wsId}`).emit(SOCKET_EVENTS.USER_OFFLINE, {
+          userId: socket.userId,
+        });
     });
   });
 }
@@ -4991,7 +6069,13 @@ function emitToUser(userId, event, payload) {
   io.to(`user:${userId}`).emit(event, payload);
 }
 
-module.exports = { initSocket, broadcastToWorkspace, emitToUser, getOnlineUserIds, getIo: () => io };
+module.exports = {
+  initSocket,
+  broadcastToWorkspace,
+  emitToUser,
+  getOnlineUserIds,
+  getIo: () => io,
+};
 ```
 
 - [ ] **Step 2: Wire socket into `index.js`**
@@ -5020,9 +6104,14 @@ Open `apps/api/src/routes/workspaces.js` (or `apps/api/src/controllers/workspace
 ```js
 const { getOnlineUserIds } = require('../lib/socket');
 
-router.get('/:id/presence', authenticate, requireWorkspaceMembership(), (req, res) => {
-  res.json({ onlineUserIds: getOnlineUserIds(req.params.id) });
-});
+router.get(
+  '/:id/presence',
+  authenticate,
+  requireWorkspaceMembership(),
+  (req, res) => {
+    res.json({ onlineUserIds: getOnlineUserIds(req.params.id) });
+  }
+);
 ```
 
 If `authenticate` and `requireWorkspaceMembership` aren't already imported in that file, add them.
@@ -5053,6 +6142,7 @@ git commit -m "feat(api): real Socket.io with cookie-auth handshake and presence
 ## Task 38: Email module
 
 **Files:**
+
 - Create: `apps/api/src/lib/email.js`
 - Create: `apps/api/src/templates/email/invitation.js`
 - Create: `apps/api/src/templates/email/mention.js`
@@ -5072,7 +6162,10 @@ function getTransporter() {
   if (!host) {
     transporter = {
       sendMail: async (opts) => {
-        console.log('[email:disabled] would send:', { to: opts.to, subject: opts.subject });
+        console.log('[email:disabled] would send:', {
+          to: opts.to,
+          subject: opts.subject,
+        });
         return { messageId: 'disabled' };
       },
     };
@@ -5103,11 +6196,16 @@ async function sendEmail({ to, subject, html, text }) {
 }
 
 const { invitationTemplate } = require('../templates/email/invitation');
-const { mentionTemplate }    = require('../templates/email/mention');
+const { mentionTemplate } = require('../templates/email/mention');
 
 async function sendInvitationEmail({ invitation, workspace, inviter }) {
   const inviteUrl = `${process.env.CLIENT_URL || 'http://localhost:3000'}/invite/${invitation.token}`;
-  const { subject, html, text } = invitationTemplate({ invitation, workspace, inviter, inviteUrl });
+  const { subject, html, text } = invitationTemplate({
+    invitation,
+    workspace,
+    inviter,
+    inviteUrl,
+  });
   return sendEmail({ to: invitation.email, subject, html, text });
 }
 
@@ -5115,17 +6213,27 @@ async function sendMentionEmail({ notification }) {
   // Caller should pre-load the user's email + entity context if rich content
   // is desired. Minimal: fetch the recipient + a relative link.
   const prisma = require('./prisma');
-  const recipient = await prisma.user.findUnique({ where: { id: notification.userId }, select: { email: true, name: true } });
+  const recipient = await prisma.user.findUnique({
+    where: { id: notification.userId },
+    select: { email: true, name: true },
+  });
   if (!recipient) return null;
   let workspaceId = null;
   if (notification.entityType === 'announcement') {
-    const a = await prisma.announcement.findUnique({ where: { id: notification.entityId }, select: { workspaceId: true } });
+    const a = await prisma.announcement.findUnique({
+      where: { id: notification.entityId },
+      select: { workspaceId: true },
+    });
     workspaceId = a?.workspaceId;
   }
   const link = workspaceId
     ? `${process.env.CLIENT_URL || 'http://localhost:3000'}/dashboard/${workspaceId}/announcements`
-    : (process.env.CLIENT_URL || 'http://localhost:3000');
-  const { subject, html, text } = mentionTemplate({ recipient, notification, link });
+    : process.env.CLIENT_URL || 'http://localhost:3000';
+  const { subject, html, text } = mentionTemplate({
+    recipient,
+    notification,
+    link,
+  });
   return sendEmail({ to: recipient.email, subject, html, text });
 }
 
@@ -5161,7 +6269,13 @@ This link expires on ${new Date(invitation.expiresAt).toLocaleDateString()}.
 }
 
 function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  return String(s).replace(
+    /[&<>"']/g,
+    (c) =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[
+        c
+      ]
+  );
 }
 function escapeAttr(s) {
   return escapeHtml(s);
@@ -5196,7 +6310,13 @@ Open Team Hub: ${link}
 }
 
 function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  return String(s).replace(
+    /[&<>"']/g,
+    (c) =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[
+        c
+      ]
+  );
 }
 
 module.exports = { mentionTemplate };
@@ -5214,6 +6334,7 @@ git commit -m "feat(api): nodemailer wrapper + invitation and mention templates"
 ## Task 39: Wire invitation emails
 
 **Files:**
+
 - Modify: `apps/api/src/controllers/invitations.js`
 
 - [ ] **Step 1: Send email on invite + resend**
@@ -5231,7 +6352,9 @@ const inviter = await prisma.user.findUnique({
   where: { id: req.user.id },
   select: { id: true, name: true },
 });
-sendInvitationEmail({ invitation, workspace, inviter }).catch((err) => console.error('email error', err));
+sendInvitationEmail({ invitation, workspace, inviter }).catch((err) =>
+  console.error('email error', err)
+);
 ```
 
 In `resendInvitation` (which presumably issues a new token / extends expiry), add the same `sendInvitationEmail` call after the transaction.
@@ -5252,6 +6375,7 @@ git commit -m "feat(api): send invitation email on create + resend"
 ## Task 40: Notifications controller + router
 
 **Files:**
+
 - Create: `apps/api/src/controllers/notifications.js`
 - Create: `apps/api/src/routes/notifications.js`
 - Modify: `apps/api/src/index.js` (mount `/api/notifications`)
@@ -5281,7 +6405,10 @@ async function markRead(req, res) {
     where: { id: req.params.id, userId: req.user.id },
   });
   if (!n) return res.status(404).json({ error: 'Notification not found' });
-  await prisma.notification.update({ where: { id: n.id }, data: { isRead: true } });
+  await prisma.notification.update({
+    where: { id: n.id },
+    data: { isRead: true },
+  });
   res.json({ ok: true });
 }
 
@@ -5308,9 +6435,9 @@ const c = require('../controllers/notifications');
 const router = express.Router();
 router.use(authenticate);
 
-router.get('/',                  c.listNotifications);
-router.patch('/:id/read',        c.markRead);
-router.patch('/read-all',        c.markAllRead);
+router.get('/', c.listNotifications);
+router.patch('/:id/read', c.markRead);
+router.patch('/read-all', c.markAllRead);
 
 module.exports = router;
 ```
@@ -5335,6 +6462,7 @@ git commit -m "feat(api): notifications endpoints — list, mark-read, mark-all-
 ## Task 41: Goal status notification (owner)
 
 **Files:**
+
 - Modify: `apps/api/src/controllers/goals.js`
 
 - [ ] **Step 1: Notify owner on status change**
@@ -5346,12 +6474,12 @@ if (goal.ownerId && goal.ownerId !== req.user.id) {
   const { createNotification } = require('../lib/notifications');
   const { NOTIFICATION_TYPES } = require('@team-hub/shared');
   await createNotification(tx, {
-    userId:     goal.ownerId,
-    type:       NOTIFICATION_TYPES.STATUS_UPDATE,
-    message:    `${req.user.name || 'Someone'} changed the status of "${goal.title}" to ${status}`,
-    actorId:    req.user.id,
+    userId: goal.ownerId,
+    type: NOTIFICATION_TYPES.STATUS_UPDATE,
+    message: `${req.user.name || 'Someone'} changed the status of "${goal.title}" to ${status}`,
+    actorId: req.user.id,
     entityType: 'goal',
-    entityId:   goal.id,
+    entityId: goal.id,
   });
 }
 ```
@@ -5368,6 +6496,7 @@ git commit -m "feat(api): notify goal owner on status change by another user"
 ## Task 42: Frontend socket client + per-store subscriptions
 
 **Files:**
+
 - Create: `apps/web/src/lib/socket.js`
 
 - [ ] **Step 1: Singleton client**
@@ -5380,7 +6509,8 @@ git commit -m "feat(api): notify goal owner on status change by another user"
 import { io } from 'socket.io-client';
 import { SOCKET_EVENTS } from '@team-hub/shared';
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5000';
+const SOCKET_URL =
+  process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5000';
 
 let socket = null;
 let currentWorkspaceId = null;
@@ -5465,6 +6595,7 @@ git commit -m "feat(web): socket.io-client singleton with workspace join + auto-
 ## Task 43: Notifications + presence stores
 
 **Files:**
+
 - Create: `apps/web/src/stores/notificationsStore.js`
 - Create: `apps/web/src/stores/presenceStore.js`
 
@@ -5484,7 +6615,8 @@ const useNotificationsStore = create((set, get) => ({
   fetch: async () => {
     set({ isLoading: true });
     try {
-      const { notifications, unreadCount } = await api.get('/api/notifications');
+      const { notifications, unreadCount } =
+        await api.get('/api/notifications');
       set({ items: notifications, unreadCount, isLoading: false });
     } catch {
       set({ isLoading: false });
@@ -5493,7 +6625,7 @@ const useNotificationsStore = create((set, get) => ({
 
   markRead: async (id) => {
     set((s) => ({
-      items: s.items.map((n) => n.id === id ? { ...n, isRead: true } : n),
+      items: s.items.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
       unreadCount: Math.max(0, s.unreadCount - 1),
     }));
     try {
@@ -5511,10 +6643,14 @@ const useNotificationsStore = create((set, get) => ({
     } catch {}
   },
 
-  prepend: (notification) => set((s) => ({
-    items: [notification, ...s.items.filter((n) => n.id !== notification.id)].slice(0, 50),
-    unreadCount: s.unreadCount + (notification.isRead ? 0 : 1),
-  })),
+  prepend: (notification) =>
+    set((s) => ({
+      items: [
+        notification,
+        ...s.items.filter((n) => n.id !== notification.id),
+      ].slice(0, 50),
+      unreadCount: s.unreadCount + (notification.isRead ? 0 : 1),
+    })),
 }));
 
 export default useNotificationsStore;
@@ -5533,24 +6669,28 @@ const usePresenceStore = create((set, get) => ({
 
   hydrate: async (workspaceId) => {
     try {
-      const { onlineUserIds } = await api.get(`/api/workspaces/${workspaceId}/presence`);
+      const { onlineUserIds } = await api.get(
+        `/api/workspaces/${workspaceId}/presence`
+      );
       set({ onlineUserIds: new Set(onlineUserIds) });
     } catch {}
   },
 
-  setOnline: (userId) => set((s) => {
-    if (s.onlineUserIds.has(userId)) return s;
-    const next = new Set(s.onlineUserIds);
-    next.add(userId);
-    return { onlineUserIds: next };
-  }),
+  setOnline: (userId) =>
+    set((s) => {
+      if (s.onlineUserIds.has(userId)) return s;
+      const next = new Set(s.onlineUserIds);
+      next.add(userId);
+      return { onlineUserIds: next };
+    }),
 
-  setOffline: (userId) => set((s) => {
-    if (!s.onlineUserIds.has(userId)) return s;
-    const next = new Set(s.onlineUserIds);
-    next.delete(userId);
-    return { onlineUserIds: next };
-  }),
+  setOffline: (userId) =>
+    set((s) => {
+      if (!s.onlineUserIds.has(userId)) return s;
+      const next = new Set(s.onlineUserIds);
+      next.delete(userId);
+      return { onlineUserIds: next };
+    }),
 
   reset: () => set({ onlineUserIds: new Set() }),
 }));
@@ -5570,6 +6710,7 @@ git commit -m "feat(web): notifications + presence Zustand stores"
 ## Task 44: Real-time bridge — socket events feed stores
 
 **Files:**
+
 - Create: `apps/web/src/lib/realtimeBridge.js`
 
 - [ ] **Step 1: Bridge file**
@@ -5604,34 +6745,114 @@ export function startRealtime(workspaceId) {
   const notifications = useNotificationsStore.getState();
   const presence = usePresenceStore.getState();
 
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.GOAL_CREATED,        (p) => goals.upsertGoal(p.goal)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.GOAL_UPDATED,        (p) => goals.upsertGoal(p.goal)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.GOAL_DELETED,        (p) => goals.removeGoal(p.goalId)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.GOAL_STATUS_CHANGED, (p) => goals.patchGoal(p.goalId, { status: p.status })));
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.GOAL_CREATED, (p) => goals.upsertGoal(p.goal))
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.GOAL_UPDATED, (p) => goals.upsertGoal(p.goal))
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.GOAL_DELETED, (p) =>
+      goals.removeGoal(p.goalId)
+    )
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.GOAL_STATUS_CHANGED, (p) =>
+      goals.patchGoal(p.goalId, { status: p.status })
+    )
+  );
 
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.MILESTONE_UPSERTED,  (p) => milestones.upsert(p.milestone)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.MILESTONE_DELETED,   (p) => milestones.removeLocal(p.goalId, p.milestoneId)));
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.MILESTONE_UPSERTED, (p) =>
+      milestones.upsert(p.milestone)
+    )
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.MILESTONE_DELETED, (p) =>
+      milestones.removeLocal(p.goalId, p.milestoneId)
+    )
+  );
 
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.ACTION_ITEM_CREATED, (p) => items.upsert(p.actionItem)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.ACTION_ITEM_UPDATED, (p) => items.upsert(p.actionItem)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.ACTION_ITEM_DELETED, (p) => items.removeLocal(p.actionItemId)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.ACTION_ITEM_MOVED,   (p) => items.upsert(p.actionItem)));
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.ACTION_ITEM_CREATED, (p) =>
+      items.upsert(p.actionItem)
+    )
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.ACTION_ITEM_UPDATED, (p) =>
+      items.upsert(p.actionItem)
+    )
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.ACTION_ITEM_DELETED, (p) =>
+      items.removeLocal(p.actionItemId)
+    )
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.ACTION_ITEM_MOVED, (p) =>
+      items.upsert(p.actionItem)
+    )
+  );
 
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.ANNOUNCEMENT_NEW,     (p) => announcements.upsert(p.announcement)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.ANNOUNCEMENT_UPDATED, (p) => announcements.upsert(p.announcement)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.ANNOUNCEMENT_PINNED,  (p) => announcements.upsert(p.announcement)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.ANNOUNCEMENT_DELETED, (p) => announcements.removeLocal(p.announcementId)));
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.ANNOUNCEMENT_NEW, (p) =>
+      announcements.upsert(p.announcement)
+    )
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.ANNOUNCEMENT_UPDATED, (p) =>
+      announcements.upsert(p.announcement)
+    )
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.ANNOUNCEMENT_PINNED, (p) =>
+      announcements.upsert(p.announcement)
+    )
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.ANNOUNCEMENT_DELETED, (p) =>
+      announcements.removeLocal(p.announcementId)
+    )
+  );
 
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.COMMENT_NEW,     (p) => comments.upsert(p.comment)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.COMMENT_DELETED, (p) => comments.removeLocal(p.announcementId, p.commentId)));
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.COMMENT_NEW, (p) =>
+      comments.upsert(p.comment)
+    )
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.COMMENT_DELETED, (p) =>
+      comments.removeLocal(p.announcementId, p.commentId)
+    )
+  );
 
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.REACTION_NEW,     (p) => reactions.upsert(p.reaction)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.REACTION_REMOVED, (p) => reactions.removeLocal(p)));
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.REACTION_NEW, (p) =>
+      reactions.upsert(p.reaction)
+    )
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.REACTION_REMOVED, (p) =>
+      reactions.removeLocal(p)
+    )
+  );
 
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.USER_ONLINE,  (p) => presence.setOnline(p.userId)));
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.USER_OFFLINE, (p) => presence.setOffline(p.userId)));
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.USER_ONLINE, (p) =>
+      presence.setOnline(p.userId)
+    )
+  );
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.USER_OFFLINE, (p) =>
+      presence.setOffline(p.userId)
+    )
+  );
 
-  unsubscribers.push(socketClient.on(SOCKET_EVENTS.NOTIFICATION_NEW, (p) => notifications.prepend(p.notification)));
+  unsubscribers.push(
+    socketClient.on(SOCKET_EVENTS.NOTIFICATION_NEW, (p) =>
+      notifications.prepend(p.notification)
+    )
+  );
 
   socketClient.connectAndJoin(workspaceId).then((ack) => {
     if (ack?.ok && Array.isArray(ack.onlineUserIds)) {
@@ -5661,6 +6882,7 @@ git commit -m "feat(web): real-time bridge wires socket events into Zustand stor
 ## Task 45: Activate real-time in workspace layout
 
 **Files:**
+
 - Modify: `apps/web/src/app/dashboard/[workspaceId]/layout.js`
 
 - [ ] **Step 1: Hook startRealtime/stopRealtime into the layout effect**
@@ -5709,6 +6931,7 @@ git commit -m "feat(web): activate realtime + notifications + presence on worksp
 ## Task 46: Notifications bell + panel
 
 **Files:**
+
 - Create: `apps/web/src/components/notifications/NotificationsBell.jsx`
 - Create: `apps/web/src/components/notifications/NotificationsPanel.jsx`
 - Modify: `apps/web/src/app/dashboard/[workspaceId]/layout.js` (mount the bell in top nav)
@@ -5736,7 +6959,14 @@ export default function NotificationsBell() {
         aria-label="Notifications"
       >
         {/* Bell icon */}
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
           <path d="M18 16v-5a6 6 0 1 0-12 0v5l-2 2h16l-2-2z" />
           <path d="M10 20a2 2 0 0 0 4 0" />
         </svg>
@@ -5788,23 +7018,42 @@ export default function NotificationsPanel({ onClose }) {
   };
 
   return (
-    <div ref={ref} className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+    <div
+      ref={ref}
+      className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50"
+    >
       <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Notifications</h3>
-        <button onClick={markAllRead} className="text-xs text-primary-600 hover:underline">Mark all read</button>
+        <h3 className="font-semibold text-gray-900 dark:text-white">
+          Notifications
+        </h3>
+        <button
+          onClick={markAllRead}
+          className="text-xs text-primary-600 hover:underline"
+        >
+          Mark all read
+        </button>
       </div>
       <ul className="max-h-96 overflow-y-auto">
         {items.length === 0 ? (
-          <li className="p-4 text-sm text-gray-500 text-center">No notifications</li>
-        ) : items.map((n) => (
-          <li key={n.id}
-            onClick={() => onClick(n)}
-            className={`p-3 border-b border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900/50 ${!n.isRead ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''}`}
-          >
-            <p className="text-sm text-gray-800 dark:text-gray-200">{n.message}</p>
-            <p className="text-xs text-gray-500 mt-1">{new Date(n.createdAt).toLocaleString()}</p>
+          <li className="p-4 text-sm text-gray-500 text-center">
+            No notifications
           </li>
-        ))}
+        ) : (
+          items.map((n) => (
+            <li
+              key={n.id}
+              onClick={() => onClick(n)}
+              className={`p-3 border-b border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900/50 ${!n.isRead ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''}`}
+            >
+              <p className="text-sm text-gray-800 dark:text-gray-200">
+                {n.message}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                {new Date(n.createdAt).toLocaleString()}
+              </p>
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );
@@ -5831,6 +7080,7 @@ git commit -m "feat(web): notifications bell with unread badge + panel"
 ## Task 47: Presence avatars in top nav
 
 **Files:**
+
 - Create: `apps/web/src/components/presence/PresenceAvatars.jsx`
 - Modify: `apps/web/src/app/dashboard/[workspaceId]/layout.js`
 
@@ -5863,18 +7113,26 @@ export default function PresenceAvatars({ max = 5 }) {
 
   return (
     <div className="flex items-center -space-x-2">
-      {visible.map((m) => (
+      {visible.map((m) =>
         m.user.avatarUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img key={m.id} src={m.user.avatarUrl} alt={m.user.name} title={`${m.user.name} (online)`}
-            className="w-7 h-7 rounded-full ring-2 ring-white dark:ring-gray-800 ring-offset-1 ring-offset-green-500" />
+          <img
+            key={m.id}
+            src={m.user.avatarUrl}
+            alt={m.user.name}
+            title={`${m.user.name} (online)`}
+            className="w-7 h-7 rounded-full ring-2 ring-white dark:ring-gray-800 ring-offset-1 ring-offset-green-500"
+          />
         ) : (
-          <div key={m.id} title={`${m.user.name} (online)`}
-            className="w-7 h-7 rounded-full bg-gray-300 ring-2 ring-white dark:ring-gray-800 ring-offset-1 ring-offset-green-500 flex items-center justify-center text-xs font-medium">
+          <div
+            key={m.id}
+            title={`${m.user.name} (online)`}
+            className="w-7 h-7 rounded-full bg-gray-300 ring-2 ring-white dark:ring-gray-800 ring-offset-1 ring-offset-green-500 flex items-center justify-center text-xs font-medium"
+          >
             {(m.user.name || '?')[0].toUpperCase()}
           </div>
         )
-      ))}
+      )}
       {overflow > 0 && (
         <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700 ring-2 ring-white dark:ring-gray-800 flex items-center justify-center text-xs">
           +{overflow}
@@ -5902,7 +7160,7 @@ git commit -m "feat(web): online presence avatars in workspace top nav"
 
 ---
 
-**End of Phase 5.** Working software shipped: Socket.io live across all features, mention notifications, assignment/status notifications, presence, invitation emails. The product *feels* alive.
+**End of Phase 5.** Working software shipped: Socket.io live across all features, mention notifications, assignment/status notifications, presence, invitation emails. The product _feels_ alive.
 
 ---
 
@@ -5915,6 +7173,7 @@ git commit -m "feat(web): online presence avatars in workspace top nav"
 ## Task 48: Install csv-stringify
 
 **Files:**
+
 - Modify: `apps/api/package.json`
 
 - [ ] **Step 1: Install**
@@ -5935,6 +7194,7 @@ git commit -m "chore(deps): add csv-stringify"
 ## Task 49: CSV streaming wrapper
 
 **Files:**
+
 - Create: `apps/api/src/lib/csv.js`
 
 - [ ] **Step 1: Implement**
@@ -5953,14 +7213,17 @@ const { stringify } = require('csv-stringify');
  */
 async function streamCsv(res, { filename, columns, rows }) {
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-  res.setHeader('Content-Disposition', `attachment; filename="${filename}.csv"`);
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="${filename}.csv"`
+  );
 
   const stringifier = stringify({
     header: true,
     columns: columns.map((c) => ({ key: c.key, header: c.header })),
     cast: {
       date: (v) => v.toISOString(),
-      boolean: (v) => v ? 'true' : 'false',
+      boolean: (v) => (v ? 'true' : 'false'),
     },
   });
   stringifier.pipe(res);
@@ -5986,6 +7249,7 @@ git commit -m "feat(api): csv streaming wrapper"
 ## Task 50: Analytics + exports controllers
 
 **Files:**
+
 - Create: `apps/api/src/controllers/analytics.js`
 - Create: `apps/api/src/controllers/exports.js`
 
@@ -6002,7 +7266,13 @@ async function getStats(req, res) {
   const now = new Date();
   const startOfWeek = startOfCurrentWeek(now);
 
-  const [totalGoals, byGoalStatus, completedActionItemsThisWeek, overdueActionItems, monthBuckets] = await Promise.all([
+  const [
+    totalGoals,
+    byGoalStatus,
+    completedActionItemsThisWeek,
+    overdueActionItems,
+    monthBuckets,
+  ] = await Promise.all([
     prisma.goal.count({ where: { workspaceId } }),
     prisma.goal.groupBy({
       by: ['status'],
@@ -6010,16 +7280,27 @@ async function getStats(req, res) {
       _count: { _all: true },
     }),
     prisma.actionItem.count({
-      where: { workspaceId, status: ACTION_ITEM_STATUS.DONE, updatedAt: { gte: startOfWeek } },
+      where: {
+        workspaceId,
+        status: ACTION_ITEM_STATUS.DONE,
+        updatedAt: { gte: startOfWeek },
+      },
     }),
     prisma.actionItem.count({
-      where: { workspaceId, status: { not: ACTION_ITEM_STATUS.DONE }, dueDate: { lt: now } },
+      where: {
+        workspaceId,
+        status: { not: ACTION_ITEM_STATUS.DONE },
+        dueDate: { lt: now },
+      },
     }),
     completionByMonth(workspaceId),
   ]);
 
   const goalsByStatus = Object.fromEntries(
-    Object.values(GOAL_STATUS).map((s) => [s, byGoalStatus.find((r) => r.status === s)?._count._all || 0])
+    Object.values(GOAL_STATUS).map((s) => [
+      s,
+      byGoalStatus.find((r) => r.status === s)?._count._all || 0,
+    ])
   );
 
   res.json({
@@ -6077,7 +7358,10 @@ const prisma = require('../lib/prisma');
 const { streamCsv } = require('../lib/csv');
 
 function slug(name) {
-  return (name || 'workspace').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return (name || 'workspace')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 }
 function dateStr() {
   return new Date().toISOString().slice(0, 10);
@@ -6085,7 +7369,10 @@ function dateStr() {
 
 async function exportGoals(req, res) {
   const workspaceId = req.member.workspaceId;
-  const ws = await prisma.workspace.findUnique({ where: { id: workspaceId }, select: { name: true } });
+  const ws = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    select: { name: true },
+  });
   const goals = await prisma.goal.findMany({
     where: { workspaceId },
     include: { owner: { select: { name: true, email: true } } },
@@ -6119,12 +7406,15 @@ async function exportGoals(req, res) {
 
 async function exportActionItems(req, res) {
   const workspaceId = req.member.workspaceId;
-  const ws = await prisma.workspace.findUnique({ where: { id: workspaceId }, select: { name: true } });
+  const ws = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    select: { name: true },
+  });
   const items = await prisma.actionItem.findMany({
     where: { workspaceId },
     include: {
       assignee: { select: { name: true, email: true } },
-      goal:     { select: { title: true } },
+      goal: { select: { title: true } },
     },
     orderBy: { createdAt: 'asc' },
   });
@@ -6160,10 +7450,16 @@ async function exportActionItems(req, res) {
 
 async function exportAnnouncements(req, res) {
   const workspaceId = req.member.workspaceId;
-  const ws = await prisma.workspace.findUnique({ where: { id: workspaceId }, select: { name: true } });
+  const ws = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    select: { name: true },
+  });
   const items = await prisma.announcement.findMany({
     where: { workspaceId },
-    include: { author: { select: { name: true, email: true } }, _count: { select: { comments: true, reactions: true } } },
+    include: {
+      author: { select: { name: true, email: true } },
+      _count: { select: { comments: true, reactions: true } },
+    },
     orderBy: { createdAt: 'asc' },
   });
   const rows = items.map((a) => ({
@@ -6196,10 +7492,21 @@ async function exportAnnouncements(req, res) {
 
 async function exportAudit(req, res) {
   const workspaceId = req.member.workspaceId;
-  const ws = await prisma.workspace.findUnique({ where: { id: workspaceId }, select: { name: true } });
+  const ws = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    select: { name: true },
+  });
   const where = { workspaceId };
-  if (req.query.from) where.createdAt = { ...(where.createdAt || {}), gte: new Date(req.query.from) };
-  if (req.query.to)   where.createdAt = { ...(where.createdAt || {}), lte: new Date(req.query.to) };
+  if (req.query.from)
+    where.createdAt = {
+      ...(where.createdAt || {}),
+      gte: new Date(req.query.from),
+    };
+  if (req.query.to)
+    where.createdAt = {
+      ...(where.createdAt || {}),
+      lte: new Date(req.query.to),
+    };
   if (req.query.type) where.type = req.query.type;
   if (req.query.actorId) where.userId = req.query.actorId;
 
@@ -6236,7 +7543,12 @@ async function exportAudit(req, res) {
   });
 }
 
-module.exports = { exportGoals, exportActionItems, exportAnnouncements, exportAudit };
+module.exports = {
+  exportGoals,
+  exportActionItems,
+  exportAnnouncements,
+  exportAudit,
+};
 ```
 
 - [ ] **Step 3: Commit**
@@ -6251,6 +7563,7 @@ git commit -m "feat(api): analytics stats + 4 streamed CSV exports"
 ## Task 51: Analytics + exports routes
 
 **Files:**
+
 - Modify: `apps/api/src/routes/workspaces.js`
 
 - [ ] **Step 1: Wire stats + exports into workspaces router**
@@ -6259,7 +7572,7 @@ Open `apps/api/src/routes/workspaces.js`. Add the following endpoints near the e
 
 ```js
 const analyticsController = require('../controllers/analytics');
-const exportsController   = require('../controllers/exports');
+const exportsController = require('../controllers/exports');
 const { CAPABILITIES } = require('@team-hub/shared');
 const { requirePermission } = require('../middleware/permission');
 ```
@@ -6267,25 +7580,44 @@ const { requirePermission } = require('../middleware/permission');
 Then add:
 
 ```js
-router.get('/:id/stats',
-  authenticate, requireWorkspaceMembership(),
-  analyticsController.getStats);
+router.get(
+  '/:id/stats',
+  authenticate,
+  requireWorkspaceMembership(),
+  analyticsController.getStats
+);
 
-router.get('/:id/exports/goals.csv',
-  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
-  exportsController.exportGoals);
+router.get(
+  '/:id/exports/goals.csv',
+  authenticate,
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.EXPORT_CSV),
+  exportsController.exportGoals
+);
 
-router.get('/:id/exports/action-items.csv',
-  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
-  exportsController.exportActionItems);
+router.get(
+  '/:id/exports/action-items.csv',
+  authenticate,
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.EXPORT_CSV),
+  exportsController.exportActionItems
+);
 
-router.get('/:id/exports/announcements.csv',
-  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
-  exportsController.exportAnnouncements);
+router.get(
+  '/:id/exports/announcements.csv',
+  authenticate,
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.EXPORT_CSV),
+  exportsController.exportAnnouncements
+);
 
-router.get('/:id/exports/audit.csv',
-  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
-  exportsController.exportAudit);
+router.get(
+  '/:id/exports/audit.csv',
+  authenticate,
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.EXPORT_CSV),
+  exportsController.exportAudit
+);
 ```
 
 (`authenticate` and `requireWorkspaceMembership` should already be imported from earlier work; if not, add them.)
@@ -6317,6 +7649,7 @@ git commit -m "feat(api): mount /stats and CSV export endpoints under workspaces
 ## Task 52: Analytics store + components
 
 **Files:**
+
 - Create: `apps/web/src/stores/analyticsStore.js`
 - Create: `apps/web/src/components/analytics/StatsTiles.jsx`
 - Create: `apps/web/src/components/analytics/GoalCompletionChart.jsx`
@@ -6355,7 +7688,8 @@ export default useAnalyticsStore;
 ```jsx
 'use client';
 
-const TILE = 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5';
+const TILE =
+  'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5';
 
 export default function StatsTiles({ stats }) {
   if (!stats) return null;
@@ -6363,18 +7697,27 @@ export default function StatsTiles({ stats }) {
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div className={TILE}>
         <p className="text-xs uppercase text-gray-500">Total goals</p>
-        <p className="text-3xl font-bold text-gray-900 dark:text-white mt-1">{stats.totalGoals}</p>
+        <p className="text-3xl font-bold text-gray-900 dark:text-white mt-1">
+          {stats.totalGoals}
+        </p>
         <p className="text-xs text-gray-500 mt-2">
-          {stats.goalsByStatus?.COMPLETED ?? 0} completed · {stats.goalsByStatus?.IN_PROGRESS ?? 0} in progress
+          {stats.goalsByStatus?.COMPLETED ?? 0} completed ·{' '}
+          {stats.goalsByStatus?.IN_PROGRESS ?? 0} in progress
         </p>
       </div>
       <div className={TILE}>
-        <p className="text-xs uppercase text-gray-500">Items completed this week</p>
-        <p className="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">{stats.completedActionItemsThisWeek}</p>
+        <p className="text-xs uppercase text-gray-500">
+          Items completed this week
+        </p>
+        <p className="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">
+          {stats.completedActionItemsThisWeek}
+        </p>
       </div>
       <div className={TILE}>
         <p className="text-xs uppercase text-gray-500">Overdue items</p>
-        <p className="text-3xl font-bold text-red-600 dark:text-red-400 mt-1">{stats.overdueActionItems}</p>
+        <p className="text-3xl font-bold text-red-600 dark:text-red-400 mt-1">
+          {stats.overdueActionItems}
+        </p>
       </div>
     </div>
   );
@@ -6388,22 +7731,37 @@ export default function StatsTiles({ stats }) {
 ```jsx
 'use client';
 
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  CartesianGrid,
+} from 'recharts';
 
 export default function GoalCompletionChart({ data }) {
   if (!data || data.length === 0) return null;
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5">
-      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Goal completion (last 6 months)</h3>
+      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+        Goal completion (last 6 months)
+      </h3>
       <div className="h-64">
         <ResponsiveContainer>
           <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" strokeOpacity={0.2} />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="#3f3f46"
+              strokeOpacity={0.2}
+            />
             <XAxis dataKey="month" stroke="currentColor" />
             <YAxis allowDecimals={false} stroke="currentColor" />
             <Tooltip />
             <Legend />
-            <Bar dataKey="created"   fill="#6366f1" name="Created"   />
+            <Bar dataKey="created" fill="#6366f1" name="Created" />
             <Bar dataKey="completed" fill="#10b981" name="Completed" />
           </BarChart>
         </ResponsiveContainer>
@@ -6429,15 +7787,32 @@ export default function ExportButtons() {
   const { workspaceId } = useParams();
   const apiBase = process.env.NEXT_PUBLIC_API_URL || '';
 
-  const link = (path) => `${apiBase}/api/workspaces/${workspaceId}/exports/${path}`;
+  const link = (path) =>
+    `${apiBase}/api/workspaces/${workspaceId}/exports/${path}`;
 
   return (
     <PermissionGate cap={CAPABILITIES.EXPORT_CSV}>
       <div className="flex flex-wrap gap-2">
-        <a href={link('goals.csv')}><Button variant="secondary" size="sm">Export goals</Button></a>
-        <a href={link('action-items.csv')}><Button variant="secondary" size="sm">Export action items</Button></a>
-        <a href={link('announcements.csv')}><Button variant="secondary" size="sm">Export announcements</Button></a>
-        <a href={link('audit.csv')}><Button variant="secondary" size="sm">Export audit log</Button></a>
+        <a href={link('goals.csv')}>
+          <Button variant="secondary" size="sm">
+            Export goals
+          </Button>
+        </a>
+        <a href={link('action-items.csv')}>
+          <Button variant="secondary" size="sm">
+            Export action items
+          </Button>
+        </a>
+        <a href={link('announcements.csv')}>
+          <Button variant="secondary" size="sm">
+            Export announcements
+          </Button>
+        </a>
+        <a href={link('audit.csv')}>
+          <Button variant="secondary" size="sm">
+            Export audit log
+          </Button>
+        </a>
       </div>
     </PermissionGate>
   );
@@ -6456,6 +7831,7 @@ git commit -m "feat(web): analytics store + StatsTiles + GoalCompletionChart + E
 ## Task 53: Dashboard analytics page (rewrite placeholder)
 
 **Files:**
+
 - Modify: `apps/web/src/app/dashboard/[workspaceId]/page.js`
 
 - [ ] **Step 1: Replace the placeholder with the analytics dashboard**
@@ -6483,7 +7859,9 @@ export default function DashboardHome() {
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Dashboard
+        </h1>
         <ExportButtons />
       </div>
 
@@ -6528,6 +7906,7 @@ git commit -m "feat(web): rewrite dashboard home as analytics page with stats + 
 ## Task 54: Audit controller + route
 
 **Files:**
+
 - Create: `apps/api/src/controllers/audit.js`
 - Modify: `apps/api/src/routes/workspaces.js`
 
@@ -6545,11 +7924,21 @@ async function listAudit(req, res) {
 
   const where = { workspaceId };
   if (req.query.type) {
-    where.type = Array.isArray(req.query.type) ? { in: req.query.type } : req.query.type;
+    where.type = Array.isArray(req.query.type)
+      ? { in: req.query.type }
+      : req.query.type;
   }
   if (req.query.actorId) where.userId = req.query.actorId;
-  if (req.query.from) where.createdAt = { ...(where.createdAt || {}), gte: new Date(req.query.from) };
-  if (req.query.to)   where.createdAt = { ...(where.createdAt || {}), lte: new Date(req.query.to) };
+  if (req.query.from)
+    where.createdAt = {
+      ...(where.createdAt || {}),
+      gte: new Date(req.query.from),
+    };
+  if (req.query.to)
+    where.createdAt = {
+      ...(where.createdAt || {}),
+      lte: new Date(req.query.to),
+    };
 
   const [total, events] = await Promise.all([
     prisma.activity.count({ where }),
@@ -6562,7 +7951,13 @@ async function listAudit(req, res) {
     }),
   ]);
 
-  res.json({ events, page, pageSize, total, totalPages: Math.ceil(total / pageSize) });
+  res.json({
+    events,
+    page,
+    pageSize,
+    total,
+    totalPages: Math.ceil(total / pageSize),
+  });
 }
 
 module.exports = { listAudit };
@@ -6575,9 +7970,13 @@ In `apps/api/src/routes/workspaces.js`, add:
 ```js
 const auditController = require('../controllers/audit');
 
-router.get('/:id/audit',
-  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.AUDIT_READ),
-  auditController.listAudit);
+router.get(
+  '/:id/audit',
+  authenticate,
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.AUDIT_READ),
+  auditController.listAudit
+);
 ```
 
 - [ ] **Step 3: Commit**
@@ -6592,6 +7991,7 @@ git commit -m "feat(api): paginated audit log endpoint"
 ## Task 55: Audit store + components
 
 **Files:**
+
 - Create: `apps/web/src/stores/auditStore.js`
 - Create: `apps/web/src/components/audit/AuditTimeline.jsx`
 - Create: `apps/web/src/components/audit/AuditFilters.jsx`
@@ -6612,19 +8012,27 @@ const useAuditStore = create((set, get) => ({
   isLoading: false,
   filters: { type: '', actorId: '', from: '', to: '' },
 
-  setFilters: (patch) => set((s) => ({ filters: { ...s.filters, ...patch }, page: 1 })),
+  setFilters: (patch) =>
+    set((s) => ({ filters: { ...s.filters, ...patch }, page: 1 })),
 
   fetch: async (workspaceId, page = 1) => {
     set({ isLoading: true });
     try {
       const f = get().filters;
       const params = new URLSearchParams({ page: String(page) });
-      if (f.type)    params.set('type', f.type);
+      if (f.type) params.set('type', f.type);
       if (f.actorId) params.set('actorId', f.actorId);
-      if (f.from)    params.set('from', f.from);
-      if (f.to)      params.set('to', f.to);
-      const data = await api.get(`/api/workspaces/${workspaceId}/audit?${params.toString()}`);
-      set({ events: data.events, page: data.page, totalPages: data.totalPages, isLoading: false });
+      if (f.from) params.set('from', f.from);
+      if (f.to) params.set('to', f.to);
+      const data = await api.get(
+        `/api/workspaces/${workspaceId}/audit?${params.toString()}`
+      );
+      set({
+        events: data.events,
+        page: data.page,
+        totalPages: data.totalPages,
+        isLoading: false,
+      });
     } catch (err) {
       set({ isLoading: false });
       throw err;
@@ -6632,10 +8040,11 @@ const useAuditStore = create((set, get) => ({
   },
 
   // Real-time
-  prepend: (activity) => set((s) => {
-    if (s.page !== 1) return s;
-    return { events: [activity, ...s.events].slice(0, 50) };
-  }),
+  prepend: (activity) =>
+    set((s) => {
+      if (s.page !== 1) return s;
+      return { events: [activity, ...s.events].slice(0, 50) };
+    }),
 }));
 
 export default useAuditStore;
@@ -6664,39 +8073,82 @@ export default function AuditFilters() {
   }, [workspaceId, members.length, fetchMembers]);
 
   const apply = () => fetch(workspaceId, 1);
-  const clear = () => { setFilters({ type: '', actorId: '', from: '', to: '' }); fetch(workspaceId, 1); };
+  const clear = () => {
+    setFilters({ type: '', actorId: '', from: '', to: '' });
+    fetch(workspaceId, 1);
+  };
 
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 grid grid-cols-1 sm:grid-cols-5 gap-3 items-end">
       <div>
-        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Type</label>
-        <select value={filters.type} onChange={(e) => setFilters({ type: e.target.value })}
-          className="w-full px-2 py-1.5 text-sm border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white">
+        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Type
+        </label>
+        <select
+          value={filters.type}
+          onChange={(e) => setFilters({ type: e.target.value })}
+          className="w-full px-2 py-1.5 text-sm border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+        >
           <option value="">All</option>
-          {Object.values(ACTIVITY_TYPES).map((t) => <option key={t} value={t}>{t}</option>)}
+          {Object.values(ACTIVITY_TYPES).map((t) => (
+            <option key={t} value={t}>
+              {t}
+            </option>
+          ))}
         </select>
       </div>
       <div>
-        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Actor</label>
-        <select value={filters.actorId} onChange={(e) => setFilters({ actorId: e.target.value })}
-          className="w-full px-2 py-1.5 text-sm border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white">
+        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Actor
+        </label>
+        <select
+          value={filters.actorId}
+          onChange={(e) => setFilters({ actorId: e.target.value })}
+          className="w-full px-2 py-1.5 text-sm border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+        >
           <option value="">All members</option>
-          {members.map((m) => <option key={m.id} value={m.user.id}>{m.user.name}</option>)}
+          {members.map((m) => (
+            <option key={m.id} value={m.user.id}>
+              {m.user.name}
+            </option>
+          ))}
         </select>
       </div>
       <div>
-        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">From</label>
-        <input type="date" value={filters.from} onChange={(e) => setFilters({ from: e.target.value })}
-          className="w-full px-2 py-1.5 text-sm border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white" />
+        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+          From
+        </label>
+        <input
+          type="date"
+          value={filters.from}
+          onChange={(e) => setFilters({ from: e.target.value })}
+          className="w-full px-2 py-1.5 text-sm border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+        />
       </div>
       <div>
-        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">To</label>
-        <input type="date" value={filters.to} onChange={(e) => setFilters({ to: e.target.value })}
-          className="w-full px-2 py-1.5 text-sm border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white" />
+        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+          To
+        </label>
+        <input
+          type="date"
+          value={filters.to}
+          onChange={(e) => setFilters({ to: e.target.value })}
+          className="w-full px-2 py-1.5 text-sm border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white"
+        />
       </div>
       <div className="flex gap-2">
-        <button onClick={apply} className="flex-1 px-3 py-1.5 text-sm bg-primary-600 text-white rounded-md hover:bg-primary-700">Apply</button>
-        <button onClick={clear} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">Clear</button>
+        <button
+          onClick={apply}
+          className="flex-1 px-3 py-1.5 text-sm bg-primary-600 text-white rounded-md hover:bg-primary-700"
+        >
+          Apply
+        </button>
+        <button
+          onClick={clear}
+          className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700"
+        >
+          Clear
+        </button>
       </div>
     </div>
   );
@@ -6718,31 +8170,48 @@ export default function AuditTimeline() {
   const { workspaceId } = useParams();
   const { events, page, totalPages, isLoading, fetch } = useAuditStore();
 
-  useEffect(() => { fetch(workspaceId, 1); }, [workspaceId, fetch]);
+  useEffect(() => {
+    fetch(workspaceId, 1);
+  }, [workspaceId, fetch]);
 
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
       {isLoading ? (
         <p className="p-6 text-sm text-gray-500">Loading…</p>
       ) : events.length === 0 ? (
-        <p className="p-6 text-sm text-gray-500">No events match these filters.</p>
+        <p className="p-6 text-sm text-gray-500">
+          No events match these filters.
+        </p>
       ) : (
         <ul>
           {events.map((e) => (
-            <li key={e.id} className="flex items-start gap-3 px-4 py-3 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+            <li
+              key={e.id}
+              className="flex items-start gap-3 px-4 py-3 border-b border-gray-100 dark:border-gray-700 last:border-b-0"
+            >
               {e.user?.avatarUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={e.user.avatarUrl} alt="" className="w-7 h-7 rounded-full mt-0.5 flex-shrink-0" />
+                <img
+                  src={e.user.avatarUrl}
+                  alt=""
+                  className="w-7 h-7 rounded-full mt-0.5 flex-shrink-0"
+                />
               ) : (
                 <div className="w-7 h-7 rounded-full bg-gray-300 mt-0.5 flex-shrink-0" />
               )}
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline justify-between gap-3">
                   <p className="text-sm">
-                    <span className="font-medium text-gray-900 dark:text-white">{e.user?.name || 'Someone'}</span>{' '}
-                    <span className="text-gray-700 dark:text-gray-300">{e.message}</span>
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {e.user?.name || 'Someone'}
+                    </span>{' '}
+                    <span className="text-gray-700 dark:text-gray-300">
+                      {e.message}
+                    </span>
                   </p>
-                  <span className="text-xs text-gray-500 whitespace-nowrap">{new Date(e.createdAt).toLocaleString()}</span>
+                  <span className="text-xs text-gray-500 whitespace-nowrap">
+                    {new Date(e.createdAt).toLocaleString()}
+                  </span>
                 </div>
                 <p className="text-xs text-gray-500 mt-0.5">{e.type}</p>
               </div>
@@ -6752,9 +8221,23 @@ export default function AuditTimeline() {
       )}
       {totalPages > 1 && (
         <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-gray-700">
-          <button disabled={page <= 1}              onClick={() => fetch(workspaceId, page - 1)} className="text-sm text-primary-600 disabled:text-gray-400">← Previous</button>
-          <span className="text-xs text-gray-500">Page {page} of {totalPages}</span>
-          <button disabled={page >= totalPages}     onClick={() => fetch(workspaceId, page + 1)} className="text-sm text-primary-600 disabled:text-gray-400">Next →</button>
+          <button
+            disabled={page <= 1}
+            onClick={() => fetch(workspaceId, page - 1)}
+            className="text-sm text-primary-600 disabled:text-gray-400"
+          >
+            ← Previous
+          </button>
+          <span className="text-xs text-gray-500">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            disabled={page >= totalPages}
+            onClick={() => fetch(workspaceId, page + 1)}
+            className="text-sm text-primary-600 disabled:text-gray-400"
+          >
+            Next →
+          </button>
         </div>
       )}
     </div>
@@ -6778,12 +8261,18 @@ export default function AuditExportButton() {
   const { filters } = useAuditStore();
   const apiBase = process.env.NEXT_PUBLIC_API_URL || '';
   const params = new URLSearchParams();
-  if (filters.type)    params.set('type', filters.type);
+  if (filters.type) params.set('type', filters.type);
   if (filters.actorId) params.set('actorId', filters.actorId);
-  if (filters.from)    params.set('from', filters.from);
-  if (filters.to)      params.set('to', filters.to);
+  if (filters.from) params.set('from', filters.from);
+  if (filters.to) params.set('to', filters.to);
   const href = `${apiBase}/api/workspaces/${workspaceId}/exports/audit.csv?${params.toString()}`;
-  return <a href={href}><Button variant="secondary" size="sm">Export CSV</Button></a>;
+  return (
+    <a href={href}>
+      <Button variant="secondary" size="sm">
+        Export CSV
+      </Button>
+    </a>
+  );
 }
 ```
 
@@ -6799,6 +8288,7 @@ git commit -m "feat(web): audit store + timeline + filters + export button"
 ## Task 56: Audit settings page + activity:new live updates
 
 **Files:**
+
 - Create: `apps/web/src/app/dashboard/[workspaceId]/settings/audit/page.js`
 - Modify: `apps/web/src/lib/realtimeBridge.js` (subscribe to `activity:new`)
 
@@ -6819,11 +8309,17 @@ export default function AuditPage() {
   return (
     <PermissionGate
       cap={CAPABILITIES.AUDIT_READ}
-      fallback={<div className="p-6"><p className="text-gray-500">Admins only.</p></div>}
+      fallback={
+        <div className="p-6">
+          <p className="text-gray-500">Admins only.</p>
+        </div>
+      }
     >
       <div className="p-6 space-y-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Audit log</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Audit log
+          </h1>
           <AuditExportButton />
         </div>
         <AuditFilters />
@@ -6846,7 +8342,9 @@ import useAuditStore from '@/stores/auditStore';
 ```js
 // inside startRealtime, alongside other socketClient.on calls:
 const audit = useAuditStore.getState();
-unsubscribers.push(socketClient.on(SOCKET_EVENTS.ACTIVITY_NEW, (p) => audit.prepend(p.activity)));
+unsubscribers.push(
+  socketClient.on(SOCKET_EVENTS.ACTIVITY_NEW, (p) => audit.prepend(p.activity))
+);
 ```
 
 - [ ] **Step 3: Add nav link**
@@ -6868,10 +8366,10 @@ export default function SettingsLayout({ children }) {
   const pathname = usePathname();
   const base = `/dashboard/${workspaceId}/settings`;
   const tabs = [
-    { href: base,                   label: 'General' },
-    { href: `${base}/members`,      label: 'Members' },
-    { href: `${base}/invitations`,  label: 'Invitations' },
-    { href: `${base}/audit`,        label: 'Audit log', cap: CAPABILITIES.AUDIT_READ },
+    { href: base, label: 'General' },
+    { href: `${base}/members`, label: 'Members' },
+    { href: `${base}/invitations`, label: 'Invitations' },
+    { href: `${base}/audit`, label: 'Audit log', cap: CAPABILITIES.AUDIT_READ },
   ];
   return (
     <div className="max-w-5xl mx-auto p-6">
@@ -6891,7 +8389,13 @@ export default function SettingsLayout({ children }) {
               {t.label}
             </Link>
           );
-          return t.cap ? <PermissionGate key={t.href} cap={t.cap}>{link}</PermissionGate> : link;
+          return t.cap ? (
+            <PermissionGate key={t.href} cap={t.cap}>
+              {link}
+            </PermissionGate>
+          ) : (
+            link
+          );
         })}
       </nav>
       {children}
@@ -6916,6 +8420,7 @@ git commit -m "feat(web): audit log settings page with live updates"
 ## Task 57: Theme toggle (dark/light/system)
 
 **Files:**
+
 - Create: `apps/web/src/stores/themeStore.js`
 - Create: `apps/web/src/components/ui/ThemeToggle.jsx`
 - Modify: `apps/web/src/app/layout.js` (apply `html.dark` class on mount)
@@ -6957,14 +8462,19 @@ const useThemeStore = create((set, get) => ({
 
 function apply(theme) {
   if (typeof window === 'undefined') return;
-  const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const isDark =
+    theme === 'dark' ||
+    (theme === 'system' &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.classList.toggle('dark', isDark);
 }
 
 if (typeof window !== 'undefined') {
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    if (useThemeStore.getState().theme === 'system') apply('system');
-  });
+  window
+    .matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', () => {
+      if (useThemeStore.getState().theme === 'system') apply('system');
+    });
 }
 
 export default useThemeStore;
@@ -6983,7 +8493,9 @@ import useThemeStore from '@/stores/themeStore';
 export default function ThemeToggle() {
   const { theme, cycle, hydrate } = useThemeStore();
 
-  useEffect(() => { hydrate(); }, [hydrate]);
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
 
   const label = theme === 'light' ? '☀️' : theme === 'dark' ? '🌙' : '🖥️';
   return (
@@ -7013,7 +8525,9 @@ Inside the component (above the `return`):
 
 ```jsx
 const hydrate = useThemeStore((s) => s.hydrate);
-useEffect(() => { hydrate(); }, [hydrate]);
+useEffect(() => {
+  hydrate();
+}, [hydrate]);
 ```
 
 If the existing root layout is a server component, instead create a small client wrapper `apps/web/src/components/ThemeProvider.jsx` that calls `hydrate()` on mount and wrap the layout's children with it. Either route works; pick whichever is less invasive given the current shape.
@@ -7038,6 +8552,7 @@ git commit -m "feat(web): dark/light/system theme toggle with localStorage persi
 ## Task 58: Cmd+K command palette
 
 **Files:**
+
 - Modify: `apps/web/package.json`
 - Create: `apps/web/src/components/ui/CommandPalette.jsx`
 - Modify: `apps/web/src/app/dashboard/[workspaceId]/layout.js` (mount globally)
@@ -7067,8 +8582,8 @@ export default function CommandPalette() {
   const router = useRouter();
   const { workspaceId } = useParams();
   const [open, setOpen] = useState(false);
-  const canCreateGoal     = useCapability(CAPABILITIES.GOAL_CREATE);
-  const canCreateAction   = useCapability(CAPABILITIES.ACTION_ITEM_CREATE);
+  const canCreateGoal = useCapability(CAPABILITIES.GOAL_CREATE);
+  const canCreateAction = useCapability(CAPABILITIES.ACTION_ITEM_CREATE);
   const canCreateAnnounce = useCapability(CAPABILITIES.ANNOUNCEMENT_CREATE);
   const { logout } = useAuthStore();
   const { cycle: cycleTheme } = useThemeStore();
@@ -7084,7 +8599,10 @@ export default function CommandPalette() {
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
-  const go = (path) => { setOpen(false); router.push(path); };
+  const go = (path) => {
+    setOpen(false);
+    router.push(path);
+  };
 
   return (
     <Command.Dialog
@@ -7094,29 +8612,84 @@ export default function CommandPalette() {
       className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] bg-black/40"
     >
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <Command.Input placeholder="Type a command…"
-          className="w-full px-4 py-3 text-sm border-b border-gray-200 dark:border-gray-700 bg-transparent focus:outline-none text-gray-900 dark:text-white" />
+        <Command.Input
+          placeholder="Type a command…"
+          className="w-full px-4 py-3 text-sm border-b border-gray-200 dark:border-gray-700 bg-transparent focus:outline-none text-gray-900 dark:text-white"
+        />
         <Command.List className="max-h-80 overflow-y-auto p-2">
-          <Command.Empty className="px-3 py-6 text-center text-sm text-gray-500">No results.</Command.Empty>
+          <Command.Empty className="px-3 py-6 text-center text-sm text-gray-500">
+            No results.
+          </Command.Empty>
 
           <Command.Group heading="Navigate">
-            <Item onSelect={() => go(`/dashboard/${workspaceId}`)}>Dashboard</Item>
-            <Item onSelect={() => go(`/dashboard/${workspaceId}/goals`)}>Goals</Item>
-            <Item onSelect={() => go(`/dashboard/${workspaceId}/announcements`)}>Announcements</Item>
-            <Item onSelect={() => go(`/dashboard/${workspaceId}/action-items`)}>Action items</Item>
-            <Item onSelect={() => go(`/dashboard/${workspaceId}/profile`)}>Your profile</Item>
-            <Item onSelect={() => go(`/dashboard/${workspaceId}/settings`)}>Settings</Item>
+            <Item onSelect={() => go(`/dashboard/${workspaceId}`)}>
+              Dashboard
+            </Item>
+            <Item onSelect={() => go(`/dashboard/${workspaceId}/goals`)}>
+              Goals
+            </Item>
+            <Item
+              onSelect={() => go(`/dashboard/${workspaceId}/announcements`)}
+            >
+              Announcements
+            </Item>
+            <Item onSelect={() => go(`/dashboard/${workspaceId}/action-items`)}>
+              Action items
+            </Item>
+            <Item onSelect={() => go(`/dashboard/${workspaceId}/profile`)}>
+              Your profile
+            </Item>
+            <Item onSelect={() => go(`/dashboard/${workspaceId}/settings`)}>
+              Settings
+            </Item>
           </Command.Group>
 
           <Command.Group heading="Create">
-            {canCreateGoal     && <Item onSelect={() => go(`/dashboard/${workspaceId}/goals?new=1`)}>New goal</Item>}
-            {canCreateAction   && <Item onSelect={() => go(`/dashboard/${workspaceId}/action-items?new=1`)}>New action item</Item>}
-            {canCreateAnnounce && <Item onSelect={() => go(`/dashboard/${workspaceId}/announcements?new=1`)}>New announcement</Item>}
+            {canCreateGoal && (
+              <Item
+                onSelect={() => go(`/dashboard/${workspaceId}/goals?new=1`)}
+              >
+                New goal
+              </Item>
+            )}
+            {canCreateAction && (
+              <Item
+                onSelect={() =>
+                  go(`/dashboard/${workspaceId}/action-items?new=1`)
+                }
+              >
+                New action item
+              </Item>
+            )}
+            {canCreateAnnounce && (
+              <Item
+                onSelect={() =>
+                  go(`/dashboard/${workspaceId}/announcements?new=1`)
+                }
+              >
+                New announcement
+              </Item>
+            )}
           </Command.Group>
 
           <Command.Group heading="Actions">
-            <Item onSelect={() => { setOpen(false); cycleTheme(); }}>Toggle theme</Item>
-            <Item onSelect={async () => { setOpen(false); await logout(); router.push('/login'); }}>Sign out</Item>
+            <Item
+              onSelect={() => {
+                setOpen(false);
+                cycleTheme();
+              }}
+            >
+              Toggle theme
+            </Item>
+            <Item
+              onSelect={async () => {
+                setOpen(false);
+                await logout();
+                router.push('/login');
+              }}
+            >
+              Sign out
+            </Item>
           </Command.Group>
         </Command.List>
       </div>
@@ -7171,6 +8744,7 @@ git commit -m "feat(web): cmd+k command palette with navigation, quick-create, t
 ## Task 59: PWA shell
 
 **Files:**
+
 - Modify: `apps/web/package.json`
 - Modify: `apps/web/next.config.js`
 - Create: `apps/web/public/manifest.json`
@@ -7220,8 +8794,18 @@ If the existing file uses ESM `export default`, adapt accordingly: `export defau
   "theme_color": "#3b82f6",
   "orientation": "portrait-primary",
   "icons": [
-    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
 ```
@@ -7266,6 +8850,7 @@ git commit -m "feat(web): PWA shell — manifest, service worker via @ducanh2912
 ## Task 60: Members search endpoint (used by mention typeahead)
 
 **Files:**
+
 - Modify: `apps/api/src/controllers/members.js` (or wherever `listMembers` lives)
 - Modify: `apps/api/src/routes/members.js` (verify search query handling)
 
@@ -7279,12 +8864,18 @@ async function listMembers(req, res) {
   const where = { workspaceId: req.member.workspaceId };
   const members = await prisma.workspaceMember.findMany({
     where,
-    include: { user: { select: { id: true, name: true, email: true, avatarUrl: true } } },
+    include: {
+      user: { select: { id: true, name: true, email: true, avatarUrl: true } },
+    },
     orderBy: { joinedAt: 'asc' },
   });
-  const filtered = !search ? members : members.filter((m) =>
-    m.user.name.toLowerCase().includes(search) || m.user.email.toLowerCase().includes(search)
-  );
+  const filtered = !search
+    ? members
+    : members.filter(
+        (m) =>
+          m.user.name.toLowerCase().includes(search) ||
+          m.user.email.toLowerCase().includes(search)
+      );
   res.json({ members: filtered });
 }
 ```
@@ -7311,6 +8902,7 @@ git commit -m "feat(api): listMembers ?search= filter for mention typeahead"
 ## Task 61: Seed script (12 users / 25 goals / 60 action items)
 
 **Files:**
+
 - Create: `apps/api/prisma/seed.js`
 - Modify: `apps/api/package.json` (the `db:seed` script already exists; verify it points to `prisma/seed.js`)
 
@@ -7322,24 +8914,31 @@ git commit -m "feat(api): listMembers ?search= filter for mention typeahead"
 const bcrypt = require('bcryptjs');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient(); // seed scripts may instantiate a fresh client
-const { GOAL_STATUS, ACTION_ITEM_STATUS, PRIORITY, ACTIVITY_TYPES, ROLES, INVITATION_TTL_DAYS } = require('@team-hub/shared');
+const {
+  GOAL_STATUS,
+  ACTION_ITEM_STATUS,
+  PRIORITY,
+  ACTIVITY_TYPES,
+  ROLES,
+  INVITATION_TTL_DAYS,
+} = require('@team-hub/shared');
 const crypto = require('crypto');
 
 const PASSWORD = 'demo1234';
 
 const USER_DEFS = [
-  { email: 'admin@demo.com',  name: 'Demo Admin',     role: ROLES.ADMIN  },
-  { email: 'alice@demo.com',  name: 'Alice Smith',    role: ROLES.MEMBER },
-  { email: 'bob@demo.com',    name: 'Bob Carter',     role: ROLES.MEMBER },
-  { email: 'cara@demo.com',   name: 'Cara Lee',       role: ROLES.MEMBER },
-  { email: 'dan@demo.com',    name: 'Dan Park',       role: ROLES.MEMBER },
-  { email: 'eve@demo.com',    name: 'Eve Wright',     role: ROLES.MEMBER },
-  { email: 'frank@demo.com',  name: 'Frank Allen',    role: ROLES.MEMBER },
-  { email: 'gita@demo.com',   name: 'Gita Patel',     role: ROLES.MEMBER },
-  { email: 'henri@demo.com',  name: 'Henri Dubois',   role: ROLES.MEMBER },
-  { email: 'iris@demo.com',   name: 'Iris Chen',      role: ROLES.ADMIN  },
-  { email: 'jorge@demo.com',  name: 'Jorge Ruiz',     role: ROLES.MEMBER },
-  { email: 'kim@demo.com',    name: 'Kim Nakamura',   role: ROLES.MEMBER },
+  { email: 'admin@demo.com', name: 'Demo Admin', role: ROLES.ADMIN },
+  { email: 'alice@demo.com', name: 'Alice Smith', role: ROLES.MEMBER },
+  { email: 'bob@demo.com', name: 'Bob Carter', role: ROLES.MEMBER },
+  { email: 'cara@demo.com', name: 'Cara Lee', role: ROLES.MEMBER },
+  { email: 'dan@demo.com', name: 'Dan Park', role: ROLES.MEMBER },
+  { email: 'eve@demo.com', name: 'Eve Wright', role: ROLES.MEMBER },
+  { email: 'frank@demo.com', name: 'Frank Allen', role: ROLES.MEMBER },
+  { email: 'gita@demo.com', name: 'Gita Patel', role: ROLES.MEMBER },
+  { email: 'henri@demo.com', name: 'Henri Dubois', role: ROLES.MEMBER },
+  { email: 'iris@demo.com', name: 'Iris Chen', role: ROLES.ADMIN },
+  { email: 'jorge@demo.com', name: 'Jorge Ruiz', role: ROLES.MEMBER },
+  { email: 'kim@demo.com', name: 'Kim Nakamura', role: ROLES.MEMBER },
 ];
 
 const GOAL_TITLES = [
@@ -7374,21 +8973,23 @@ async function main() {
   console.log('Seeding…');
   await reset();
 
-  const users = await Promise.all(USER_DEFS.map(async (u) => {
-    return prisma.user.create({
-      data: {
-        email:    u.email,
-        name:     u.name,
-        password: await bcrypt.hash(PASSWORD, 10),
-      },
-    });
-  }));
+  const users = await Promise.all(
+    USER_DEFS.map(async (u) => {
+      return prisma.user.create({
+        data: {
+          email: u.email,
+          name: u.name,
+          password: await bcrypt.hash(PASSWORD, 10),
+        },
+      });
+    })
+  );
 
   const adminUser = users[0];
 
   const workspace = await prisma.workspace.create({
     data: {
-      name:        'Acme Product Team',
+      name: 'Acme Product Team',
       description: 'Demo workspace seeded for the technical assessment.',
       accentColor: '#6366f1',
       createdById: adminUser.id,
@@ -7397,7 +8998,9 @@ async function main() {
 
   await prisma.workspaceMember.createMany({
     data: USER_DEFS.map((u, i) => ({
-      userId: users[i].id, workspaceId: workspace.id, role: u.role,
+      userId: users[i].id,
+      workspaceId: workspace.id,
+      role: u.role,
     })),
   });
 
@@ -7405,7 +9008,12 @@ async function main() {
   const goals = [];
   for (let i = 0; i < GOAL_TITLES.length; i++) {
     const owner = users[i % users.length];
-    const status = pick([GOAL_STATUS.NOT_STARTED, GOAL_STATUS.IN_PROGRESS, GOAL_STATUS.IN_PROGRESS, GOAL_STATUS.COMPLETED]);
+    const status = pick([
+      GOAL_STATUS.NOT_STARTED,
+      GOAL_STATUS.IN_PROGRESS,
+      GOAL_STATUS.IN_PROGRESS,
+      GOAL_STATUS.COMPLETED,
+    ]);
     const dueDate = randomFutureDate(i);
     const goal = await prisma.goal.create({
       data: {
@@ -7426,7 +9034,10 @@ async function main() {
       await prisma.milestone.create({
         data: {
           title: `Milestone ${m + 1} for ${goal.title}`,
-          progress: status === GOAL_STATUS.COMPLETED ? 100 : Math.min(100, (m + 1) * 25),
+          progress:
+            status === GOAL_STATUS.COMPLETED
+              ? 100
+              : Math.min(100, (m + 1) * 25),
           completedAt: status === GOAL_STATUS.COMPLETED ? new Date() : null,
           goalId: goal.id,
         },
@@ -7436,17 +9047,34 @@ async function main() {
 
   // Action items (60)
   for (let i = 0; i < 60; i++) {
-    const status = pick([ACTION_ITEM_STATUS.TODO, ACTION_ITEM_STATUS.TODO, ACTION_ITEM_STATUS.IN_PROGRESS, ACTION_ITEM_STATUS.DONE]);
-    const priority = pick([PRIORITY.LOW, PRIORITY.MEDIUM, PRIORITY.MEDIUM, PRIORITY.HIGH, PRIORITY.URGENT]);
+    const status = pick([
+      ACTION_ITEM_STATUS.TODO,
+      ACTION_ITEM_STATUS.TODO,
+      ACTION_ITEM_STATUS.IN_PROGRESS,
+      ACTION_ITEM_STATUS.DONE,
+    ]);
+    const priority = pick([
+      PRIORITY.LOW,
+      PRIORITY.MEDIUM,
+      PRIORITY.MEDIUM,
+      PRIORITY.HIGH,
+      PRIORITY.URGENT,
+    ]);
     const goal = i % 3 === 0 ? null : goals[i % goals.length];
     const assignee = users[(i * 7) % users.length];
     await prisma.actionItem.create({
       data: {
         title: `Demo task #${i + 1}`,
         description: 'Seeded action item for the demo.',
-        priority, status,
+        priority,
+        status,
         position: i,
-        dueDate: i % 4 === 0 ? randomFutureDate(i) : (i % 5 === 0 ? randomPastDate(i) : null),
+        dueDate:
+          i % 4 === 0
+            ? randomFutureDate(i)
+            : i % 5 === 0
+              ? randomPastDate(i)
+              : null,
         assigneeId: assignee.id,
         goalId: goal?.id || null,
         workspaceId: workspace.id,
@@ -7471,12 +9099,12 @@ async function main() {
     const author = users[i % 2 === 0 ? 0 : 9];
     const a = await prisma.announcement.create({
       data: {
-        title:       `Update ${i + 1}`,
-        content:     announcementBodies[i],
-        authorId:    author.id,
+        title: `Update ${i + 1}`,
+        content: announcementBodies[i],
+        authorId: author.id,
         workspaceId: workspace.id,
-        isPinned:    i === 0,
-        pinnedAt:    i === 0 ? new Date() : null,
+        isPinned: i === 0,
+        pinnedAt: i === 0 ? new Date() : null,
       },
     });
     if (i < 3) {
@@ -7507,9 +9135,14 @@ async function main() {
   for (let i = 0; i < 30; i++) {
     await prisma.activity.create({
       data: {
-        type:    pick([ACTIVITY_TYPES.GOAL_CREATED, ACTIVITY_TYPES.ACTION_ITEM_CREATED, ACTIVITY_TYPES.ANNOUNCEMENT_POSTED, ACTIVITY_TYPES.GOAL_STATUS_CHANGED]),
+        type: pick([
+          ACTIVITY_TYPES.GOAL_CREATED,
+          ACTIVITY_TYPES.ACTION_ITEM_CREATED,
+          ACTIVITY_TYPES.ANNOUNCEMENT_POSTED,
+          ACTIVITY_TYPES.GOAL_STATUS_CHANGED,
+        ]),
         message: `seeded activity ${i + 1}`,
-        userId:  users[i % users.length].id,
+        userId: users[i % users.length].id,
         workspaceId: workspace.id,
         createdAt: new Date(Date.now() - i * 60 * 60 * 1000), // backwards in time
       },
@@ -7523,16 +9156,21 @@ async function main() {
         email,
         role: ROLES.MEMBER,
         token: crypto.randomBytes(32).toString('hex'),
-        expiresAt: new Date(Date.now() + INVITATION_TTL_DAYS * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(
+          Date.now() + INVITATION_TTL_DAYS * 24 * 60 * 60 * 1000
+        ),
         workspaceId: workspace.id,
         invitedById: adminUser.id,
       },
     });
   }
 
-  console.log(`Seeded ${users.length} users, ${goals.length} goals, 60 action items, ${announcementBodies.length} announcements, 30 activities, 2 invitations.`);
+  console.log(
+    `Seeded ${users.length} users, ${goals.length} goals, 60 action items, ${announcementBodies.length} announcements, 30 activities, 2 invitations.`
+  );
   console.log('Demo credentials:');
-  for (const u of USER_DEFS) console.log(`  ${u.email} / ${PASSWORD}  (${u.role})`);
+  for (const u of USER_DEFS)
+    console.log(`  ${u.email} / ${PASSWORD}  (${u.role})`);
 }
 
 async function reset() {
@@ -7552,12 +9190,21 @@ async function reset() {
   await prisma.user.deleteMany();
 }
 
-function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function randomFutureDate(seed) { return new Date(Date.now() + (10 + (seed * 3) % 30) * 24 * 60 * 60 * 1000); }
-function randomPastDate(seed)   { return new Date(Date.now() - (3 + (seed * 5) % 14) * 24 * 60 * 60 * 1000); }
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+function randomFutureDate(seed) {
+  return new Date(Date.now() + (10 + ((seed * 3) % 30)) * 24 * 60 * 60 * 1000);
+}
+function randomPastDate(seed) {
+  return new Date(Date.now() - (3 + ((seed * 5) % 14)) * 24 * 60 * 60 * 1000);
+}
 
 main()
-  .catch((e) => { console.error(e); process.exit(1); })
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
   .finally(() => prisma.$disconnect());
 ```
 
@@ -7585,13 +9232,14 @@ git commit -m "feat(api): seed script — 12 users, 25 goals, 60 action items, 1
 ## Task 62: README rewrite
 
 **Files:**
+
 - Modify: `README.md` (root) — write fresh
 
 - [ ] **Step 1: Write the README**
 
 Replace `README.md` at the repo root with a comprehensive document covering:
 
-```markdown
+````markdown
 # Collaborative Team Hub
 
 Full-stack collaboration platform built for the FredoCloud Technical Assessment.
@@ -7605,10 +9253,10 @@ Teams manage shared goals, post announcements, and track action items in real ti
 
 ## Demo accounts
 
-| Email | Password | Role |
-|---|---|---|
-| `admin@demo.com` | `demo1234` | Admin |
-| `iris@demo.com`  | `demo1234` | Admin |
+| Email            | Password   | Role   |
+| ---------------- | ---------- | ------ |
+| `admin@demo.com` | `demo1234` | Admin  |
+| `iris@demo.com`  | `demo1234` | Admin  |
 | `alice@demo.com` | `demo1234` | Member |
 | `bob@demo.com`   | `demo1234` | Member |
 
@@ -7617,6 +9265,7 @@ Teams manage shared goals, post announcements, and track action items in real ti
 ## Features
 
 ### Core
+
 - Email/password auth with JWT in httpOnly cookies (access + rotated refresh)
 - User profile with Cloudinary avatar upload
 - Workspaces — create, switch, invite by email (token link), Admin/Member roles
@@ -7631,17 +9280,19 @@ Teams manage shared goals, post announcements, and track action items in real ti
 - CSV exports — goals, action items, announcements, audit log
 
 ### Advanced features (3 of 5 — assignment minimum is 2)
+
 1. **Optimistic UI** — Status changes, reactions, pin/unpin, kanban DnD, milestone progress, inline edits all reflect instantly and roll back on error.
 2. **Advanced RBAC** — Capability matrix in `@team-hub/shared` enforced by `requirePermission(cap)` middleware on the backend and `useCapability` / `<PermissionGate>` on the frontend. Every privileged endpoint and UI button is gated against the same source of truth.
 3. **Audit log** — Immutable `Activity` table written via `logActivity(tx, ...)` inside every mutation transaction. Filterable timeline UI under Settings → Audit log; live updates via the `activity:new` socket event; CSV export.
 
 ### Bonus features
+
 - **Dark / light theme** — Tailwind class-mode + system-pref detection + persistent toggle
 - **Email notifications** — Nodemailer with SMTP env-driven transport (Resend in production, console-log fallback for local dev)
 - **Cmd+K command palette** — `cmdk` lib, navigation + quick-create + theme + sign-out
 - **OpenAPI / Swagger** — Auto-generated from JSDoc, served at `/api/docs`
 - **PWA** — Installable shell via `@ducanh2912/next-pwa` (no offline writes — see "known limitations")
-- **Tests** — *Not included; explicitly deferred per scope decision.*
+- **Tests** — _Not included; explicitly deferred per scope decision._
 
 ## Tech stack
 
@@ -7657,28 +9308,33 @@ Requires Node 18+ and PostgreSQL 14+.
    cd collaborative_team_hub
    npm install
    ```
+````
 
 2. Provision a local Postgres database (or use Railway's `DATABASE_URL`).
 
 3. Configure env files:
+
    ```bash
    cp apps/api/.env.example apps/api/.env
    # Then fill in the values described in "Environment variables" below.
    ```
 
    For the web app:
+
    ```bash
    echo 'NEXT_PUBLIC_API_URL=http://localhost:5000'   >  apps/web/.env.local
    echo 'NEXT_PUBLIC_SOCKET_URL=http://localhost:5000' >> apps/web/.env.local
    ```
 
 4. Migrate and seed:
+
    ```bash
    npm run db:migrate --workspace=@team-hub/api
    npm run db:seed    --workspace=@team-hub/api
    ```
 
 5. Run both apps:
+
    ```bash
    npm run dev
    ```
@@ -7689,28 +9345,28 @@ Requires Node 18+ and PostgreSQL 14+.
 
 ### `apps/api/.env`
 
-| Name | Required | Notes |
-|---|---|---|
-| `DATABASE_URL` | yes | Postgres connection string |
-| `JWT_ACCESS_SECRET` | yes | `openssl rand -hex 32` |
-| `JWT_REFRESH_SECRET` | yes | `openssl rand -hex 32` |
-| `CLOUDINARY_CLOUD_NAME` | yes | For avatar + workspace icon uploads |
-| `CLOUDINARY_API_KEY` | yes | |
-| `CLOUDINARY_API_SECRET` | yes | |
-| `CLIENT_URL` | yes | Web app URL — must match exactly for cookies + CORS |
-| `SMTP_HOST` | no | If unset, emails are logged instead of sent |
-| `SMTP_PORT` | no | Default 465 |
-| `SMTP_USER` | no | |
-| `SMTP_PASS` | no | |
-| `SMTP_FROM` | no | e.g. `Team Hub <noreply@example.com>` |
-| `PORT` | no | Default 5000 |
+| Name                    | Required | Notes                                               |
+| ----------------------- | -------- | --------------------------------------------------- |
+| `DATABASE_URL`          | yes      | Postgres connection string                          |
+| `JWT_ACCESS_SECRET`     | yes      | `openssl rand -hex 32`                              |
+| `JWT_REFRESH_SECRET`    | yes      | `openssl rand -hex 32`                              |
+| `CLOUDINARY_CLOUD_NAME` | yes      | For avatar + workspace icon uploads                 |
+| `CLOUDINARY_API_KEY`    | yes      |                                                     |
+| `CLOUDINARY_API_SECRET` | yes      |                                                     |
+| `CLIENT_URL`            | yes      | Web app URL — must match exactly for cookies + CORS |
+| `SMTP_HOST`             | no       | If unset, emails are logged instead of sent         |
+| `SMTP_PORT`             | no       | Default 465                                         |
+| `SMTP_USER`             | no       |                                                     |
+| `SMTP_PASS`             | no       |                                                     |
+| `SMTP_FROM`             | no       | e.g. `Team Hub <noreply@example.com>`               |
+| `PORT`                  | no       | Default 5000                                        |
 
 ### `apps/web/.env.local`
 
-| Name | Required | Notes |
-|---|---|---|
-| `NEXT_PUBLIC_API_URL` | yes | API base URL |
-| `NEXT_PUBLIC_SOCKET_URL` | yes | Same as API URL (Socket.io shares the HTTP server) |
+| Name                     | Required | Notes                                              |
+| ------------------------ | -------- | -------------------------------------------------- |
+| `NEXT_PUBLIC_API_URL`    | yes      | API base URL                                       |
+| `NEXT_PUBLIC_SOCKET_URL` | yes      | Same as API URL (Socket.io shares the HTTP server) |
 
 ## Scripts
 
@@ -7765,20 +9421,22 @@ docs/
 ## License
 
 MIT.
-```
+
+````
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add README.md
 git commit -m "docs: comprehensive README with features, advanced + bonus, env, deployment"
-```
+````
 
 ---
 
 ## Task 63: Railway service configs
 
 **Files:**
+
 - Create: `apps/api/railway.json`
 - Create: `apps/web/railway.json`
 - Create: `apps/api/.env.example` (verify or create)
@@ -7855,6 +9513,7 @@ git commit -m "chore(deploy): Railway service configs for api + web"
 - [ ] **Step 1: Provision Railway project**
 
 In the Railway dashboard:
+
 1. Create a new project named `team-hub`.
 2. Connect to the GitHub repo `orvian36/collaborative_team_hub`.
 3. Add the **PostgreSQL** plugin to the project. Railway auto-injects `DATABASE_URL` to whichever service references it.
@@ -7921,6 +9580,7 @@ git push origin main
 - [ ] **Step 1: Script the walkthrough**
 
 Cover in 3-5 minutes:
+
 1. Sign in as admin (`admin@demo.com / demo1234`)
 2. Tour: dashboard analytics + chart + CSV export
 3. Goals list → goal detail → milestone progress slider → activity feed
@@ -7951,6 +9611,7 @@ git push origin main
 ## Task 66: Final cleanup + final commit
 
 **Files:**
+
 - Audit recent commits for any leftover scaffolding, console.logs, or `.skip` comments.
 
 - [ ] **Step 1: Search for stray debug code**
@@ -7990,6 +9651,7 @@ git push origin main
 - [ ] **Step 6: Submission packaging**
 
 Compose the submission email/form with:
+
 - Live web URL
 - Live API URL + Swagger link
 - Public GitHub repo URL
@@ -8008,6 +9670,7 @@ Compose the submission email/form with:
 **Total tasks:** 66 across 7 phases. Each task ends with a single conventional commit, so the merged history reads as a clean engineering log.
 
 **What gets shipped to `main` after each phase:**
+
 1. Phase 1: profile + avatar, capability matrix, audit-log helper
 2. Phase 2: goals, milestones, per-goal activity feed
 3. Phase 3: announcements, comments, reactions, pinning, mentions
@@ -8015,4 +9678,3 @@ Compose the submission email/form with:
 5. Phase 5: real-time, presence, notifications, mention/invite emails
 6. Phase 6: analytics dashboard, completion chart, 4 CSV exports
 7. Phase 7: audit log UI, theme, Cmd+K, PWA, seed, README, Railway deploy
-

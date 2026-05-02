@@ -13,7 +13,11 @@ const { hasCapability } = require('@team-hub/shared');
  */
 const requirePermission = (capability) => (req, res, next) => {
   if (!req.member) {
-    return res.status(500).json({ error: 'requirePermission used without requireWorkspaceMembership' });
+    return res
+      .status(500)
+      .json({
+        error: 'requirePermission used without requireWorkspaceMembership',
+      });
   }
   if (!hasCapability(req.member.role, capability)) {
     return res.status(403).json({ error: 'Forbidden' });

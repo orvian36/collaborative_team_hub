@@ -9,6 +9,7 @@
 Build out the rest of the Collaborative Team Hub on top of the existing auth + workspaces foundation. Single master spec, single phased plan, seven vertical-slice phases. Each phase produces working software that can ship to `main` independently.
 
 **Already on `main` (no rework):**
+
 - Auth: register, login, logout, refresh, `GET /api/auth/me` (JWT in httpOnly cookies)
 - Workspaces: CRUD, members, invitations (token-link, 7d TTL), icon upload, accent colour, role matrix (`ADMIN`/`MEMBER`)
 - Prisma schema declares (but does not yet wire up) `Goal`, `Milestone`, `Announcement`, `Comment`, `Reaction`, `ActionItem`, `Activity`, `Notification`
@@ -16,6 +17,7 @@ Build out the rest of the Collaborative Team Hub on top of the existing auth + w
 - Shared constants: roles, statuses, priorities, activity types, notification types, invitation status, accent palette, socket event names
 
 **Out of scope for this spec (assignment doesn't ask):**
+
 - Password reset / 2FA
 - File attachments beyond avatars + workspace icons
 - Real-time collaborative editing (advanced feature 1 — not picked)
@@ -26,6 +28,7 @@ Build out the rest of the Collaborative Team Hub on top of the existing auth + w
 ## 2. Feature Set Decisions (recap)
 
 ### Core PDF features (all required)
+
 - User profile + avatar upload
 - Goals + milestones + per-goal activity feed
 - Announcements + reactions + comments + pinning (rich text via TipTap)
@@ -36,11 +39,13 @@ Build out the rest of the Collaborative Team Hub on top of the existing auth + w
 - Analytics dashboard: stats + Recharts goal-completion chart + CSV export
 
 ### Advanced features chosen (3 of 5 — assignment requires only 2)
+
 - **#2 Optimistic UI** — scoped to status changes, reactions, pin/unpin, kanban DnD, milestone progress slider, inline edits. Create/delete/comment stay blocking.
 - **#4 Advanced RBAC** — capability matrix in `@team-hub/shared`, `requirePermission(cap)` middleware, `useCapability` / `<PermissionGate>` on the frontend.
 - **#5 Audit log** — reuses `Activity` model, immutable log helper, filterable timeline UI under `settings/audit`, CSV export.
 
 ### Bonus features chosen (all 6)
+
 - **A. Dark / light theme** — Tailwind `darkMode: 'class'` already configured; ship the toggle + system-pref detection
 - **B. Email notifications** — Nodemailer + Resend SMTP, sends on invitation create/resend and on @mention notification creation, fire-and-forget
 - **C. Cmd+K command palette** — `cmdk` library, navigation + new-entity quick actions
@@ -49,6 +54,7 @@ Build out the rest of the Collaborative Team Hub on top of the existing auth + w
 - **F. PWA** — `@ducanh2912/next-pwa` shell-only (no offline writes), installable
 
 ### Library choices
+
 - Rich text: **TipTap** (`@tiptap/react @tiptap/starter-kit @tiptap/extension-mention @tiptap/extension-link @tiptap/suggestion`) — output sanitized server-side via `sanitize-html`
 - Kanban DnD: **`@dnd-kit/core` + `@dnd-kit/sortable` + `@dnd-kit/utilities`**
 - CSV: **`csv-stringify`** streaming writer
@@ -61,6 +67,7 @@ Build out the rest of the Collaborative Team Hub on top of the existing auth + w
 ### Backend (`apps/api`) additions
 
 **New libs:**
+
 - `lib/socket.js` — Socket.io setup, JWT-cookie handshake auth, presence map, `broadcastToWorkspace(workspaceId, event, payload)` helper
 - `lib/email.js` — `sendEmail({ to, subject, html, text })`, env-driven Nodemailer transport, fire-and-forget
 - `lib/sanitize.js` — `sanitize-html` wrapper with allowlist tuned for TipTap output
@@ -70,9 +77,11 @@ Build out the rest of the Collaborative Team Hub on top of the existing auth + w
 - `lib/mentions.js` — extracts user IDs from sanitized HTML (`span[data-user-id]`) and from `@[Name](id)` markdown text
 
 **New middleware:**
+
 - `middleware/permission.js` — `requirePermission(capability)` reads `req.member.role` (set by existing `requireWorkspaceMembership` middleware), calls `hasCapability(role, cap)` from shared, 403s on miss
 
 **New controllers (one file each):**
+
 - `controllers/goals.js`
 - `controllers/milestones.js`
 - `controllers/announcements.js`
@@ -85,6 +94,7 @@ Build out the rest of the Collaborative Team Hub on top of the existing auth + w
 - `controllers/exports.js`
 
 **New routes (one file each, mounted in `index.js`):**
+
 - `routes/goals.js` — replaces existing stub; sub-mounts `routes/milestones.js` at `/:goalId/milestones`
 - `routes/announcements.js` — replaces stub; sub-mounts `routes/comments.js` and `routes/reactions.js`
 - `routes/actionItems.js` — replaces stub
@@ -96,16 +106,20 @@ Build out the rest of the Collaborative Team Hub on top of the existing auth + w
 ### Frontend (`apps/web`) additions
 
 **New libs:**
+
 - `lib/socket.js` — singleton `socket.io-client`, auto-reconnect, `connectToWorkspace(workspaceId)` / `disconnect()`, exposes per-event `subscribe(event, handler)` for stores
 - `lib/optimistic.js` — `optimisticUpdate({ get, set, key, id, patch, apiCall })` snapshot/restore helper
 
 **New hooks:**
+
 - `hooks/useCapability.js` — reads active workspace role from store, returns boolean
 
 **New stores (Zustand, one per feature):**
+
 - `goalsStore`, `milestonesStore`, `announcementsStore`, `commentsStore`, `reactionsStore`, `actionItemsStore`, `notificationsStore`, `presenceStore`, `auditStore`, `analyticsStore`, `themeStore`
 
 **New routes under `dashboard/[workspaceId]/`:**
+
 - `profile/page.js` — name + avatar editor
 - `page.js` (rewrite of placeholder) — Analytics dashboard
 - `goals/page.js` — list + filters + create
@@ -115,6 +129,7 @@ Build out the rest of the Collaborative Team Hub on top of the existing auth + w
 - `settings/audit/page.js` — audit log timeline + filters + export
 
 **Component directories** (each has its own folder under `components/`):
+
 - `goals/`, `announcements/`, `actionItems/`, `analytics/`, `audit/`, `notifications/`, `presence/`, `mentions/`, `profile/`
 - `ui/CommandPalette.jsx`, `ui/ThemeToggle.jsx`, `ui/PermissionGate.jsx`, `ui/RichTextRenderer.jsx`
 
@@ -144,6 +159,7 @@ ALTER TABLE "Goal" ADD CONSTRAINT "Goal_createdById_fkey"
 ```
 
 **Schema.prisma corresponding edits:**
+
 - `Goal.createdById` + relation `createdBy User @relation("GoalCreator", ...)` and back-relation on User
 - `Milestone.dueDate` + `completedAt`
 - `Announcement.pinnedAt`
@@ -159,29 +175,29 @@ Lives in `packages/shared/src/index.js`. Backend enforces; frontend gates UI for
 ```js
 const CAPABILITIES = {
   WORKSPACE_SETTINGS_WRITE: 'workspace:settings:write',
-  WORKSPACE_DELETE:         'workspace:delete',
-  MEMBER_INVITE:            'member:invite',
-  MEMBER_ROLE_WRITE:        'member:role:write',
-  MEMBER_REMOVE:            'member:remove',
-  GOAL_CREATE:              'goal:create',
-  GOAL_EDIT:                'goal:edit',
-  GOAL_DELETE:              'goal:delete',
-  GOAL_REASSIGN_OWNER:      'goal:reassign-owner',
-  MILESTONE_WRITE:          'milestone:write',
-  ACTION_ITEM_CREATE:       'actionItem:create',
-  ACTION_ITEM_EDIT:         'actionItem:edit',
-  ACTION_ITEM_DELETE:       'actionItem:delete',
-  ACTION_ITEM_REASSIGN:     'actionItem:reassign',
-  ANNOUNCEMENT_CREATE:      'announcement:create',
-  ANNOUNCEMENT_EDIT:        'announcement:edit',
-  ANNOUNCEMENT_DELETE:      'announcement:delete',
-  ANNOUNCEMENT_PIN:         'announcement:pin',
-  COMMENT_CREATE:           'comment:create',
-  COMMENT_DELETE_OWN:       'comment:delete-own',
-  COMMENT_DELETE_ANY:       'comment:delete-any',
-  REACTION_TOGGLE:          'reaction:toggle',
-  AUDIT_READ:               'audit:read',
-  EXPORT_CSV:               'export:csv',
+  WORKSPACE_DELETE: 'workspace:delete',
+  MEMBER_INVITE: 'member:invite',
+  MEMBER_ROLE_WRITE: 'member:role:write',
+  MEMBER_REMOVE: 'member:remove',
+  GOAL_CREATE: 'goal:create',
+  GOAL_EDIT: 'goal:edit',
+  GOAL_DELETE: 'goal:delete',
+  GOAL_REASSIGN_OWNER: 'goal:reassign-owner',
+  MILESTONE_WRITE: 'milestone:write',
+  ACTION_ITEM_CREATE: 'actionItem:create',
+  ACTION_ITEM_EDIT: 'actionItem:edit',
+  ACTION_ITEM_DELETE: 'actionItem:delete',
+  ACTION_ITEM_REASSIGN: 'actionItem:reassign',
+  ANNOUNCEMENT_CREATE: 'announcement:create',
+  ANNOUNCEMENT_EDIT: 'announcement:edit',
+  ANNOUNCEMENT_DELETE: 'announcement:delete',
+  ANNOUNCEMENT_PIN: 'announcement:pin',
+  COMMENT_CREATE: 'comment:create',
+  COMMENT_DELETE_OWN: 'comment:delete-own',
+  COMMENT_DELETE_ANY: 'comment:delete-any',
+  REACTION_TOGGLE: 'reaction:toggle',
+  AUDIT_READ: 'audit:read',
+  EXPORT_CSV: 'export:csv',
 };
 
 const ROLE_CAPABILITIES = {
@@ -206,8 +222,10 @@ function hasCapability(role, capability) {
 ```
 
 **Backend usage:**
+
 ```js
-router.post('/',
+router.post(
+  '/',
   requireWorkspaceMembership(),
   requirePermission(CAPABILITIES.GOAL_CREATE),
   createGoal
@@ -215,11 +233,16 @@ router.post('/',
 ```
 
 **Frontend usage:**
+
 ```jsx
 const canCreate = useCapability(CAPABILITIES.GOAL_CREATE);
-{canCreate && <Button>New goal</Button>}
+{
+  canCreate && <Button>New goal</Button>;
+}
 // or
-<PermissionGate cap={CAPABILITIES.GOAL_CREATE}><Button>...</Button></PermissionGate>
+<PermissionGate cap={CAPABILITIES.GOAL_CREATE}>
+  <Button>...</Button>
+</PermissionGate>;
 ```
 
 ## 6. Real-time Topology
@@ -245,6 +268,7 @@ Exposes `getOnlineUserIds(workspaceId): string[]` for the initial-load REST endp
 ### Events
 
 **Workspace room (`workspace:<id>`):**
+
 - `goal:created` / `goal:updated` / `goal:deleted` / `goal:status-changed`
 - `milestone:upserted` / `milestone:deleted`
 - `actionItem:created` / `actionItem:updated` / `actionItem:deleted` / `actionItem:moved`
@@ -255,6 +279,7 @@ Exposes `getOnlineUserIds(workspaceId): string[]` for the initial-load REST endp
 - `activity:new`
 
 **Personal room (`user:<userId>`):**
+
 - `notification:new`
 
 ### Client (`apps/web/src/lib/socket.js`)
@@ -262,6 +287,7 @@ Exposes `getOnlineUserIds(workspaceId): string[]` for the initial-load REST endp
 Singleton client. `connectToWorkspace(workspaceId)` called by `[workspaceId]/layout.js` mount effect. Token cookie travels via `withCredentials: true`. Token rotation works automatically on reconnect because the cookie is refreshed before reconnect attempts complete.
 
 Per-feature stores own their subscriptions. Example:
+
 ```js
 // goalsStore.js
 subscribe(socket) {
@@ -276,18 +302,18 @@ subscribe(socket) {
 
 ### Scoped operations
 
-| Operation | Optimistic? |
-|---|---|
-| Action item kanban DnD (status + position) | ✅ |
-| Action item inline edit (priority, assignee, due date) | ✅ |
-| Goal status change | ✅ |
-| Milestone progress slider | ✅ |
-| Announcement reaction toggle | ✅ |
-| Announcement pin/unpin | ✅ |
-| Goal create / edit / delete | ❌ blocking |
-| Action item create / delete | ❌ blocking |
-| Announcement create / edit / delete | ❌ blocking |
-| Comment create / delete | ❌ blocking |
+| Operation                                              | Optimistic? |
+| ------------------------------------------------------ | ----------- |
+| Action item kanban DnD (status + position)             | ✅          |
+| Action item inline edit (priority, assignee, due date) | ✅          |
+| Goal status change                                     | ✅          |
+| Milestone progress slider                              | ✅          |
+| Announcement reaction toggle                           | ✅          |
+| Announcement pin/unpin                                 | ✅          |
+| Goal create / edit / delete                            | ❌ blocking |
+| Action item create / delete                            | ❌ blocking |
+| Announcement create / edit / delete                    | ❌ blocking |
+| Comment create / delete                                | ❌ blocking |
 
 ### Helper (`apps/web/src/lib/optimistic.js`)
 
@@ -297,14 +323,16 @@ export async function optimisticUpdate({ get, set, key, id, patch, apiCall }) {
   const prev = list.find((x) => x.id === id);
   if (!prev) return apiCall();
 
-  set((s) => ({ [key]: s[key].map((x) => x.id === id ? { ...x, ...patch } : x) }));
+  set((s) => ({
+    [key]: s[key].map((x) => (x.id === id ? { ...x, ...patch } : x)),
+  }));
 
   try {
     const result = await apiCall();
-    set((s) => ({ [key]: s[key].map((x) => x.id === id ? result : x) }));
+    set((s) => ({ [key]: s[key].map((x) => (x.id === id ? result : x)) }));
     return result;
   } catch (err) {
-    set((s) => ({ [key]: s[key].map((x) => x.id === id ? prev : x) }));
+    set((s) => ({ [key]: s[key].map((x) => (x.id === id ? prev : x)) }));
     throw err;
   }
 }
@@ -320,17 +348,17 @@ Reuses `Activity` model. Immutable: no PUT/DELETE routes. Inserted only via `log
 
 ### Logged events
 
-| Event | Logged? |
-|---|---|
-| Goal created/updated/deleted/status-changed | ✅ |
-| Milestone added/updated/removed | ✅ |
-| Action item created/updated/status-changed/deleted | ✅ |
-| Announcement posted/edited/pinned/deleted | ✅ |
-| Comment added/deleted | ✅ |
-| Reaction added/removed | ❌ (too noisy) |
-| Member invited/role-changed/removed/left | ✅ |
-| Workspace settings changed (name, accent, icon) | ✅ |
-| User logins | ❌ |
+| Event                                              | Logged?        |
+| -------------------------------------------------- | -------------- |
+| Goal created/updated/deleted/status-changed        | ✅             |
+| Milestone added/updated/removed                    | ✅             |
+| Action item created/updated/status-changed/deleted | ✅             |
+| Announcement posted/edited/pinned/deleted          | ✅             |
+| Comment added/deleted                              | ✅             |
+| Reaction added/removed                             | ❌ (too noisy) |
+| Member invited/role-changed/removed/left           | ✅             |
+| Workspace settings changed (name, accent, icon)    | ✅             |
+| User logins                                        | ❌             |
 
 ### UI
 
@@ -343,6 +371,7 @@ Reuses `Activity` model. Immutable: no PUT/DELETE routes. Inserted only via `log
 ## 9. CSV Export
 
 Four endpoints, all admin-only via `requirePermission(CAPABILITIES.EXPORT_CSV)`, all streamed:
+
 - `GET /api/workspaces/:id/exports/goals.csv`
 - `GET /api/workspaces/:id/exports/action-items.csv`
 - `GET /api/workspaces/:id/exports/announcements.csv`
@@ -360,11 +389,11 @@ Nodemailer with SMTP env-driven transport. Default production: Resend (`SMTP_HOS
 
 ### Triggers
 
-| Trigger | Email |
-|---|---|
-| Invitation created or resent | Yes — to invitee email |
-| Notification created with type `MENTION` | Yes — to mentioned user |
-| Notification created with other types (`ASSIGNMENT`, `STATUS_UPDATE`) | No (in-app only) |
+| Trigger                                                               | Email                   |
+| --------------------------------------------------------------------- | ----------------------- |
+| Invitation created or resent                                          | Yes — to invitee email  |
+| Notification created with type `MENTION`                              | Yes — to mentioned user |
+| Notification created with other types (`ASSIGNMENT`, `STATUS_UPDATE`) | No (in-app only)        |
 
 ### Templates
 
@@ -385,18 +414,19 @@ Fire-and-forget: `sendEmail(...)` is called inside a `Promise.resolve().then(...
 ### Notification creation
 
 `lib/notifications.js` exposes `createNotification(tx, { userId, type, message, actorId?, entityType?, entityId? })`:
+
 1. Inserts `Notification` row in `tx`
 2. After `tx` commits, emits `notification:new` to `user:<userId>` socket room
 3. If `type === 'MENTION'`, dispatches email (fire-and-forget) using mention template
 
 ### Notification types in scope
 
-| Type | Trigger |
-|---|---|
-| `MENTION` | User @mentioned in announcement body or comment or goal activity update |
-| `ASSIGNMENT` | Action item created or updated and assignee field changed (notify new assignee, only if not the actor) |
-| `STATUS_UPDATE` | Goal status changed by someone other than the goal owner (notify owner) |
-| `INVITE` | Notification model used; not emitted for the assignment scope (covered by email) |
+| Type            | Trigger                                                                                                |
+| --------------- | ------------------------------------------------------------------------------------------------------ |
+| `MENTION`       | User @mentioned in announcement body or comment or goal activity update                                |
+| `ASSIGNMENT`    | Action item created or updated and assignee field changed (notify new assignee, only if not the actor) |
+| `STATUS_UPDATE` | Goal status changed by someone other than the goal owner (notify owner)                                |
+| `INVITE`        | Notification model used; not emitted for the assignment scope (covered by email)                       |
 
 ### UI
 
@@ -434,6 +464,7 @@ Fire-and-forget: `sendEmail(...)` is called inside a `Promise.resolve().then(...
 Each phase = working software = one merge to `main`.
 
 ### Phase 1 — Foundation (~6 tasks)
+
 - Migration `20260501100000_add_team_hub_completion_fields`
 - `packages/shared/src/index.js` — `CAPABILITIES`, `ROLE_CAPABILITIES`, `hasCapability`
 - `apps/api/src/middleware/permission.js`
@@ -444,6 +475,7 @@ Each phase = working software = one merge to `main`.
 - Update top nav avatar to link to profile
 
 ### Phase 2 — Goals & Milestones (~10 tasks)
+
 - `controllers/goals.js`, `controllers/milestones.js`
 - `routes/goals.js` (replace stub) + `routes/milestones.js` (sub-mount) + `GET /:id/activity`
 - `goalsStore`, `milestonesStore`
@@ -451,6 +483,7 @@ Each phase = working software = one merge to `main`.
 - Components: `GoalCard`, `GoalFormModal`, `MilestoneList`, `GoalActivityFeed`, `StatusPill`
 
 ### Phase 3 — Announcements (~10 tasks)
+
 - Add deps: `@tiptap/react @tiptap/starter-kit @tiptap/extension-mention @tiptap/extension-link @tiptap/suggestion sanitize-html`
 - `lib/sanitize.js`
 - `controllers/announcements.js`, `controllers/comments.js`, `controllers/reactions.js`
@@ -460,6 +493,7 @@ Each phase = working software = one merge to `main`.
 - Components: `AnnouncementCard`, `AnnouncementComposer` (TipTap), `ReactionBar`, `CommentList`, `PinToggle`, `RichTextRenderer`
 
 ### Phase 4 — Action Items (~10 tasks)
+
 - Add deps: `@dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities`
 - `controllers/actionItems.js` + `PATCH /:id/move` (transactional reorder)
 - `routes/actionItems.js` (replace stub)
@@ -469,6 +503,7 @@ Each phase = working software = one merge to `main`.
 - Optimistic-UI integration: kanban DnD via `optimisticMove`
 
 ### Phase 5 — Real-time + Notifications + @mentions + Email (~12 tasks)
+
 - Add dep: `nodemailer`
 - `lib/socket.js` — full implementation per Section 6
 - `index.js` — uncomment scaffolding, attach to httpServer
@@ -486,6 +521,7 @@ Each phase = working software = one merge to `main`.
 - Top nav extension in `[workspaceId]/layout.js`
 
 ### Phase 6 — Analytics + CSV (~6 tasks)
+
 - `lib/csv.js`
 - `controllers/analytics.js` — `GET /api/workspaces/:id/stats`
 - `controllers/exports.js` — 4 endpoints
@@ -494,6 +530,7 @@ Each phase = working software = one merge to `main`.
 - Components: `StatsTiles`, `GoalCompletionChart` (Recharts BarChart), `ExportButtons`
 
 ### Phase 7 — Audit UI + Optimistic Polish + Bonus + Deploy (~12 tasks)
+
 - `controllers/audit.js` + `GET /api/workspaces/:id/audit`
 - Page: `settings/audit/page.js`
 - Components: `AuditTimeline`, `AuditFilters`, `AuditExportButton`
@@ -513,6 +550,7 @@ Each phase = working software = one merge to `main`.
 ### Railway services
 
 One Railway project, three services:
+
 1. `api` — built from `apps/api`, start command runs `prisma migrate deploy && node src/index.js`
 2. `web` — built from `apps/web`, `npm run build` → `npm start`
 3. `postgres` — Railway plugin, auto-injects `DATABASE_URL`
@@ -520,6 +558,7 @@ One Railway project, three services:
 ### Required env vars
 
 **`api` service:**
+
 - `DATABASE_URL` (auto)
 - `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET` (manual; `openssl rand -hex 32`)
 - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
@@ -529,6 +568,7 @@ One Railway project, three services:
 - `PORT` (auto)
 
 **`web` service:**
+
 - `NEXT_PUBLIC_API_URL` = public URL of `api` service
 - `NEXT_PUBLIC_SOCKET_URL` = same as `NEXT_PUBLIC_API_URL`
 

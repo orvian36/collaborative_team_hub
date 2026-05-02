@@ -10,7 +10,8 @@ import Button from '@/components/ui/Button';
 
 export default function DashboardLayout({ children }) {
   const router = useRouter();
-  const { user, isAuthenticated, isCheckingAuth, checkAuth, logout } = useAuthStore();
+  const { user, isAuthenticated, isCheckingAuth, checkAuth, logout } =
+    useAuthStore();
   const { fetchWorkspaces, activeWorkspaceId } = useWorkspaceStore();
 
   useEffect(() => {
@@ -42,12 +43,21 @@ export default function DashboardLayout({ children }) {
         <nav className="bg-white dark:bg-gray-800 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16 items-center">
-              <span className="text-xl font-bold text-primary-600">Team Hub</span>
+              <span className="text-xl font-bold text-primary-600">
+                Team Hub
+              </span>
               <div className="flex items-center gap-3">
                 {activeWorkspaceId ? (
-                  <Link href={`/dashboard/${activeWorkspaceId}/profile`} className="hidden sm:flex items-center gap-2 hover:opacity-80">
+                  <Link
+                    href={`/dashboard/${activeWorkspaceId}/profile`}
+                    className="hidden sm:flex items-center gap-2 hover:opacity-80"
+                  >
                     {user?.avatarUrl ? (
-                      <img src={user.avatarUrl} alt="avatar" className="w-8 h-8 rounded-full object-cover" />
+                      <img
+                        src={user.avatarUrl}
+                        alt="avatar"
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-bold text-sm">
                         {(user?.name?.[0] || '?').toUpperCase()}
@@ -62,7 +72,9 @@ export default function DashboardLayout({ children }) {
                     {user?.name}
                   </span>
                 )}
-                <Button variant="secondary" size="sm" onClick={() => logout()}>Logout</Button>
+                <Button variant="secondary" size="sm" onClick={() => logout()}>
+                  Logout
+                </Button>
               </div>
             </div>
           </div>

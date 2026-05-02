@@ -3,7 +3,8 @@
 import { io } from 'socket.io-client';
 import { SOCKET_EVENTS } from '@team-hub/shared';
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5000';
+const SOCKET_URL =
+  process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5000';
 
 let socket = null;
 let currentWorkspaceId = null;

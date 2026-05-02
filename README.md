@@ -11,10 +11,10 @@ Teams manage shared goals, post announcements, and track action items in real ti
 
 ## Demo accounts
 
-| Email | Password | Role |
-|---|---|---|
-| `admin@demo.com` | `demo1234` | Admin |
-| `iris@demo.com`  | `demo1234` | Admin |
+| Email            | Password   | Role   |
+| ---------------- | ---------- | ------ |
+| `admin@demo.com` | `demo1234` | Admin  |
+| `iris@demo.com`  | `demo1234` | Admin  |
 | `alice@demo.com` | `demo1234` | Member |
 | `bob@demo.com`   | `demo1234` | Member |
 
@@ -23,6 +23,7 @@ Teams manage shared goals, post announcements, and track action items in real ti
 ## Features
 
 ### Core
+
 - Email/password auth with JWT in httpOnly cookies (access + rotated refresh)
 - User profile with Cloudinary avatar upload
 - Workspaces — create, switch, invite by email (token link), Admin/Member roles
@@ -37,17 +38,19 @@ Teams manage shared goals, post announcements, and track action items in real ti
 - CSV exports — goals, action items, announcements, audit log
 
 ### Advanced features (3 of 5 — assignment minimum is 2)
+
 1. **Optimistic UI** — Status changes, reactions, pin/unpin, kanban DnD, milestone progress, inline edits all reflect instantly and roll back on error.
 2. **Advanced RBAC** — Capability matrix in `@team-hub/shared` enforced by `requirePermission(cap)` middleware on the backend and `useCapability` / `<PermissionGate>` on the frontend. Every privileged endpoint and UI button is gated against the same source of truth.
 3. **Audit log** — Immutable `Activity` table written via `logActivity(tx, ...)` inside every mutation transaction. Filterable timeline UI under Settings → Audit log; live updates via the `activity:new` socket event; CSV export.
 
 ### Bonus features
+
 - **Dark / light theme** — Tailwind class-mode + system-pref detection + persistent toggle
 - **Email notifications** — Nodemailer with SMTP env-driven transport (Resend in production, console-log fallback for local dev)
 - **Cmd+K command palette** — `cmdk` lib, navigation + quick-create + theme + sign-out
 - **OpenAPI / Swagger** — Auto-generated from JSDoc, served at `/api/docs`
 - **PWA** — Installable shell via `@ducanh2912/next-pwa` (no offline writes — see "known limitations")
-- **Tests** — *Not included; explicitly deferred per scope decision.*
+- **Tests** — _Not included; explicitly deferred per scope decision._
 
 ## Tech stack
 
@@ -58,6 +61,7 @@ Turborepo monorepo — `apps/api` (Express + Prisma + Socket.io), `apps/web` (Ne
 Requires Node 18+ and PostgreSQL 14+.
 
 1. Clone and install:
+
    ```bash
    git clone https://github.com/orvian36/collaborative_team_hub.git
    cd collaborative_team_hub
@@ -67,24 +71,28 @@ Requires Node 18+ and PostgreSQL 14+.
 2. Provision a local Postgres database (or use Railway's `DATABASE_URL`).
 
 3. Configure env files:
+
    ```bash
    cp apps/api/.env.example apps/api/.env
    # Then fill in the values described in "Environment variables" below.
    ```
 
    For the web app:
+
    ```bash
    echo 'NEXT_PUBLIC_API_URL=http://localhost:5000'   >  apps/web/.env.local
    echo 'NEXT_PUBLIC_SOCKET_URL=http://localhost:5000' >> apps/web/.env.local
    ```
 
 4. Migrate and seed:
+
    ```bash
    npm run db:migrate --workspace=@team-hub/api
    npm run db:seed    --workspace=@team-hub/api
    ```
 
 5. Run both apps:
+
    ```bash
    npm run dev
    ```
@@ -95,28 +103,28 @@ Requires Node 18+ and PostgreSQL 14+.
 
 ### `apps/api/.env`
 
-| Name | Required | Notes |
-|---|---|---|
-| `DATABASE_URL` | yes | Postgres connection string |
-| `JWT_ACCESS_SECRET` | yes | `openssl rand -hex 32` |
-| `JWT_REFRESH_SECRET` | yes | `openssl rand -hex 32` |
-| `CLOUDINARY_CLOUD_NAME` | yes | For avatar + workspace icon uploads |
-| `CLOUDINARY_API_KEY` | yes | |
-| `CLOUDINARY_API_SECRET` | yes | |
-| `CLIENT_URL` | yes | Web app URL — must match exactly for cookies + CORS |
-| `SMTP_HOST` | no | If unset, emails are logged instead of sent |
-| `SMTP_PORT` | no | Default 465 |
-| `SMTP_USER` | no | |
-| `SMTP_PASS` | no | |
-| `SMTP_FROM` | no | e.g. `Team Hub <noreply@example.com>` |
-| `PORT` | no | Default 5000 |
+| Name                    | Required | Notes                                               |
+| ----------------------- | -------- | --------------------------------------------------- |
+| `DATABASE_URL`          | yes      | Postgres connection string                          |
+| `JWT_ACCESS_SECRET`     | yes      | `openssl rand -hex 32`                              |
+| `JWT_REFRESH_SECRET`    | yes      | `openssl rand -hex 32`                              |
+| `CLOUDINARY_CLOUD_NAME` | yes      | For avatar + workspace icon uploads                 |
+| `CLOUDINARY_API_KEY`    | yes      |                                                     |
+| `CLOUDINARY_API_SECRET` | yes      |                                                     |
+| `CLIENT_URL`            | yes      | Web app URL — must match exactly for cookies + CORS |
+| `SMTP_HOST`             | no       | If unset, emails are logged instead of sent         |
+| `SMTP_PORT`             | no       | Default 465                                         |
+| `SMTP_USER`             | no       |                                                     |
+| `SMTP_PASS`             | no       |                                                     |
+| `SMTP_FROM`             | no       | e.g. `Team Hub <noreply@example.com>`               |
+| `PORT`                  | no       | Default 5000                                        |
 
 ### `apps/web/.env.local`
 
-| Name | Required | Notes |
-|---|---|---|
-| `NEXT_PUBLIC_API_URL` | yes | API base URL |
-| `NEXT_PUBLIC_SOCKET_URL` | yes | Same as API URL (Socket.io shares the HTTP server) |
+| Name                     | Required | Notes                                              |
+| ------------------------ | -------- | -------------------------------------------------- |
+| `NEXT_PUBLIC_API_URL`    | yes      | API base URL                                       |
+| `NEXT_PUBLIC_SOCKET_URL` | yes      | Same as API URL (Socket.io shares the HTTP server) |
 
 ## Scripts
 

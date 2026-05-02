@@ -29,7 +29,6 @@ export default function WorkspaceLayout({ children }) {
     return () => stopRealtime();
   }, [workspaceId, fetchNotifications, hydratePresence]);
 
-
   useEffect(() => {
     if (!isLoading && workspaces.length > 0 && !workspace) {
       router.replace('/dashboard');
@@ -51,12 +50,25 @@ export default function WorkspaceLayout({ children }) {
   const isAdmin = workspace.myRole === 'ADMIN';
   const tabs = [
     { href: `/dashboard/${workspace.id}`, label: 'Home' },
-    isAdmin && { href: `/dashboard/${workspace.id}/settings`, label: 'Settings' },
+    isAdmin && {
+      href: `/dashboard/${workspace.id}/settings`,
+      label: 'Settings',
+    },
     { href: `/dashboard/${workspace.id}/goals`, label: 'Goals' },
-    { href: `/dashboard/${workspace.id}/announcements`, label: 'Announcements' },
+    {
+      href: `/dashboard/${workspace.id}/announcements`,
+      label: 'Announcements',
+    },
     { href: `/dashboard/${workspace.id}/action-items`, label: 'Action Items' },
     { href: `/dashboard/${workspace.id}/settings/members`, label: 'Members' },
-    isAdmin && { href: `/dashboard/${workspace.id}/settings/invitations`, label: 'Invitations' },
+    isAdmin && {
+      href: `/dashboard/${workspace.id}/settings/invitations`,
+      label: 'Invitations',
+    },
+    isAdmin && {
+      href: `/dashboard/${workspace.id}/settings/audit`,
+      label: 'Audit Log',
+    },
   ].filter(Boolean);
 
   return (
@@ -69,7 +81,11 @@ export default function WorkspaceLayout({ children }) {
           <div className="w-14 h-14 rounded-lg overflow-hidden bg-white/20 flex items-center justify-center text-2xl font-bold">
             {workspace.iconUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={workspace.iconUrl} alt="" className="w-full h-full object-cover" />
+              <img
+                src={workspace.iconUrl}
+                alt=""
+                className="w-full h-full object-cover"
+              />
             ) : (
               (workspace.name[0] || '?').toUpperCase()
             )}

@@ -6,8 +6,8 @@ const { ROLES, CAPABILITIES } = require('@team-hub/shared');
 const { requirePermission } = require('../middleware/permission');
 const c = require('../controllers/workspaces');
 const analyticsController = require('../controllers/analytics');
-const exportsController   = require('../controllers/exports');
-const auditController     = require('../controllers/audit');
+const exportsController = require('../controllers/exports');
+const auditController = require('../controllers/audit');
 
 const router = express.Router();
 
@@ -31,16 +31,25 @@ const upload = multer({
 router.post('/', c.createWorkspace);
 router.get('/', c.listWorkspaces);
 router.get('/:id', requireWorkspaceMembership(), c.getWorkspace);
-router.patch('/:id', requireWorkspaceMembership(ROLES.ADMIN), c.updateWorkspace);
-router.delete('/:id', requireWorkspaceMembership(ROLES.ADMIN), c.deleteWorkspace);
+router.patch(
+  '/:id',
+  requireWorkspaceMembership(ROLES.ADMIN),
+  c.updateWorkspace
+);
+router.delete(
+  '/:id',
+  requireWorkspaceMembership(ROLES.ADMIN),
+  c.deleteWorkspace
+);
 
 router.post(
   '/:id/icon',
   requireWorkspaceMembership(ROLES.ADMIN),
-  (req, res, next) => upload.single('icon')(req, res, (err) => {
-    if (err) return res.status(400).json({ error: err.message });
-    next();
-  }),
+  (req, res, next) =>
+    upload.single('icon')(req, res, (err) => {
+      if (err) return res.status(400).json({ error: err.message });
+      next();
+    }),
   c.uploadIcon
 );
 
@@ -55,29 +64,46 @@ router.get('/:id/presence', requireWorkspaceMembership(), (req, res) => {
 });
 
 // Analytics & Exports
-router.get('/:id/stats',
+router.get(
+  '/:id/stats',
   requireWorkspaceMembership(),
-  analyticsController.getStats);
+  analyticsController.getStats
+);
 
-router.get('/:id/exports/goals.csv',
-  requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
-  exportsController.exportGoals);
+router.get(
+  '/:id/exports/goals.csv',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.EXPORT_CSV),
+  exportsController.exportGoals
+);
 
-router.get('/:id/exports/action-items.csv',
-  requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
-  exportsController.exportActionItems);
+router.get(
+  '/:id/exports/action-items.csv',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.EXPORT_CSV),
+  exportsController.exportActionItems
+);
 
-router.get('/:id/exports/announcements.csv',
-  requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
-  exportsController.exportAnnouncements);
+router.get(
+  '/:id/exports/announcements.csv',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.EXPORT_CSV),
+  exportsController.exportAnnouncements
+);
 
-router.get('/:id/exports/audit.csv',
-  requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
-  exportsController.exportAudit);
+router.get(
+  '/:id/exports/audit.csv',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.EXPORT_CSV),
+  exportsController.exportAudit
+);
 
 // Audit Log
-router.get('/:id/audit',
-  requireWorkspaceMembership(), requirePermission(CAPABILITIES.AUDIT_READ),
-  auditController.listAudit);
+router.get(
+  '/:id/audit',
+  requireWorkspaceMembership(),
+  requirePermission(CAPABILITIES.AUDIT_READ),
+  auditController.listAudit
+);
 
 module.exports = router;

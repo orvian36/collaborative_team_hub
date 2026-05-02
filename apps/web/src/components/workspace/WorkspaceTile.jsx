@@ -3,7 +3,11 @@
 import Link from 'next/link';
 
 const initials = (name) =>
-  name.split(/\s+/).slice(0, 2).map((p) => p[0]?.toUpperCase() || '').join('') || '?';
+  name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase() || '')
+    .join('') || '?';
 
 export default function WorkspaceTile({ workspace, isActive, href, title }) {
   const bg = workspace.accentColor || '#3b82f6';
@@ -18,7 +22,11 @@ export default function WorkspaceTile({ workspace, isActive, href, title }) {
     >
       {workspace.iconUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={workspace.iconUrl} alt="" className="w-full h-full object-cover" />
+        <img
+          src={workspace.iconUrl}
+          alt=""
+          className="w-full h-full object-cover"
+        />
       ) : (
         <span className="text-base">{initials(workspace.name)}</span>
       )}

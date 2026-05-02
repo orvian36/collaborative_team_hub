@@ -13,7 +13,8 @@
 function extractFromHtml(html) {
   if (!html) return [];
   const ids = [];
-  const re = /<span[^>]*\bdata-type=["']mention["'][^>]*\bdata-id=["']([a-f0-9-]{36})["']/gi;
+  const re =
+    /<span[^>]*\bdata-type=["']mention["'][^>]*\bdata-id=["']([a-f0-9-]{36})["']/gi;
   let m;
   while ((m = re.exec(html))) ids.push(m[1]);
   return Array.from(new Set(ids));

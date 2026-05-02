@@ -8,7 +8,7 @@ import useAuthStore from '@/stores/authStore';
 export default function LoginPage() {
   const router = useRouter();
   const { login, isLoading, error } = useAuthStore();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState('');
@@ -37,7 +37,10 @@ export default function LoginPage() {
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
           Or{' '}
-          <Link href="/register" className="font-medium text-primary-600 hover:text-primary-500">
+          <Link
+            href="/register"
+            className="font-medium text-primary-600 hover:text-primary-500"
+          >
             create a new workspace
           </Link>
         </p>
@@ -48,12 +51,17 @@ export default function LoginPage() {
           <form className="space-y-6" onSubmit={handleSubmit}>
             {(error || formError) && (
               <div className="bg-red-50 dark:bg-red-900/30 p-4 rounded-md">
-                <p className="text-sm text-red-700 dark:text-red-400">{error || formError}</p>
+                <p className="text-sm text-red-700 dark:text-red-400">
+                  {error || formError}
+                </p>
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Email address
               </label>
               <div className="mt-1">
@@ -71,7 +79,10 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Password
               </label>
               <div className="mt-1">

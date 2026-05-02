@@ -11,9 +11,17 @@ export default function MembersPage() {
   const router = useRouter();
   const { workspaceId } = useParams();
   const { user } = useAuthStore();
-  const workspace = useWorkspaceStore((s) => s.workspaces.find((w) => w.id === workspaceId));
+  const workspace = useWorkspaceStore((s) =>
+    s.workspaces.find((w) => w.id === workspaceId)
+  );
   const fetchWorkspaces = useWorkspaceStore((s) => s.fetchWorkspaces);
-  const { members, fetchMembers, updateMemberRole, removeMember, leaveWorkspace } = useWorkspaceMembersStore();
+  const {
+    members,
+    fetchMembers,
+    updateMemberRole,
+    removeMember,
+    leaveWorkspace,
+  } = useWorkspaceMembersStore();
 
   useEffect(() => {
     if (workspaceId) fetchMembers(workspaceId);
