@@ -74,6 +74,17 @@ const createInvitation = async (req, res) => {
       },
     });
 
+    const { sendInvitationEmail } = require('../lib/email');
+    const workspace = await prisma.workspace.findUnique({
+      where: { id: req.member.workspaceId },
+      select: { id: true, name: true, accentColor: true },
+    });
+    const inviter = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: { id: true, name: true },
+    });
+    sendInvitationEmail({ invitation, workspace, inviter }).catch((err) => console.error('email error', err));
+
     res.status(201).json({ invitation, inviteUrl: inviteUrlFor(token) });
   } catch (err) {
     console.error('createInvitation error:', err);
@@ -165,6 +176,18 @@ const resendInvitation = async (req, res) => {
       where: { id: inv.id },
       data: { status: INVITATION_STATUS.PENDING, expiresAt: ttlFromNow() },
     });
+
+    const { sendInvitationEmail } = require('../lib/email');
+    const workspace = await prisma.workspace.findUnique({
+      where: { id: inv.workspaceId },
+      select: { id: true, name: true, accentColor: true },
+    });
+    const inviter = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: { id: true, name: true },
+    });
+    sendInvitationEmail({ invitation: updated, workspace, inviter }).catch((err) => console.error('email error', err));
+
     res.status(200).json({ invitation: updated, inviteUrl: inviteUrlFor(updated.token) });
   } catch (err) {
     console.error('resendInvitation error:', err);
