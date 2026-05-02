@@ -35,6 +35,7 @@ export default function WorkspaceLayout({ children }) {
     { href: `/dashboard/${workspace.id}`, label: 'Home' },
     isAdmin && { href: `/dashboard/${workspace.id}/settings`, label: 'Settings' },
     { href: `/dashboard/${workspace.id}/goals`, label: 'Goals' },
+    { href: `/dashboard/${workspace.id}/announcements`, label: 'Announcements' },
     { href: `/dashboard/${workspace.id}/settings/members`, label: 'Members' },
     isAdmin && { href: `/dashboard/${workspace.id}/settings/invitations`, label: 'Invitations' },
   ].filter(Boolean);
