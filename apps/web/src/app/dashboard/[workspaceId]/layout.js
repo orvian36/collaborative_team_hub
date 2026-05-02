@@ -10,6 +10,7 @@ import usePresenceStore from '@/stores/presenceStore';
 import NotificationsBell from '@/components/notifications/NotificationsBell';
 import PresenceAvatars from '@/components/presence/PresenceAvatars';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import CommandPalette from '@/components/ui/CommandPalette';
 
 export default function WorkspaceLayout({ children }) {
   const router = useRouter();
@@ -106,6 +107,7 @@ export default function WorkspaceLayout({ children }) {
         })}
       </nav>
       {children}
+      <CommandPalette />
     </div>
   );
 }

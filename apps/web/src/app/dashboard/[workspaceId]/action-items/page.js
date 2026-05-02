@@ -22,6 +22,13 @@ export default function ActionItemsPage() {
 
   useEffect(() => { fetchAll(workspaceId); }, [workspaceId, fetchAll]);
 
+  useEffect(() => {
+    if (params.get('new') === '1') {
+      setEditing(null);
+      setOpen(true);
+    }
+  }, [params]);
+
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { CAPABILITIES } from '@team-hub/shared';
 import useAnnouncementsStore from '@/stores/announcementsStore';
 import useReactionsStore from '@/stores/reactionsStore';
@@ -20,10 +20,18 @@ export default function AnnouncementsPage() {
   const [composerOpen, setComposerOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     fetchAll(workspaceId);
   }, [workspaceId, fetchAll]);
+
+  useEffect(() => {
+    if (searchParams.get('new') === '1') {
+      setEditing(null);
+      setComposerOpen(true);
+    }
+  }, [searchParams]);
 
   // Hydrate reactions per visible announcement (one extra request each).
   useEffect(() => {

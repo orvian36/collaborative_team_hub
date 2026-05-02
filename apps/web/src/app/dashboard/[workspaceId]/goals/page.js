@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { CAPABILITIES } from '@team-hub/shared';
 import useGoalsStore from '@/stores/goalsStore';
 import { useCapability } from '@/hooks/useCapability';
@@ -15,10 +15,15 @@ export default function GoalsPage() {
   const canCreate = useCapability(CAPABILITIES.GOAL_CREATE);
   const [open, setOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     fetchGoals(workspaceId);
   }, [workspaceId, fetchGoals]);
+
+  useEffect(() => {
+    if (searchParams.get('new') === '1') setOpen(true);
+  }, [searchParams]);
 
   const filtered = goals.filter((g) => statusFilter === 'ALL' || g.status === statusFilter);
 
