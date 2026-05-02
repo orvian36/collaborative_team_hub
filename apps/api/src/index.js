@@ -46,7 +46,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/workspaces', require('./routes/workspaces'));
 app.use('/api/invitations', require('./routes/invitations'));
-app.use('/api/goals', require('./routes/goals'));
+app.use('/api/workspaces/:workspaceId/goals', require('./routes/goals'));
 app.use('/api/announcements', require('./routes/announcements'));
 app.use('/api/actionItems', require('./routes/actionItems'));
 
