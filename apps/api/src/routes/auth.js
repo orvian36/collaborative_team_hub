@@ -1,11 +1,24 @@
 // Authentication routes (register, login, logout, refresh, profile)
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const multer = require('multer');
 const prisma = require('../lib/prisma');
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken, setAuthCookies, clearAuthCookies, REFRESH_TOKEN_EXPIRY_MS } = require('../lib/jwt');
 const { authenticate } = require('../middleware/auth');
+const { uploadBuffer } = require('../lib/cloudinary');
 
 const router = express.Router();
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
+  fileFilter: (_req, file, cb) => {
+    if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.mimetype)) {
+      return cb(new Error('Only PNG, JPEG, or WebP images are allowed'));
+    }
+    cb(null, true);
+  },
+});
 
 /**
  * @openapi
@@ -285,6 +298,66 @@ router.get('/me', authenticate, async (req, res) => {
     res.status(200).json({ user });
   } catch (error) {
     console.error('Get profile error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/**
+ * @openapi
+ * /api/auth/me:
+ *   put:
+ *     tags: [Auth]
+ *     summary: Update profile or avatar
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               avatar:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Profile updated
+ */
+router.put('/me', authenticate, upload.single('avatar'), async (req, res) => {
+  try {
+    const data = {};
+
+    if (typeof req.body.name === 'string' && req.body.name.trim().length > 0) {
+      data.name = req.body.name.trim();
+    }
+
+    if (req.file) {
+      const url = await uploadBuffer(req.file.buffer, {
+        folder: 'team-hub/avatars',
+        publicId: `user-${req.user.id}`,
+      });
+      data.avatarUrl = url;
+    }
+
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({ error: 'No changes provided' });
+    }
+
+    const user = await prisma.user.update({
+      where: { id: req.user.id },
+      data,
+      select: { id: true, email: true, name: true, avatarUrl: true, createdAt: true },
+    });
+
+    res.status(200).json({ user });
+  } catch (error) {
+    if (error.message?.startsWith('Only PNG')) {
+      return res.status(400).json({ error: error.message });
+    }
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ error: 'Avatar must be 2MB or smaller' });
+    }
+    console.error('Update profile error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
