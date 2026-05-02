@@ -10,6 +10,7 @@ import useCommentsStore from '@/stores/commentsStore';
 import useReactionsStore from '@/stores/reactionsStore';
 import useNotificationsStore from '@/stores/notificationsStore';
 import usePresenceStore from '@/stores/presenceStore';
+import useAuditStore from '@/stores/auditStore';
 
 let unsubscribers = [];
 
@@ -24,6 +25,7 @@ export function startRealtime(workspaceId) {
   const reactions = useReactionsStore.getState();
   const notifications = useNotificationsStore.getState();
   const presence = usePresenceStore.getState();
+  const audit = useAuditStore.getState();
 
   unsubscribers.push(socketClient.on(SOCKET_EVENTS.GOAL_CREATED,        (p) => goals.upsertGoal(p.goal)));
   unsubscribers.push(socketClient.on(SOCKET_EVENTS.GOAL_UPDATED,        (p) => goals.upsertGoal(p.goal)));
@@ -53,6 +55,7 @@ export function startRealtime(workspaceId) {
   unsubscribers.push(socketClient.on(SOCKET_EVENTS.USER_OFFLINE, (p) => presence.setOffline(p.userId)));
 
   unsubscribers.push(socketClient.on(SOCKET_EVENTS.NOTIFICATION_NEW, (p) => notifications.prepend(p.notification)));
+  unsubscribers.push(socketClient.on(SOCKET_EVENTS.ACTIVITY_NEW,     (p) => audit.prepend(p.activity)));
 
   socketClient.connectAndJoin(workspaceId).then((ack) => {
     if (ack?.ok && Array.isArray(ack.onlineUserIds)) {
