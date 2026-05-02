@@ -96,5 +96,5 @@ export const api = {
   patch: (path, body) => customFetch(path, { method: 'PATCH', body: JSON.stringify(body) }),
   put: (path, body) => customFetch(path, { method: 'PUT', body: JSON.stringify(body) }),
   delete: (path) => customFetch(path, { method: 'DELETE' }),
-  upload: (path, formData) => customFetch(path, { method: 'POST', body: formData }, { isFormData: true }),
+  upload: (path, formData, { method = 'POST' } = {}) => customFetch(path, { method, body: formData }, { isFormData: true }),
 };

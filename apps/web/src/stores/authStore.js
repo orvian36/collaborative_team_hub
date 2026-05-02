@@ -54,6 +54,21 @@ const useAuthStore = create((set) => ({
     }
   },
 
+  updateProfile: async ({ name, avatarFile }) => {
+    set({ isLoading: true, error: null });
+    try {
+      const formData = new FormData();
+      if (name) formData.append('name', name);
+      if (avatarFile) formData.append('avatar', avatarFile);
+      const res = await api.upload('/api/auth/me', formData, { method: 'PUT' });
+      set({ user: res.user, isLoading: false });
+      return { success: true, user: res.user };
+    } catch (err) {
+      set({ isLoading: false, error: err.message });
+      return { success: false, error: err.message };
+    }
+  },
+
   checkAuth: async () => {
     try {
       set({ isCheckingAuth: true, error: null });
