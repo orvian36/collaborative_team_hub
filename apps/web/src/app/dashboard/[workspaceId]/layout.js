@@ -7,6 +7,8 @@ import useWorkspaceStore from '@/stores/workspaceStore';
 import { startRealtime, stopRealtime } from '@/lib/realtimeBridge';
 import useNotificationsStore from '@/stores/notificationsStore';
 import usePresenceStore from '@/stores/presenceStore';
+import NotificationsBell from '@/components/notifications/NotificationsBell';
+import PresenceAvatars from '@/components/presence/PresenceAvatars';
 
 export default function WorkspaceLayout({ children }) {
   const router = useRouter();
@@ -58,7 +60,7 @@ export default function WorkspaceLayout({ children }) {
   return (
     <div>
       <header
-        className="rounded-lg p-6 mb-6 text-white"
+        className="rounded-lg p-6 mb-6 text-white flex items-center justify-between shadow-sm"
         style={{ backgroundColor: workspace.accentColor }}
       >
         <div className="flex items-center gap-4">
@@ -76,6 +78,11 @@ export default function WorkspaceLayout({ children }) {
               <p className="text-sm opacity-90">{workspace.description}</p>
             )}
           </div>
+        </div>
+        <div className="flex items-center gap-4 bg-white/10 px-4 py-2 rounded-lg">
+          <PresenceAvatars />
+          <div className="w-px h-6 bg-white/30" />
+          <NotificationsBell />
         </div>
       </header>
       <nav className="flex gap-1 mb-6 border-b border-gray-200 dark:border-gray-700">
