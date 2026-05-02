@@ -4,6 +4,9 @@ import { useEffect } from 'react';
 import { useParams, useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import useWorkspaceStore from '@/stores/workspaceStore';
+import { startRealtime, stopRealtime } from '@/lib/realtimeBridge';
+import useNotificationsStore from '@/stores/notificationsStore';
+import usePresenceStore from '@/stores/presenceStore';
 
 export default function WorkspaceLayout({ children }) {
   const router = useRouter();
@@ -11,6 +14,17 @@ export default function WorkspaceLayout({ children }) {
   const { workspaceId } = useParams();
   const { workspaces, isLoading, setActiveWorkspaceId } = useWorkspaceStore();
   const workspace = workspaces.find((w) => w.id === workspaceId);
+
+  const { fetch: fetchNotifications } = useNotificationsStore();
+  const { hydrate: hydratePresence } = usePresenceStore();
+
+  useEffect(() => {
+    startRealtime(workspaceId);
+    fetchNotifications();
+    hydratePresence(workspaceId);
+    return () => stopRealtime();
+  }, [workspaceId, fetchNotifications, hydratePresence]);
+
 
   useEffect(() => {
     if (!isLoading && workspaces.length > 0 && !workspace) {
