@@ -1,87 +1,19 @@
-// TODO: Action Item routes
 const express = require('express');
-const router = express.Router();
+const { CAPABILITIES } = require('@team-hub/shared');
+const { authenticate } = require('../middleware/auth');
+const { requireWorkspaceMembership } = require('../middleware/workspace');
+const { requirePermission } = require('../middleware/permission');
+const c = require('../controllers/actionItems');
 
-/**
- * @openapi
- * /api/action-items:
- *   post:
- *     tags: [Action Items]
- *     summary: Create an action item
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ActionItemInput'
- *     responses:
- *       201:
- *         description: Action item created
- *   get:
- *     tags: [Action Items]
- *     summary: List action items for a workspace
- *     parameters:
- *       - in: query
- *         name: workspaceId
- *         required: true
- *         schema:
- *           type: string
- *           format: uuid
- *     responses:
- *       200:
- *         description: List of action items
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/ActionItem'
- */
+const router = express.Router({ mergeParams: true });
+router.use(authenticate);
 
-/**
- * @openapi
- * /api/action-items/{id}:
- *   get:
- *     tags: [Action Items]
- *     summary: Get action item by ID
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Action item details
- *   put:
- *     tags: [Action Items]
- *     summary: Update an action item
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ActionItemInput'
- *     responses:
- *       200:
- *         description: Action item updated
- *   delete:
- *     tags: [Action Items]
- *     summary: Delete an action item
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       204:
- *         description: Action item deleted
- */
+router.get('/',  requireWorkspaceMembership(), c.listActionItems);
+router.post('/', requireWorkspaceMembership(), requirePermission(CAPABILITIES.ACTION_ITEM_CREATE), c.createActionItem);
+
+router.get('/:actionItemId',         requireWorkspaceMembership(), c.getActionItem);
+router.put('/:actionItemId',         requireWorkspaceMembership(), requirePermission(CAPABILITIES.ACTION_ITEM_EDIT),   c.updateActionItem);
+router.patch('/:actionItemId/move',  requireWorkspaceMembership(), requirePermission(CAPABILITIES.ACTION_ITEM_EDIT),   c.moveActionItem);
+router.delete('/:actionItemId',      requireWorkspaceMembership(), requirePermission(CAPABILITIES.ACTION_ITEM_DELETE), c.deleteActionItem);
 
 module.exports = router;

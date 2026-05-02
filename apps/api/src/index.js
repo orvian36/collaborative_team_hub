@@ -48,7 +48,7 @@ app.use('/api/workspaces', require('./routes/workspaces'));
 app.use('/api/invitations', require('./routes/invitations'));
 app.use('/api/workspaces/:workspaceId/goals', require('./routes/goals'));
 app.use('/api/workspaces/:workspaceId/announcements', require('./routes/announcements'));
-app.use('/api/actionItems', require('./routes/actionItems'));
+app.use('/api/workspaces/:workspaceId/action-items', require('./routes/actionItems'));
 
 // TODO: Initialize Socket.io
 // const { Server } = require('socket.io');
