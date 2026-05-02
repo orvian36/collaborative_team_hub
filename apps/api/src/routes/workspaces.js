@@ -2,8 +2,12 @@ const express = require('express');
 const multer = require('multer');
 const { authenticate } = require('../middleware/auth');
 const { requireWorkspaceMembership } = require('../middleware/workspace');
-const { ROLES } = require('@team-hub/shared');
+const { ROLES, CAPABILITIES } = require('@team-hub/shared');
+const { requirePermission } = require('../middleware/permission');
 const c = require('../controllers/workspaces');
+const analyticsController = require('../controllers/analytics');
+const exportsController   = require('../controllers/exports');
+const auditController     = require('../controllers/audit');
 
 const router = express.Router();
 
@@ -40,12 +44,7 @@ router.post(
   c.uploadIcon
 );
 
-const analyticsController = require('../controllers/analytics');
-const exportsController   = require('../controllers/exports');
-const { CAPABILITIES } = require('@team-hub/shared');
-const { requirePermission } = require('../middleware/permission');
-
-// Sub-routers (defined in later tasks). Both need mergeParams to see :workspaceId.
+// Sub-routers. Both need mergeParams to see :workspaceId.
 router.use('/:workspaceId/members', require('./members'));
 router.use('/:workspaceId/invitations', require('./invitations.workspace'));
 
@@ -55,24 +54,30 @@ router.get('/:id/presence', requireWorkspaceMembership(), (req, res) => {
   res.json({ onlineUserIds: getOnlineUserIds(req.params.id) });
 });
 
+// Analytics & Exports
 router.get('/:id/stats',
-  authenticate, requireWorkspaceMembership(),
+  requireWorkspaceMembership(),
   analyticsController.getStats);
 
 router.get('/:id/exports/goals.csv',
-  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
+  requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
   exportsController.exportGoals);
 
 router.get('/:id/exports/action-items.csv',
-  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
+  requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
   exportsController.exportActionItems);
 
 router.get('/:id/exports/announcements.csv',
-  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
+  requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
   exportsController.exportAnnouncements);
 
 router.get('/:id/exports/audit.csv',
-  authenticate, requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
+  requireWorkspaceMembership(), requirePermission(CAPABILITIES.EXPORT_CSV),
   exportsController.exportAudit);
+
+// Audit Log
+router.get('/:id/audit',
+  requireWorkspaceMembership(), requirePermission(CAPABILITIES.AUDIT_READ),
+  auditController.listAudit);
 
 module.exports = router;
