@@ -32,15 +32,21 @@ export default function ActionItemsPage() {
   }, [params]);
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Action items
-        </h1>
+    <div>
+      <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.18em] text-subtle font-semibold">
+            The work itself
+          </p>
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-fg mt-1">
+            Action items
+          </h1>
+        </div>
         <div className="flex items-center gap-3">
           <ViewToggle value={view} />
           {canCreate && (
             <Button
+              variant="contrast"
               onClick={() => {
                 setEditing(null);
                 setOpen(true);
@@ -53,7 +59,14 @@ export default function ActionItemsPage() {
       </div>
 
       {isLoading ? (
-        <p className="text-gray-500">Loading…</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-pulse">
+          {[...Array(3)].map((_, i) => (
+            <div
+              key={i}
+              className="h-72 rounded-2xl border border-line bg-[color:var(--surface-2)]"
+            />
+          ))}
+        </div>
       ) : view === 'kanban' ? (
         <KanbanBoard
           onCardClick={(it) => {

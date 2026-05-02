@@ -23,8 +23,11 @@ export default function DashboardPage() {
   }, [isLoading, workspaces, router, getLastActiveWorkspaceId]);
 
   return (
-    <div className="flex items-center justify-center min-h-[40vh]">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+    <div className="flex items-center justify-center min-h-[40vh] text-muted">
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-7 h-7 rounded-full border-2 border-current border-t-transparent animate-spin" />
+        <span className="text-sm">Picking the right workspace</span>
+      </div>
     </div>
   );
 }

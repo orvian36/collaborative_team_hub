@@ -2,11 +2,17 @@ import { GOAL_STATUS } from '@team-hub/shared';
 
 const STYLES = {
   [GOAL_STATUS.NOT_STARTED]:
-    'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200',
+    'bg-[color:var(--surface-3)] text-muted',
   [GOAL_STATUS.IN_PROGRESS]:
-    'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
+    'bg-primary-600/10 text-primary-700 dark:text-primary-300',
   [GOAL_STATUS.COMPLETED]:
-    'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
+    'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
+};
+
+const DOT = {
+  [GOAL_STATUS.NOT_STARTED]: 'bg-ink-400',
+  [GOAL_STATUS.IN_PROGRESS]: 'bg-primary-500',
+  [GOAL_STATUS.COMPLETED]: 'bg-emerald-500',
 };
 
 const LABELS = {
@@ -16,11 +22,13 @@ const LABELS = {
 };
 
 export default function StatusPill({ status }) {
+  const key = STYLES[status] ? status : GOAL_STATUS.NOT_STARTED;
   return (
     <span
-      className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${STYLES[status] || STYLES[GOAL_STATUS.NOT_STARTED]}`}
+      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium whitespace-nowrap ${STYLES[key]}`}
     >
-      {LABELS[status] || status}
+      <span className={`w-1.5 h-1.5 rounded-full ${DOT[key]}`} aria-hidden />
+      {LABELS[key] || status}
     </span>
   );
 }

@@ -11,24 +11,29 @@ export default function NotificationsBell() {
   return (
     <div className="relative">
       <button
+        type="button"
         onClick={() => setOpen((v) => !v)}
-        className="relative p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-        aria-label="Notifications"
+        className="relative inline-flex items-center justify-center w-9 h-9 rounded-full text-muted hover:text-fg hover:bg-[color:var(--surface-2)] transition-colors focus-ring"
+        aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : ''}`}
       >
-        {/* Bell icon */}
         <svg
-          width="20"
-          height="20"
           viewBox="0 0 24 24"
+          className="w-[17px] h-[17px]"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden
         >
           <path d="M18 16v-5a6 6 0 1 0-12 0v5l-2 2h16l-2-2z" />
           <path d="M10 20a2 2 0 0 0 4 0" />
         </svg>
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] rounded-full flex items-center justify-center">
+          <span
+            className="absolute top-1.5 right-1.5 min-w-[16px] h-4 px-1 bg-rose-500 text-white text-[10px] rounded-full grid place-items-center font-semibold ring-2 ring-[color:var(--surface)]"
+            aria-hidden
+          >
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}

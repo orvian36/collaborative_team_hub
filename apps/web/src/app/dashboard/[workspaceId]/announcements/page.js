@@ -54,13 +54,19 @@ export default function AnnouncementsPage() {
   }, [announcements, workspaceId, setForAnnouncement]);
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Announcements
-        </h1>
+    <div className="max-w-3xl mx-auto">
+      <div className="flex items-end justify-between gap-4 mb-6">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.18em] text-subtle font-semibold">
+            Context, broadcast once
+          </p>
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-fg mt-1">
+            Announcements
+          </h1>
+        </div>
         {canCreate && (
           <Button
+            variant="contrast"
             onClick={() => {
               setEditing(null);
               setComposerOpen(true);
@@ -72,9 +78,31 @@ export default function AnnouncementsPage() {
       </div>
 
       {isLoading ? (
-        <p className="text-gray-500">Loading…</p>
+        <div className="space-y-4 animate-pulse">
+          {[...Array(3)].map((_, i) => (
+            <div
+              key={i}
+              className="h-32 rounded-2xl border border-line bg-[color:var(--surface-2)]"
+            />
+          ))}
+        </div>
       ) : announcements.length === 0 ? (
-        <p className="text-gray-500">No announcements yet.</p>
+        <div className="rounded-2xl border border-dashed border-line bg-[color:var(--surface)] py-16 px-6 text-center">
+          <p className="text-sm text-muted">No announcements yet.</p>
+          {canCreate && (
+            <div className="mt-4">
+              <Button
+                variant="contrast"
+                onClick={() => {
+                  setEditing(null);
+                  setComposerOpen(true);
+                }}
+              >
+                Post the first one
+              </Button>
+            </div>
+          )}
+        </div>
       ) : (
         <div className="space-y-4">
           {announcements.map((a) => (

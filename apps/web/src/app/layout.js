@@ -2,20 +2,23 @@ import './globals.css';
 import ThemeProvider from '@/components/ThemeProvider';
 
 export const metadata = {
-  title: 'Collaborative Team Hub',
+  title: 'Team Hub — One place to keep the work moving',
   description:
-    'A full-stack web application for teams to manage shared goals, post announcements, and track action items in real time.',
+    'A workspace for goals, announcements, and action items. Built so small teams can stay on the same page without another standup.',
   manifest: '/manifest.json',
 };
 
 export const viewport = {
-  themeColor: '#3b82f6',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#fafbfc' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0b12' },
+  ],
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <body className="bg-app text-fg antialiased">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

@@ -40,22 +40,40 @@ export default function CommandPalette() {
       open={open}
       onOpenChange={setOpen}
       label="Command palette"
-      className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] bg-black/40"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-[12vh] px-4 bg-black/40 backdrop-blur-sm animate-fade-in"
     >
       <Dialog.Title className="sr-only">Command Palette</Dialog.Title>
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <Command.Input
-          placeholder="Type a command…"
-          className="w-full px-4 py-3 text-sm border-b border-gray-200 dark:border-gray-700 bg-transparent focus:outline-none text-gray-900 dark:text-white"
-        />
+      <div className="bg-[color:var(--surface)] rounded-2xl shadow-lift w-full max-w-lg border border-line overflow-hidden">
+        <div className="flex items-center gap-3 px-4 border-b border-line">
+          <svg
+            viewBox="0 0 16 16"
+            className="w-4 h-4 text-subtle"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <circle cx="7" cy="7" r="4.5" />
+            <path d="m13.5 13.5-3-3" />
+          </svg>
+          <Command.Input
+            placeholder="Search or run a command…"
+            className="flex-1 py-3.5 text-sm bg-transparent focus:outline-none text-fg placeholder:text-subtle"
+          />
+          <kbd className="hidden sm:inline-flex px-1.5 py-0.5 rounded bg-[color:var(--surface-3)] font-mono text-[10px] text-subtle">
+            esc
+          </kbd>
+        </div>
         <Command.List className="max-h-80 overflow-y-auto p-2">
-          <Command.Empty className="px-3 py-6 text-center text-sm text-gray-500">
+          <Command.Empty className="px-3 py-6 text-center text-sm text-subtle">
             No results.
           </Command.Empty>
 
           <Command.Group
             heading="Navigate"
-            className="text-xs font-semibold text-gray-500 px-3 py-2 uppercase tracking-wider"
+            className="text-[11px] font-semibold text-subtle px-3 py-2 uppercase tracking-[0.14em]"
           >
             <Item onSelect={() => go(`/dashboard/${workspaceId}`)}>
               Dashboard
@@ -81,7 +99,7 @@ export default function CommandPalette() {
 
           <Command.Group
             heading="Create"
-            className="text-xs font-semibold text-gray-500 px-3 py-2 uppercase tracking-wider mt-2"
+            className="text-[11px] font-semibold text-subtle px-3 py-2 uppercase tracking-[0.14em] mt-2"
           >
             {canCreateGoal && (
               <Item
@@ -112,7 +130,7 @@ export default function CommandPalette() {
 
           <Command.Group
             heading="Actions"
-            className="text-xs font-semibold text-gray-500 px-3 py-2 uppercase tracking-wider mt-2"
+            className="text-[11px] font-semibold text-subtle px-3 py-2 uppercase tracking-[0.14em] mt-2"
           >
             <Item
               onSelect={() => {
@@ -142,8 +160,11 @@ function Item({ onSelect, children }) {
   return (
     <Command.Item
       onSelect={onSelect}
-      className="px-3 py-2 text-sm text-gray-800 dark:text-gray-200 rounded cursor-pointer aria-selected:bg-primary-100 aria-selected:text-primary-900 dark:aria-selected:bg-primary-900/40 dark:aria-selected:text-primary-100"
+      className="px-3 py-2 text-sm text-fg rounded-lg cursor-pointer aria-selected:bg-[color:var(--surface-2)] aria-selected:text-fg flex items-center gap-2"
     >
+      <span className="w-4 h-4 rounded-md bg-primary-600/12 grid place-items-center text-primary-700 dark:text-primary-300 text-[10px]">
+        →
+      </span>
       {children}
     </Command.Item>
   );
