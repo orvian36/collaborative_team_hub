@@ -139,6 +139,20 @@ async function changeGoalStatus(req, res) {
       entityId:    g.id,
       metadata:    { from: goal.status, to: status },
     });
+
+    if (goal.ownerId && goal.ownerId !== req.user.id) {
+      const { createNotification } = require('../lib/notifications');
+      const { NOTIFICATION_TYPES } = require('@team-hub/shared');
+      await createNotification(tx, {
+        userId:     goal.ownerId,
+        type:       NOTIFICATION_TYPES.STATUS_UPDATE,
+        message:    `${req.user.name || 'Someone'} changed the status of "${goal.title}" to ${status}`,
+        actorId:    req.user.id,
+        entityType: 'goal',
+        entityId:   goal.id,
+      });
+    }
+
     return g;
   });
 
