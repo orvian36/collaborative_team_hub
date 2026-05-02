@@ -30,6 +30,7 @@ const assertNotLastAdmin = async (tx, workspaceId, leavingMemberId) => {
  */
 const listMembers = async (req, res) => {
   try {
+    const search = (req.query.search || '').trim().toLowerCase();
     const members = await prisma.workspaceMember.findMany({
       where: { workspaceId: req.params.workspaceId },
       include: {
@@ -38,7 +39,7 @@ const listMembers = async (req, res) => {
       orderBy: [{ role: 'asc' }, { joinedAt: 'asc' }],
     });
 
-    const out = members.map((m) => ({
+    let out = members.map((m) => ({
       id: m.id,
       userId: m.user.id,
       name: m.user.name,
@@ -47,6 +48,13 @@ const listMembers = async (req, res) => {
       role: m.role,
       joinedAt: m.joinedAt,
     }));
+
+    if (search) {
+      out = out.filter((m) =>
+        m.name.toLowerCase().includes(search) || m.email.toLowerCase().includes(search)
+      );
+    }
+
     res.status(200).json({ members: out });
   } catch (err) {
     console.error('listMembers error:', err);
