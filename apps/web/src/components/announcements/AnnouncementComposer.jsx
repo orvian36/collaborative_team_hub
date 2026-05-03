@@ -1,6 +1,8 @@
+// apps/web/src/components/announcements/AnnouncementComposer.jsx
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { createRef, useEffect, useMemo, useRef, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Mention from '@tiptap/extension-mention';
@@ -8,7 +10,9 @@ import Link from '@tiptap/extension-link';
 import { useParams } from 'next/navigation';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
-import { api } from '@/lib/api';
+import MentionList from '../mentions/MentionList';
+import { filterMembers } from '../mentions/filterMembers';
+import { useWorkspaceMembers } from '../mentions/useWorkspaceMembers';
 
 export default function AnnouncementComposer({
   open,
@@ -20,6 +24,14 @@ export default function AnnouncementComposer({
   const [title, setTitle] = useState(initial?.title || '');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  const { members } = useWorkspaceMembers(workspaceId);
+  // The TipTap suggestion `items` callback runs outside React's render tree;
+  // it reads the current member list synchronously through this ref.
+  const membersRef = useRef(members);
+  useEffect(() => {
+    membersRef.current = members;
+  }, [members]);
 
   const extensions = useMemo(
     () => [
@@ -46,40 +58,68 @@ export default function AnnouncementComposer({
         ],
         suggestion: {
           char: '@',
-          items: async ({ query }) => {
-            try {
-              const res = await api.get(
-                `/api/workspaces/${workspaceId}/members?search=${encodeURIComponent(query || '')}`
-              );
-              return (res.members || [])
-                .slice(0, 5)
-                .map((m) => ({ id: m.user.id, label: m.user.name }));
-            } catch {
-              return [];
-            }
-          },
+          items: ({ query }) => filterMembers(membersRef.current, query),
           render: () => {
-            // Minimal popover: render a list of buttons; full a11y polish is out of scope.
-            let popup;
+            let container = null;
+            let root = null;
+            const listRef = createRef();
+
+            const draw = (props) => {
+              if (!props.clientRect) return;
+              const rect = props.clientRect();
+              if (!rect) return;
+              const position = { top: rect.bottom + 4, left: rect.left };
+              root.render(
+                <MentionList
+                  ref={listRef}
+                  items={props.items}
+                  loading={false}
+                  position={position}
+                  onSelect={(m) =>
+                    props.command({ id: m.user.id, label: m.user.name })
+                  }
+                />
+              );
+            };
+
             return {
               onStart: (props) => {
-                popup = renderMentionPopup(props);
+                container = document.createElement('div');
+                document.body.appendChild(container);
+                root = createRoot(container);
+                draw(props);
               },
-              onUpdate: (props) => popup?.update(props),
-              onKeyDown: (props) => popup?.onKeyDown(props),
-              onExit: () => popup?.destroy(),
+              onUpdate: (props) => {
+                draw(props);
+              },
+              onKeyDown: (props) => {
+                if (props.event.key === 'Escape') return false; // let TipTap close
+                return listRef.current?.onKeyDown(props.event) ?? false;
+              },
+              onExit: () => {
+                root?.unmount();
+                container?.remove();
+                root = null;
+                container = null;
+              },
             };
           },
         },
       }),
     ],
-    [workspaceId]
+    []
   );
 
   const editor = useEditor({
     extensions,
     content: initial?.content || '<p></p>',
     immediatelyRender: false,
+    editorProps: {
+      attributes: {
+        class:
+          'tiptap-editor-content prose prose-sm max-w-none dark:prose-invert focus:outline-none',
+      },
+    },
   });
 
   useEffect(() => {
@@ -124,7 +164,10 @@ export default function AnnouncementComposer({
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Content
           </label>
-          <div className="border border-gray-300 dark:border-gray-700 rounded-md p-3 min-h-[150px] prose prose-sm max-w-none dark:prose-invert dark:bg-gray-900">
+          <div
+            onClick={() => editor?.commands.focus()}
+            className="tiptap-editor border border-gray-300 dark:border-gray-700 rounded-md p-3 min-h-[240px] dark:bg-gray-900 cursor-text"
+          >
             <EditorContent editor={editor} />
           </div>
         </div>
@@ -142,15 +185,4 @@ export default function AnnouncementComposer({
       </form>
     </Modal>
   );
-}
-
-function renderMentionPopup(_props) {
-  // Very small fallback popup: rely on TipTap's default suggestion flow with
-  // basic visual cue. The full implementation can be enriched later; this
-  // ships a working mention typeahead via the editor's built-in command queue.
-  return {
-    update: () => {},
-    onKeyDown: () => false,
-    destroy: () => {},
-  };
 }

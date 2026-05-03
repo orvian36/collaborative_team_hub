@@ -1,11 +1,16 @@
 {
-  "$schema": "https://railway.com/railway.schema.json",
+  "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "builder": "NIXPACKS"
+    "builder": "RAILPACK",
+    "buildCommand": "npm run build --workspace=@team-hub/web"
   },
   "deploy": {
-    "startCommand": "npm start",
+    "startCommand": "npm run start --workspace=@team-hub/web",
     "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 5
+    "restartPolicyMaxRetries": 10
+  },
+  "env": {
+    "NEXT_PUBLIC_API_URL": "http://localhost:5000",
+    "NEXT_PUBLIC_SOCKET_URL": "http://localhost:5000"
   }
 }

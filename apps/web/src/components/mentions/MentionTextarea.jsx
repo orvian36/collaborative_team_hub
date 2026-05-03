@@ -1,16 +1,20 @@
+// apps/web/src/components/mentions/MentionTextarea.jsx
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { api } from '@/lib/api';
+import { filterMembers } from './filterMembers';
+import { useWorkspaceMembers } from './useWorkspaceMembers';
+import { getCaretCoordinates } from './caretCoordinates';
+import MentionList from './MentionList';
 
 /**
  * Plain-text textarea with @-mention typeahead. Emits the value as
  * markdown-style tokens: "Hi @[Alice Smith](user-id-uuid)".
  *
- * Used by comments and the goal activity composer (Phase 5 will hook into
- * this for goal updates). The TipTap editor handles announcement bodies
- * with its own mention extension.
+ * Used by comments and the goal-activity composer. The TipTap editor in
+ * AnnouncementComposer handles its own mention extension but mounts the
+ * same MentionList component for visual parity.
  */
 export default function MentionTextarea({
   value,
@@ -19,76 +23,102 @@ export default function MentionTextarea({
   rows = 3,
 }) {
   const { workspaceId } = useParams();
-  const ref = useRef(null);
-  const [suggestions, setSuggestions] = useState([]);
+  const { members, loading } = useWorkspaceMembers(workspaceId);
+  const taRef = useRef(null);
+  const listRef = useRef(null);
+  // showAt: { start, caret } — start is the @ index, caret is the cursor index
   const [showAt, setShowAt] = useState(null);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
 
-  useEffect(() => {
-    if (!showAt) {
-      setSuggestions([]);
-      return;
-    }
-    const term = value.slice(showAt.start + 1, showAt.caret);
-    let cancelled = false;
-    api
-      .get(
-        `/api/workspaces/${workspaceId}/members?search=${encodeURIComponent(term)}`
-      )
-      .then((r) => {
-        if (!cancelled) setSuggestions((r.members || []).slice(0, 5));
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [value, showAt, workspaceId]);
+  const query = showAt ? value.slice(showAt.start + 1, showAt.caret) : '';
+  const filtered = useMemo(
+    () => (showAt ? filterMembers(members, query) : []),
+    [members, query, showAt]
+  );
 
-  const onKeyUp = (e) => {
-    const caret = e.target.selectionStart;
+  const closePopup = () => setShowAt(null);
+
+  const recomputeFromCaret = (caret) => {
     const before = value.slice(0, caret);
     const at = before.lastIndexOf('@');
-    if (at < 0 || /\s/.test(before.slice(at + 1))) {
-      setShowAt(null);
+    if (at < 0) return closePopup();
+    // Bail if there's whitespace between the @ and the caret.
+    if (/\s/.test(before.slice(at + 1))) return closePopup();
+    // Bail if @ is mid-word (e.g. an email address).
+    const charBefore = at > 0 ? before[at - 1] : '';
+    if (charBefore && !/\s/.test(charBefore)) return closePopup();
+    setShowAt({ start: at, caret });
+    if (taRef.current) {
+      setPosition(getCaretCoordinates(taRef.current, at));
+    }
+  };
+
+  const onChangeInternal = (e) => {
+    onChange(e.target.value);
+    // Defer to next tick so selectionStart reflects the post-change caret.
+    requestAnimationFrame(() => {
+      const ta = taRef.current;
+      if (ta) recomputeFromCaret(ta.selectionStart);
+    });
+  };
+
+  const onKeyDown = (e) => {
+    if (!showAt) return;
+    // Esc always closes; let MentionList tell us if it consumed nav keys.
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closePopup();
       return;
     }
-    setShowAt({ start: at, caret });
+    const handled = listRef.current?.onKeyDown(e);
+    if (handled) e.preventDefault();
   };
 
   const insertMention = (member) => {
     if (!showAt) return;
     const token = `@[${member.user.name}](${member.user.id})`;
-    const next =
-      value.slice(0, showAt.start) + token + value.slice(showAt.caret);
+    const next = value.slice(0, showAt.start) + token + value.slice(showAt.caret);
     onChange(next);
-    setShowAt(null);
-    setTimeout(() => ref.current?.focus(), 0);
+    closePopup();
+    requestAnimationFrame(() => {
+      const ta = taRef.current;
+      if (!ta) return;
+      const pos = showAt.start + token.length;
+      ta.focus();
+      ta.setSelectionRange(pos, pos);
+    });
   };
 
+  // Close the popup if the textarea loses focus (clicking the popup uses
+  // mousedown + preventDefault so it does NOT blur the textarea).
+  useEffect(() => {
+    const ta = taRef.current;
+    if (!ta) return;
+    const onBlur = () => closePopup();
+    ta.addEventListener('blur', onBlur);
+    return () => ta.removeEventListener('blur', onBlur);
+  }, []);
+
   return (
-    <div className="relative">
+    <>
       <textarea
-        ref={ref}
+        ref={taRef}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onKeyUp={onKeyUp}
+        onChange={onChangeInternal}
+        onKeyDown={onKeyDown}
         rows={rows}
         placeholder={placeholder}
-        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white text-sm"
+        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
       />
-      {showAt && suggestions.length > 0 && (
-        <div className="absolute z-10 mt-1 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
-          {suggestions.map((m) => (
-            <button
-              key={m.user.id}
-              onClick={() => insertMention(m)}
-              className="block w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              <span className="font-medium">{m.user.name}</span>
-              <span className="ml-2 text-xs text-gray-500">{m.user.email}</span>
-            </button>
-          ))}
-        </div>
+      {showAt && (
+        <MentionList
+          ref={listRef}
+          items={filtered}
+          loading={loading}
+          onSelect={insertMention}
+          position={position}
+        />
       )}
-    </div>
+    </>
   );
 }
