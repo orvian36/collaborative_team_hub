@@ -8,9 +8,5 @@
     "startCommand": "npm run start --workspace=@team-hub/web",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
-  },
-  "env": {
-    "NEXT_PUBLIC_API_URL": "http://localhost:5000",
-    "NEXT_PUBLIC_SOCKET_URL": "http://localhost:5000"
   }
 }

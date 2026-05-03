@@ -8,21 +8,5 @@
     "startCommand": "npm run start --workspace=@team-hub/api",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
-  },
-  "env": {
-    "DATABASE_URL": "postgresql://postgres.qnowknokdlfiggojeqjr:G2nx6nn_zE%25Vw3B@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres?pgbouncer=true",
-    "JWT_ACCESS_SECRET": "your-access-secret-change-me",
-    "JWT_REFRESH_SECRET": "your-refresh-secret-change-me",
-    "CLOUDINARY_CLOUD_NAME": "dk12bpuq5",
-    "CLOUDINARY_API_KEY": "843333974367952",
-    "CLOUDINARY_API_SECRET": "ySnWZSC_opZL-CXnsAJgNg1A2gw",
-    "CLIENT_URL": "http://localhost:3000",
-    "PORT": "5000",
-    "NODE_ENV": "production",
-    "SMTP_HOST": "smtp.gmail.com",
-    "SMTP_PORT": "465",
-    "SMTP_USER": "hr665102@gmail.com",
-    "SMTP_PASS": "zsch trhd zycy lmkw",
-    "SMTP_FROM": "Team Hub <hr665102@gmail.com>"
   }
 }
