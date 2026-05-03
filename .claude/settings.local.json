@@ -42,7 +42,10 @@
       "Bash(git push *)",
       "Bash(git merge *)",
       "Bash(npm run *)",
-      "Bash(npx --workspace=@team-hub/api prisma format --schema apps/api/prisma/schema.prisma)"
+      "Bash(npx --workspace=@team-hub/api prisma format --schema apps/api/prisma/schema.prisma)",
+      "Bash(git -C \"C:/Users/Best Laptop Gallery/Desktop/live/collaborative_team_hub/\" log --oneline -n 30)",
+      "Bash(git -C \"C:/Users/Best Laptop Gallery/Desktop/live/collaborative_team_hub/\" log --oneline)",
+      "Bash(git check-ignore *)"
     ]
   }
 }
