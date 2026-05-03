@@ -44,7 +44,7 @@ export default function DashboardLayout({ children }) {
     <div className="min-h-screen flex bg-app">
       <WorkspaceRail />
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="sticky top-0 z-20 bg-[color:var(--bg)]/85 backdrop-blur-md border-b border-line">
+        <header className="sticky top-0 z-40 bg-[color:var(--bg)]/85 backdrop-blur-md border-b border-line">
           <div className="flex items-center justify-between gap-4 px-4 sm:px-6 h-14">
             <div className="flex items-center gap-2 min-w-0">
               <span className="hidden sm:inline-flex font-semibold tracking-tight text-[15px]">
@@ -105,7 +105,7 @@ export default function DashboardLayout({ children }) {
                     />
                     <div
                       role="menu"
-                      className="absolute right-0 top-full mt-2 w-60 rounded-xl border border-line bg-[color:var(--surface)] shadow-lift overflow-hidden z-40 animate-fade-in"
+                      className="absolute right-0 top-full mt-2 w-60 rounded-xl border border-line bg-[color:var(--surface)] shadow-lift overflow-hidden z-50 animate-fade-in"
                     >
                       <div className="px-4 py-3 border-b border-line">
                         <p className="text-sm font-medium truncate">
