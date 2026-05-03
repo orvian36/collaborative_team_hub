@@ -13,6 +13,7 @@ export default function ProfilePage() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log('Submitting profile update. Name:', name, 'File:', avatarFile);
     setMsg('');
     const r = await updateProfile({
       name: name !== user?.name ? name : undefined,

@@ -344,6 +344,7 @@ router.get('/me', authenticate, async (req, res) => {
  */
 router.put('/me', authenticate, upload.single('avatar'), async (req, res) => {
   try {
+    console.log('PUT /me hit! Body:', req.body, 'File:', req.file ? req.file.originalname : 'none');
     const data = {};
 
     if (typeof req.body.name === 'string' && req.body.name.trim().length > 0) {
