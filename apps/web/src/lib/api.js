@@ -49,17 +49,11 @@ const customFetch = async (url, options = {}, { isFormData = false } = {}) => {
           const error = new Error('Session expired');
           error.status = 401;
           onRefreshed(error);
-          if (typeof window !== 'undefined') {
-            window.location.href = '/login';
-          }
           throw error;
         }
       } catch (error) {
         isRefreshing = false;
         onRefreshed(error);
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
-        }
         throw error;
       }
     } else {
