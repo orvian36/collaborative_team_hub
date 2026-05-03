@@ -19,7 +19,8 @@ const useActionItemsStore = create((set, get) => ({
         `/api/workspaces/${workspaceId}/action-items`
       );
       const buckets = EMPTY_BUCKETS();
-      for (const item of actionItems) {
+      const items = actionItems || [];
+      for (const item of items) {
         if (!buckets[item.status]) buckets[item.status] = [];
         buckets[item.status].push(item);
       }

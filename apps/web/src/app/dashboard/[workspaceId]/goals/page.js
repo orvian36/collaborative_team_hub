@@ -11,7 +11,7 @@ import Button from '@/components/ui/Button';
 
 export default function GoalsPage() {
   const { workspaceId } = useParams();
-  const { goals, isLoading, fetchGoals, createGoal } = useGoalsStore();
+  const { goals = [], isLoading, fetchGoals, createGoal } = useGoalsStore();
   const canCreate = useCapability(CAPABILITIES.GOAL_CREATE);
   const [open, setOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState('ALL');
@@ -25,11 +25,13 @@ export default function GoalsPage() {
     if (searchParams.get('new') === '1') setOpen(true);
   }, [searchParams]);
 
-  const filtered = goals.filter(
+  const safeGoals = Array.isArray(goals) ? goals : [];
+
+  const filtered = safeGoals.filter(
     (g) => statusFilter === 'ALL' || g.status === statusFilter
   );
 
-  const counts = goals.reduce(
+  const counts = safeGoals.reduce(
     (acc, g) => {
       acc.ALL += 1;
       acc[g.status] = (acc[g.status] || 0) + 1;

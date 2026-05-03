@@ -11,7 +11,7 @@ const useGoalsStore = create((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const { goals } = await api.get(`/api/workspaces/${workspaceId}/goals`);
-      set({ goals, isLoading: false });
+      set({ goals: goals || [], isLoading: false });
     } catch (err) {
       set({ error: err.message, isLoading: false });
     }

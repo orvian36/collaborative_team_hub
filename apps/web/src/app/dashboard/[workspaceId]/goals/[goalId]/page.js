@@ -17,10 +17,14 @@ import { useCapability } from '@/hooks/useCapability';
 export default function GoalDetailPage() {
   const router = useRouter();
   const { workspaceId, goalId } = useParams();
-  const { currentGoal, fetchGoal, updateGoal, changeStatus, deleteGoal } =
-    useGoalsStore();
-  const ms = useMilestonesStore();
-  const milestones = ms.byGoalId[goalId] || [];
+  const currentGoal = useGoalsStore((s) => s.currentGoal);
+  const fetchGoal = useGoalsStore((s) => s.fetchGoal);
+  const updateGoal = useGoalsStore((s) => s.updateGoal);
+  const changeStatus = useGoalsStore((s) => s.changeStatus);
+  const deleteGoal = useGoalsStore((s) => s.deleteGoal);
+  const fetchForGoal = useMilestonesStore((s) => s.fetchForGoal);
+  const byGoalId = useMilestonesStore((s) => s.byGoalId);
+  const milestones = byGoalId[goalId] || [];
   const canEdit = useCapability(CAPABILITIES.GOAL_EDIT);
   const canDelete = useCapability(CAPABILITIES.GOAL_DELETE);
   const [editOpen, setEditOpen] = useState(false);
@@ -30,8 +34,12 @@ export default function GoalDetailPage() {
     fetchGoal(workspaceId, goalId).catch(() =>
       router.push(`/dashboard/${workspaceId}/goals`)
     );
-    ms.fetchForGoal(workspaceId, goalId);
-  }, [workspaceId, goalId, fetchGoal, ms, router]);
+    fetchForGoal(workspaceId, goalId);
+  }, [workspaceId, goalId, fetchGoal, fetchForGoal, router]);
+
+  const createMilestone = useMilestonesStore((s) => s.create);
+  const updateMilestone = useMilestonesStore((s) => s.update);
+  const removeMilestone = useMilestonesStore((s) => s.remove);
 
   if (!currentGoal)
     return (
@@ -99,9 +107,9 @@ export default function GoalDetailPage() {
       <section>
         <MilestoneList
           milestones={milestones}
-          onCreate={(p) => ms.create(workspaceId, goalId, p)}
-          onUpdate={(id, p) => ms.update(workspaceId, goalId, id, p)}
-          onRemove={(id) => ms.remove(workspaceId, goalId, id)}
+          onCreate={(p) => createMilestone(workspaceId, goalId, p)}
+          onUpdate={(id, p) => updateMilestone(workspaceId, goalId, id, p)}
+          onRemove={(id) => removeMilestone(workspaceId, goalId, id)}
         />
       </section>
 

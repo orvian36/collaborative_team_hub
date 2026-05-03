@@ -12,7 +12,7 @@ const useAnnouncementsStore = create((set, get) => ({
       const { announcements } = await api.get(
         `/api/workspaces/${workspaceId}/announcements`
       );
-      set({ announcements, isLoading: false });
+      set({ announcements: announcements || [], isLoading: false });
     } catch (err) {
       set({ isLoading: false });
       throw err;
