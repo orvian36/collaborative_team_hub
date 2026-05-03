@@ -1,0 +1,28 @@
+/* apps/web/src/styles/tiptap.css */
+
+/* Make the inner ProseMirror element fill the wrapper so clicking
+   anywhere in the box focuses the editor. The wrapper sets min-height;
+   ProseMirror inherits it. */
+.tiptap-editor .tiptap-editor-content,
+.tiptap-editor .ProseMirror {
+  min-height: 100%;
+  outline: none;
+}
+
+/* Reasonable spacing inside the editor without depending on `prose`
+   variants that compress empty editors into one visible row. */
+.tiptap-editor .ProseMirror p {
+  margin: 0 0 0.5em 0;
+}
+.tiptap-editor .ProseMirror p:last-child {
+  margin-bottom: 0;
+}
+
+/* Placeholder for empty editors (TipTap's data-placeholder convention). */
+.tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: rgb(156 163 175); /* gray-400 */
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
