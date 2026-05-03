@@ -1,11 +1,15 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Button from '../ui/Button';
 
 export default function AvatarUpload({ currentUrl, onSelect }) {
   const inputRef = useRef(null);
   const [preview, setPreview] = useState(null);
+
+  useEffect(() => {
+    setPreview(null);
+  }, [currentUrl]);
 
   const onFile = (e) => {
     const f = e.target.files?.[0];
@@ -20,6 +24,8 @@ export default function AvatarUpload({ currentUrl, onSelect }) {
     }
     setPreview(URL.createObjectURL(f));
     onSelect(f);
+    // clear input value so the same file can be selected again
+    e.target.value = '';
   };
 
   const url = preview || currentUrl;
