@@ -1,7 +1,7 @@
 # Collaborative Team Hub
 
 ## 📖 Project Overview
-Full-stack collaboration platform built for the **FredoCloud Technical Assessment**. This platform enables teams to manage shared goals, track action items via Kanban, and communicate through real-time announcements and notifications.
+Full-stack collaboration platform designed for modern teams. This platform enables teams to manage shared goals, track action items via Kanban, and communicate through real-time announcements and notifications.
 
 ### 🚀 Live Demo & Documentation
 - **Web App:** [collaborativeteamhub-production.up.railway.app](https://collaborativeteamhub-production.up.railway.app/)
