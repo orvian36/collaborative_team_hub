@@ -17,13 +17,46 @@ function getTransporter() {
     };
     return transporter;
   }
+  // Gmail app passwords arrive formatted "xxxx xxxx xxxx xxxx" — strip whitespace.
+  const pass = (process.env.SMTP_PASS || '').replace(/\s+/g, '');
   transporter = nodemailer.createTransport({
     host,
     port: Number(process.env.SMTP_PORT || 465),
     secure: Number(process.env.SMTP_PORT || 465) === 465,
-    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+    auth: { user: process.env.SMTP_USER, pass },
   });
   return transporter;
+}
+
+/**
+ * Connects to the configured SMTP server and reports the result. Called once
+ * at server startup so misconfigured credentials are surfaced immediately
+ * instead of silently failing on the first invitation/@mention.
+ */
+async function verifyEmailTransport() {
+  const host = process.env.SMTP_HOST;
+  if (!host) {
+    console.log(
+      '📧 Email: SMTP_HOST not set — emails will be logged to console, not sent.'
+    );
+    return false;
+  }
+  try {
+    const t = getTransporter();
+    await t.verify();
+    console.log(
+      `📧 Email: SMTP transport ready (${host}, user=${process.env.SMTP_USER || '<unset>'})`
+    );
+    return true;
+  } catch (err) {
+    console.error(
+      `📧 Email: SMTP transport FAILED (${host}): ${err.message}`
+    );
+    console.error(
+      '   Sends will be attempted but will likely fail. Check SMTP_USER / SMTP_PASS / SMTP_PORT.'
+    );
+    return false;
+  }
 }
 
 /**
@@ -83,4 +116,9 @@ async function sendMentionEmail({ notification }) {
   return sendEmail({ to: recipient.email, subject, html, text });
 }
 
-module.exports = { sendEmail, sendInvitationEmail, sendMentionEmail };
+module.exports = {
+  sendEmail,
+  sendInvitationEmail,
+  sendMentionEmail,
+  verifyEmailTransport,
+};

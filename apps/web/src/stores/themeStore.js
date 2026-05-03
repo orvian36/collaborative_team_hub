@@ -2,13 +2,8 @@ import { create } from 'zustand';
 
 const KEY = 'theme';
 
-const initial = (() => {
-  if (typeof window === 'undefined') return 'system';
-  return localStorage.getItem(KEY) || 'system';
-})();
-
 const useThemeStore = create((set, get) => ({
-  theme: initial, // 'light' | 'dark' | 'system'
+  theme: 'system', // 'light' | 'dark' | 'system' — kept SSR-consistent; real value loaded in hydrate()
 
   set: (theme) => {
     if (typeof window !== 'undefined') localStorage.setItem(KEY, theme);
@@ -23,7 +18,10 @@ const useThemeStore = create((set, get) => ({
   },
 
   hydrate: () => {
-    apply(get().theme);
+    if (typeof window === 'undefined') return;
+    const stored = localStorage.getItem(KEY) || 'system';
+    if (stored !== get().theme) set({ theme: stored });
+    apply(stored);
   },
 }));
 

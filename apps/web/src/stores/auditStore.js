@@ -24,14 +24,13 @@ const useAuditStore = create((set, get) => ({
         `/api/workspaces/${workspaceId}/audit?${params.toString()}`
       );
       set({
-        events: data.events,
-        page: data.page,
-        totalPages: data.totalPages,
+        events: data.events ?? [],
+        page: data.page ?? page,
+        totalPages: data.totalPages ?? 1,
         isLoading: false,
       });
-    } catch (err) {
+    } catch {
       set({ isLoading: false });
-      throw err;
     }
   },
 

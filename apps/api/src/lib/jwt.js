@@ -46,17 +46,19 @@ const verifyRefreshToken = (token) => {
  * Set HTTP-Only cookies for authentication
  */
 const setAuthCookies = (res, accessToken, refreshToken) => {
+  const isProd = process.env.NODE_ENV === 'production';
+
   res.cookie('accessToken', accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'strict',
     maxAge: 15 * 60 * 1000, // 15 minutes
   });
 
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'strict',
     path: '/api/auth/refresh', // Restrict path for better security
     maxAge: REFRESH_TOKEN_EXPIRY_MS,
   });
@@ -66,8 +68,14 @@ const setAuthCookies = (res, accessToken, refreshToken) => {
  * Clear HTTP-Only authentication cookies
  */
 const clearAuthCookies = (res) => {
-  res.clearCookie('accessToken');
-  res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
+  const isProd = process.env.NODE_ENV === 'production';
+  const opts = {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'strict',
+  };
+  res.clearCookie('accessToken', opts);
+  res.clearCookie('refreshToken', { ...opts, path: '/api/auth/refresh' });
 };
 
 module.exports = {

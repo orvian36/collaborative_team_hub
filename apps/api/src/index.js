@@ -70,4 +70,8 @@ initSocket(server);
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 API server running on port ${PORT}`);
+  // Async verify SMTP — does not block server start, but logs the result so
+  // misconfigured credentials are visible right away.
+  const { verifyEmailTransport } = require('./lib/email');
+  verifyEmailTransport();
 });
