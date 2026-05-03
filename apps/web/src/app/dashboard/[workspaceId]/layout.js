@@ -93,14 +93,18 @@ export default function WorkspaceLayout({ children }) {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <section className="relative overflow-hidden rounded-2xl border border-line bg-[color:var(--surface)] mb-5">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.18]"
-          style={{
-            background: `radial-gradient(60% 100% at 0% 0%, ${accent}, transparent 60%)`,
-          }}
-        />
+      <section className="relative z-20 rounded-2xl border border-line bg-[color:var(--surface)] mb-5">
+        {/* Background layer with its own clipping */}
+        <div className="absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none">
+          <div
+            aria-hidden
+            className="absolute inset-0 opacity-[0.18]"
+            style={{
+              background: `radial-gradient(60% 100% at 0% 0%, ${accent}, transparent 60%)`,
+            }}
+          />
+        </div>
+
         <div className="relative flex items-center justify-between gap-4 p-5 sm:p-6">
           <div className="flex items-center gap-4 min-w-0">
             <div
