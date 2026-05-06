@@ -1,0 +1,189 @@
+{
+  "apps/api/src/lib/jwt.js": {
+    "description": "JSON Web Token utility for authentication. Manages generation and verification of access (15m) and refresh (7d) tokens, and handles httpOnly cookie management with secure/sameSite defaults.",
+    "tags": ["library", "authentication", "jwt", "cookies", "security"],
+    "dependencies": ["jsonwebtoken"],
+    "connections": [
+      { "to": "apps/api/src/middleware/auth.js", "type": "used_by_middleware" },
+      { "to": "apps/api/src/routes/auth.js", "type": "used_by_routes" }
+    ]
+  },
+  "apps/api/src/lib/mentions.js": {
+    "description": "Regex-based extractor for user @mentions. Supports both sanitized HTML spans (TipTap format) and markdown tokens (used in comments and goals).",
+    "tags": ["library", "mentions", "regex", "parsing"],
+    "dependencies": [],
+    "connections": [
+      { "to": "apps/api/src/controllers/announcements.js", "type": "used_by" },
+      { "to": "apps/api/src/controllers/comments.js", "type": "used_by" }
+    ]
+  },
+  "apps/api/src/lib/notifications.js": {
+    "description": "Core notification dispatcher. Persists notification rows and pushes real-time alerts to specific users via Socket.io. Also triggers email alerts for mentions.",
+    "tags": ["library", "notifications", "real-time", "alerts"],
+    "dependencies": ["./socket", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/src/lib/socket.js", "type": "emits_to_user" },
+      { "to": "apps/api/src/lib/email.js", "type": "sends_email_alerts" }
+    ]
+  },
+  "apps/api/src/lib/prisma.js": {
+    "description": "PrismaClient singleton. Ensures a single connection pool is shared across the entire API to prevent connection exhaustion during development reloads.",
+    "tags": ["library", "database", "prisma", "singleton"],
+    "dependencies": ["@prisma/client"],
+    "connections": [
+      { "to": "apps/api/prisma/schema.prisma", "type": "instantiates" }
+    ]
+  },
+  "apps/api/src/lib/sanitize.js": {
+    "description": "HTML sanitization wrapper using sanitize-html. Configured for TipTap content, allowing specific tags (span, a, p) and attributes while forcing external links to safe targets.",
+    "tags": ["library", "security", "sanitization", "xss-protection"],
+    "dependencies": ["sanitize-html"],
+    "connections": [
+      { "to": "apps/api/src/controllers/announcements.js", "type": "used_by" }
+    ]
+  },
+  "apps/api/src/lib/socket.js": {
+    "description": "Socket.io implementation for real-time features. Manages workspace rooms, user-specific rooms, and presence tracking (Map-based). Handles JWT authentication via handshake cookies.",
+    "tags": ["library", "real-time", "socket-io", "presence", "rooms"],
+    "dependencies": ["socket.io", "cookie", "jsonwebtoken", "./prisma", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/src/index.js", "type": "initialized_by" },
+      { "to": "apps/api/src/lib/activity.js", "type": "broadcasts_activity" }
+    ]
+  },
+  "apps/api/src/middleware/auth.js": {
+    "description": "Authentication middleware. Verifies the 'accessToken' httpOnly cookie and attaches the userId to 'req.user'.",
+    "tags": ["middleware", "authentication", "security"],
+    "dependencies": ["../lib/jwt"],
+    "connections": [
+      { "to": "apps/api/src/lib/jwt.js", "type": "verifies_tokens" }
+    ]
+  },
+  "apps/api/src/middleware/permission.js": {
+    "description": "Capability-based authorization middleware. Checks if 'req.member' (attached by workspace middleware) has the required capability from @team-hub/shared.",
+    "tags": ["middleware", "authorization", "rbac", "capabilities"],
+    "dependencies": ["@team-hub/shared"],
+    "connections": [
+      { "to": "packages/shared/src/index.js", "type": "uses_capability_matrix" }
+    ]
+  },
+  "apps/api/src/middleware/workspace.js": {
+    "description": "Workspace isolation middleware. Validates that the user is a member of the requested workspace and attaches the membership row (including role) to 'req.member'.",
+    "tags": ["middleware", "isolation", "multi-tenancy", "membership"],
+    "dependencies": ["../lib/prisma", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/src/routes/workspaces.js", "type": "used_by" }
+    ]
+  },
+  "apps/api/src/routes/actionItems.js": {
+    "description": "Route definitions for Action Items. Scoped to a workspace and protected by capability-based permissions.",
+    "tags": ["routes", "kanban", "action-items"],
+    "dependencies": ["../middleware/auth", "../middleware/workspace", "../middleware/permission", "../controllers/actionItems"],
+    "connections": [
+      { "to": "apps/api/src/controllers/actionItems.js", "type": "mounts_handlers" }
+    ]
+  },
+  "apps/api/src/routes/announcements.js": {
+    "description": "Route definitions for Announcements. Includes nested routers for comments and reactions.",
+    "tags": ["routes", "announcements"],
+    "dependencies": ["../middleware/auth", "../middleware/workspace", "../middleware/permission", "../controllers/announcements", "./comments", "./reactions"],
+    "connections": [
+      { "to": "apps/api/src/routes/comments.js", "type": "nests" },
+      { "to": "apps/api/src/routes/reactions.js", "type": "nests" }
+    ]
+  },
+  "apps/api/src/routes/auth.js": {
+    "description": "Route definitions for Authentication. Handles registration (including default workspace creation), login, logout, refresh, and profile management (including avatar uploads).",
+    "tags": ["routes", "authentication", "registration", "profile"],
+    "dependencies": ["bcryptjs", "multer", "../lib/prisma", "../lib/jwt", "../middleware/auth", "../lib/cloudinary", "../controllers/workspaces"],
+    "connections": [
+      { "to": "apps/api/src/controllers/workspaces.js", "type": "creates_initial_workspace" },
+      { "to": "apps/api/src/lib/jwt.js", "type": "manages_tokens" }
+    ]
+  },
+  "apps/api/src/routes/goals.js": {
+    "description": "Route definitions for Goals. Scoped to workspace, supports status updates and activity history. Nests milestones.",
+    "tags": ["routes", "goals", "okrs"],
+    "dependencies": ["../middleware/auth", "../middleware/workspace", "../middleware/permission", "./milestones", "../controllers/goals"],
+    "connections": [
+      { "to": "apps/api/src/routes/milestones.js", "type": "nests" }
+    ]
+  },
+  "apps/api/src/routes/invitations.js": {
+    "description": "Public route definitions for Invitation acceptance. Allows public preview of invitation details via token.",
+    "tags": ["routes", "onboarding", "public"],
+    "dependencies": ["../middleware/auth", "../controllers/invitations"],
+    "connections": [
+      { "to": "apps/api/src/controllers/invitations.js", "type": "mounts_handlers" }
+    ]
+  },
+  "apps/api/src/routes/invitations.workspace.js": {
+    "description": "Admin-only route definitions for managing workspace invitations (create, list, revoke, resend).",
+    "tags": ["routes", "admin", "invitations"],
+    "dependencies": ["../middleware/auth", "../middleware/workspace", "@team-hub/shared", "../controllers/invitations"],
+    "connections": [
+      { "to": "apps/api/src/controllers/invitations.js", "type": "mounts_admin_handlers" }
+    ]
+  },
+  "apps/api/src/routes/notifications.js": {
+    "description": "Route definitions for User notifications. Supports marking single or all as read.",
+    "tags": ["routes", "notifications"],
+    "dependencies": ["../middleware/auth", "../controllers/notifications"],
+    "connections": [
+      { "to": "apps/api/src/controllers/notifications.js", "type": "mounts_handlers" }
+    ]
+  },
+  "apps/api/src/routes/workspaces.js": {
+    "description": "Route definitions for Workspace management. Includes presence, analytics, exports, and audit log routes. Nests members and admin invitations.",
+    "tags": ["routes", "workspaces", "management"],
+    "dependencies": ["multer", "../middleware/auth", "../middleware/workspace", "../controllers/workspaces", "../controllers/analytics", "../controllers/exports", "../controllers/audit", "./members", "./invitations.workspace", "../lib/socket"],
+    "connections": [
+      { "to": "apps/api/src/routes/members.js", "type": "nests" },
+      { "to": "apps/api/src/routes/invitations.workspace.js", "type": "nests" }
+    ]
+  },
+  "apps/api/src/templates/email/invitation.js": {
+    "description": "Email template for Workspace invitations. Generates HTML and plain-text versions with workspace accent colors.",
+    "tags": ["template", "email", "html"],
+    "dependencies": [],
+    "connections": [
+      { "to": "apps/api/src/lib/email.js", "type": "used_by" }
+    ]
+  },
+  "apps/api/src/templates/email/mention.js": {
+    "description": "Email template for @mentions. Generates simple notification alerts with deep links to the relevant content.",
+    "tags": ["template", "email", "html"],
+    "dependencies": [],
+    "connections": [
+      { "to": "apps/api/src/lib/email.js", "type": "used_by" }
+    ]
+  },
+  "apps/web/.env.example": {
+    "description": "Example environment variables for the frontend. Includes API and Socket URLs.",
+    "tags": ["config", "environment", "frontend"],
+    "dependencies": [],
+    "connections": [
+      { "to": "apps/web/next.config.js", "type": "configures" }
+    ]
+  },
+  "apps/web/jsconfig.json": {
+    "description": "Javascript configuration for Next.js. Defines the '@/*' path alias mapping to 'src/*'.",
+    "tags": ["config", "jsconfig", "alias"],
+    "dependencies": [],
+    "connections": []
+  },
+  "apps/web/next.config.js": {
+    "description": "Next.js configuration. Enables PWA support, configures Cloudinary image domains, and injects environment variables.",
+    "tags": ["config", "nextjs", "pwa", "images"],
+    "dependencies": ["@ducanh2912/next-pwa"],
+    "connections": []
+  },
+  "apps/web/package.json": {
+    "description": "Frontend package manifest. Lists dependencies for Next.js 16, React 19, TipTap, Dnd-kit, and Zustand.",
+    "tags": ["config", "package-json", "dependencies"],
+    "dependencies": ["next", "react", "zustand", "tiptap", "dnd-kit", "@team-hub/shared"],
+    "connections": [
+      { "to": "packages/shared/package.json", "type": "depends_on" }
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+{"nodes": [{"id": "node_modules_rollup_plugin_node_resolve_node_modules_resolve_test_resolver_symlinked_package_bar_js", "label": "bar.js", "file_type": "code", "source_file": "node_modules\\@rollup\\plugin-node-resolve\\node_modules\\resolve\\test\\resolver\\symlinked\\package\\bar.js", "source_location": "L1"}], "edges": [], "raw_calls": []}

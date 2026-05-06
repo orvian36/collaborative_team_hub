@@ -1,0 +1,1 @@
+{"nodes": [{"id": "node_modules_rollup_plugin_node_resolve_node_modules_resolve_test_shadowed_core_node_modules_util_index_js", "label": "index.js", "file_type": "code", "source_file": "node_modules\\@rollup\\plugin-node-resolve\\node_modules\\resolve\\test\\shadowed_core\\node_modules\\util\\index.js", "source_location": "L1"}], "edges": [], "raw_calls": []}

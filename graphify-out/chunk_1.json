@@ -1,0 +1,185 @@
+{
+  "apps/api/prisma/seed.js": {
+    "description": "Database seed script for local development and testing. Populates the database with demo users, workspaces, goals, action items, announcements, and activity logs. Uses @team-hub/shared constants for consistency.",
+    "tags": ["database", "seeding", "demo-data", "prisma"],
+    "dependencies": ["@prisma/client", "@team-hub/shared", "bcryptjs", "crypto"],
+    "connections": [
+      { "to": "apps/api/prisma/schema.prisma", "type": "uses" },
+      { "to": "packages/shared/src/index.js", "type": "imports_constants" }
+    ]
+  },
+  "apps/api/prisma/migrations/20260501000000_add_workspace_icon_and_invitations/migration.sql": {
+    "description": "SQL migration adding 'iconUrl' and 'createdById' to Workspaces, and creating the 'Invitation' table for workspace onboarding.",
+    "tags": ["migration", "schema", "workspaces", "invitations"],
+    "dependencies": [],
+    "connections": [
+      { "to": "apps/api/prisma/schema.prisma", "type": "migrates" }
+    ]
+  },
+  "apps/api/prisma/migrations/20260501100000_add_team_hub_completion_fields/migration.sql": {
+    "description": "SQL migration adding operational fields: 'createdById' to Goals, 'dueDate'/'completedAt' to Milestones, 'pinnedAt' to Announcements, 'mentionedUserIds' to Comments, and 'entityType'/'entityId' to Activity/Notification logs.",
+    "tags": ["migration", "schema", "activity-feed", "notifications", "mentions"],
+    "dependencies": [],
+    "connections": [
+      { "to": "apps/api/prisma/schema.prisma", "type": "migrates" }
+    ]
+  },
+  "apps/api/src/index.js": {
+    "description": "API server entry point. Configures Express, CORS, Socket.io, and mounts all major route groups (auth, workspaces, goals, announcements, action items, notifications).",
+    "tags": ["entry-point", "server", "express", "socket-io", "middleware"],
+    "dependencies": ["express", "cors", "cookie-parser", "./config/swagger", "./routes/auth", "./routes/workspaces", "./routes/invitations", "./routes/goals", "./routes/announcements", "./routes/actionItems", "./routes/notifications", "./lib/socket", "./lib/email"],
+    "connections": [
+      { "to": "apps/api/src/config/swagger.js", "type": "configures_docs" },
+      { "to": "apps/api/src/lib/socket.js", "type": "initializes" },
+      { "to": "apps/api/src/lib/email.js", "type": "verifies_transport" }
+    ]
+  },
+  "apps/api/src/config/swagger.js": {
+    "description": "Swagger/OpenAPI configuration. Defines the API spec, security schemes (cookie-auth), and shared component schemas (User, Workspace, Goal, etc.).",
+    "tags": ["documentation", "openapi", "swagger", "schema-definitions"],
+    "dependencies": ["swagger-jsdoc"],
+    "connections": [
+      { "to": "apps/api/src/index.js", "type": "configured_by" }
+    ]
+  },
+  "apps/api/src/controllers/actionItems.js": {
+    "description": "Controller for Action Items (Kanban tasks). Handles CRUD, reordering (positioning), assignment notifications, and workspace-wide socket broadcasts.",
+    "tags": ["controller", "kanban", "action-items", "real-time", "notifications"],
+    "dependencies": ["../lib/prisma", "../lib/activity", "../lib/socket", "../lib/notifications", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/src/lib/activity.js", "type": "logs_activity" },
+      { "to": "apps/api/src/lib/socket.js", "type": "broadcasts" },
+      { "to": "apps/api/src/lib/notifications.js", "type": "notifies_assignee" }
+    ]
+  },
+  "apps/api/src/controllers/analytics.js": {
+    "description": "Controller for workspace analytics. Aggregates goal statuses, weekly action item completion, and monthly performance trends.",
+    "tags": ["controller", "analytics", "reporting", "aggregation"],
+    "dependencies": ["../lib/prisma", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/prisma/schema.prisma", "type": "queries" }
+    ]
+  },
+  "apps/api/src/controllers/announcements.js": {
+    "description": "Controller for Announcements. Supports rich-text sanitization, @mentions extraction, pinning, and real-time updates.",
+    "tags": ["controller", "announcements", "mentions", "sanitization", "real-time"],
+    "dependencies": ["../lib/prisma", "../lib/sanitize", "../lib/mentions", "../lib/activity", "../lib/socket", "../lib/notifications", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/src/lib/sanitize.js", "type": "sanitizes_content" },
+      { "to": "apps/api/src/lib/mentions.js", "type": "extracts_mentions" }
+    ]
+  },
+  "apps/api/src/controllers/audit.js": {
+    "description": "Controller for the Workspace Audit Log. Provides paginated activity streams with filtering by type, actor, and date range.",
+    "tags": ["controller", "audit-log", "compliance", "pagination"],
+    "dependencies": ["../lib/prisma"],
+    "connections": [
+      { "to": "apps/api/src/lib/activity.js", "type": "reads_logs" }
+    ]
+  },
+  "apps/api/src/controllers/comments.js": {
+    "description": "Controller for Announcement comments. Handles @mentions, capability-based deletion (own vs any), and notification dispatch.",
+    "tags": ["controller", "comments", "mentions", "rbac"],
+    "dependencies": ["../lib/prisma", "../lib/mentions", "../lib/activity", "../lib/socket", "../lib/notifications", "@team-hub/shared"],
+    "connections": [
+      { "to": "packages/shared/src/index.js", "type": "checks_capabilities" }
+    ]
+  },
+  "apps/api/src/controllers/exports.js": {
+    "description": "Controller for data exports. Streams Goals, Action Items, Announcements, and Audit Logs as CSV files.",
+    "tags": ["controller", "export", "csv", "streaming"],
+    "dependencies": ["../lib/prisma", "../lib/csv"],
+    "connections": [
+      { "to": "apps/api/src/lib/csv.js", "type": "uses_streaming" }
+    ]
+  },
+  "apps/api/src/controllers/goals.js": {
+    "description": "Controller for high-level Goals. Manages status transitions, ownership, and activity logging.",
+    "tags": ["controller", "goals", "okr", "status-management"],
+    "dependencies": ["../lib/prisma", "../lib/activity", "../lib/socket", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/src/controllers/milestones.js", "type": "manages_related" }
+    ]
+  },
+  "apps/api/src/controllers/invitations.js": {
+    "description": "Controller for Workspace invitations. Handles token generation, email dispatch via SMTP, and the public acceptance flow.",
+    "tags": ["controller", "onboarding", "invitations", "email", "security"],
+    "dependencies": ["crypto", "../lib/prisma", "../lib/email", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/src/lib/email.js", "type": "sends_email" }
+    ]
+  },
+  "apps/api/src/controllers/members.js": {
+    "description": "Controller for Workspace membership. Manages roles, member removal, and ensures 'last admin' protection.",
+    "tags": ["controller", "members", "rbac", "security-policy"],
+    "dependencies": ["../lib/prisma", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/src/controllers/workspaces.js", "type": "related_to" }
+    ]
+  },
+  "apps/api/src/controllers/milestones.js": {
+    "description": "Controller for Goal milestones. Tracks progress (0-100%) and updates completion timestamps.",
+    "tags": ["controller", "milestones", "progress-tracking"],
+    "dependencies": ["../lib/prisma", "../lib/activity", "../lib/socket", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/src/controllers/goals.js", "type": "belongs_to" }
+    ]
+  },
+  "apps/api/src/controllers/notifications.js": {
+    "description": "Controller for User notifications. Manages read/unread states and fetching the latest activity alerts.",
+    "tags": ["controller", "notifications", "alerts"],
+    "dependencies": ["../lib/prisma"],
+    "connections": [
+      { "to": "apps/api/prisma/schema.prisma", "type": "queries" }
+    ]
+  },
+  "apps/api/src/controllers/reactions.js": {
+    "description": "Controller for Announcement reactions (emojis). Toggles reactions and broadcasts changes via Socket.io.",
+    "tags": ["controller", "reactions", "emoji", "real-time"],
+    "dependencies": ["../lib/prisma", "../lib/socket", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/src/controllers/announcements.js", "type": "reacts_to" }
+    ]
+  },
+  "apps/api/src/controllers/workspaces.js": {
+    "description": "Controller for Workspace management. Handles CRUD, icon uploads via Cloudinary, and hex color validation.",
+    "tags": ["controller", "workspaces", "cloudinary", "image-upload"],
+    "dependencies": ["crypto", "../lib/prisma", "../lib/cloudinary", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/src/lib/cloudinary.js", "type": "uploads_images" }
+    ]
+  },
+  "apps/api/src/lib/activity.js": {
+    "description": "Library for logging immutable activity feed entries. Designed to run within database transactions.",
+    "tags": ["library", "audit", "activity-log", "transactional"],
+    "dependencies": ["./socket", "@team-hub/shared"],
+    "connections": [
+      { "to": "apps/api/src/lib/socket.js", "type": "broadcasts_new_activity" }
+    ]
+  },
+  "apps/api/src/lib/cloudinary.js": {
+    "description": "Integration with Cloudinary for image storage. Supports buffer-based uploads and publicId-based deletion.",
+    "tags": ["library", "cloudinary", "media", "storage"],
+    "dependencies": ["cloudinary"],
+    "connections": [
+      { "to": "apps/api/src/controllers/workspaces.js", "type": "used_by" }
+    ]
+  },
+  "apps/api/src/lib/csv.js": {
+    "description": "Library for streaming database results to CSV format using csv-stringify.",
+    "tags": ["library", "csv", "streaming", "export"],
+    "dependencies": ["csv-stringify"],
+    "connections": [
+      { "to": "apps/api/src/controllers/exports.js", "type": "used_by" }
+    ]
+  },
+  "apps/api/src/lib/email.js": {
+    "description": "SMTP email client using Nodemailer. Supports fallback to console logging for development and rich templates for invitations and mentions.",
+    "tags": ["library", "email", "smtp", "nodemailer"],
+    "dependencies": ["nodemailer", "../templates/email/invitation", "../templates/email/mention", "./prisma"],
+    "connections": [
+      { "to": "apps/api/src/controllers/invitations.js", "type": "sends_onboarding_emails" },
+      { "to": "apps/api/src/lib/notifications.js", "type": "can_send_alerts" }
+    ]
+  }
+}

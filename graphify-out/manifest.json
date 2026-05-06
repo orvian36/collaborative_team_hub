@@ -1,0 +1,618 @@
+{
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\prisma\\seed.js": {
+    "mtime": 1777710788.0548034,
+    "hash": "7b943784d01f5f28e85e508e45df3137"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\prisma\\migrations\\20260501000000_add_workspace_icon_and_invitations\\migration.sql": {
+    "mtime": 1777638355.117662,
+    "hash": "60fd0049d4de182fbe39328efe991570"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\prisma\\migrations\\20260501100000_add_team_hub_completion_fields\\migration.sql": {
+    "mtime": 1777710788.0437014,
+    "hash": "2ac0bbb0f1d6d0a1bfc8d515cd700be4"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\index.js": {
+    "mtime": 1777737961.7208261,
+    "hash": "58bcf664e9e3a59e734e9def67354771"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\config\\swagger.js": {
+    "mtime": 1777710788.0593877,
+    "hash": "4750d00038841e7629ea79a7acc82547"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\actionItems.js": {
+    "mtime": 1777710788.0631962,
+    "hash": "6f8c727b748d92ae7fde94ed29408ced"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\analytics.js": {
+    "mtime": 1777710788.0647311,
+    "hash": "07cfc1a2b04b56a5a96e00c7bc273437"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\announcements.js": {
+    "mtime": 1777710788.0666857,
+    "hash": "d2ca235e0989e9eed0bf0c0b5a9965ae"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\audit.js": {
+    "mtime": 1777710788.0697272,
+    "hash": "99c6d34155166002e10e88dbd292fe2b"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\comments.js": {
+    "mtime": 1777710788.0707293,
+    "hash": "f080647cbecf86c99a70dcf3e2ec172e"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\exports.js": {
+    "mtime": 1777710788.0717244,
+    "hash": "fb35ec133f63376530ec3fbe8e72c1d8"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\goals.js": {
+    "mtime": 1777710788.0737245,
+    "hash": "94aac725ed4cd283434e90b6e87e165d"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\invitations.js": {
+    "mtime": 1777710788.0767274,
+    "hash": "d3472a9c9ec969c8794b2c91772d97e9"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\members.js": {
+    "mtime": 1777710788.078689,
+    "hash": "235a6f0efbc8158dd42c78fcf7134692"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\milestones.js": {
+    "mtime": 1777710788.0797057,
+    "hash": "ffecef3331531d25e67e50f5e97e3494"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\notifications.js": {
+    "mtime": 1777710788.0807066,
+    "hash": "8a7e1d258914d9cb975f7e9dbd0719a9"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\reactions.js": {
+    "mtime": 1777710788.0822208,
+    "hash": "3ee3ba963427d007abb164814c9649fd"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\controllers\\workspaces.js": {
+    "mtime": 1777710788.08526,
+    "hash": "4cd08ac731f5ae831bc31282e8a081c6"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\lib\\activity.js": {
+    "mtime": 1777710788.090656,
+    "hash": "b9f59b6cb615067cd8a7a12b4b270e86"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\lib\\cloudinary.js": {
+    "mtime": 1777699686.766767,
+    "hash": "1a9232053524f0a30e52f0140f902cc7"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\lib\\csv.js": {
+    "mtime": 1777710788.0921695,
+    "hash": "8970869ef496a581dc1db4f1336d1df8"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\lib\\email.js": {
+    "mtime": 1777737954.3876424,
+    "hash": "581501d069bce7322c7c8b9bb97f9056"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\lib\\jwt.js": {
+    "mtime": 1777734762.9960876,
+    "hash": "a79616fc4a86bad8f743eca1eee82c00"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\lib\\mentions.js": {
+    "mtime": 1777710788.0963018,
+    "hash": "8fc4bd9f80a1cc5c8723ac21300a008a"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\lib\\notifications.js": {
+    "mtime": 1777710788.097814,
+    "hash": "af9a171b597e865f391b843db4a01c17"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\lib\\prisma.js": {
+    "mtime": 1777548411.348141,
+    "hash": "b5606d52567a5f4545e8ffea76ba3b64"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\lib\\sanitize.js": {
+    "mtime": 1777710788.099868,
+    "hash": "76c1b82525617fa312239f265f8237b4"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\lib\\socket.js": {
+    "mtime": 1777710788.1018846,
+    "hash": "bdca83e46a0169c0a065eed4e47f2ead"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\middleware\\auth.js": {
+    "mtime": 1777699686.8824937,
+    "hash": "65056d1c22fab9d39699f5e2bebab719"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\middleware\\permission.js": {
+    "mtime": 1777710788.102883,
+    "hash": "654b14f5f15a167adbdb53bb1bdfc5cd"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\middleware\\workspace.js": {
+    "mtime": 1777699686.917302,
+    "hash": "b0b05016072079a3ca4bb42fa5267313"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\routes\\actionItems.js": {
+    "mtime": 1777710788.1048849,
+    "hash": "7be7ad79d32d11148a9da90699dc8c70"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\routes\\announcements.js": {
+    "mtime": 1777710788.106886,
+    "hash": "1f95553f61e5f3d4d58ecf30faa3d750"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\routes\\auth.js": {
+    "mtime": 1777813620.7769442,
+    "hash": "4e832f0b430d9871fe6ccdcd1e3d7418"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\routes\\comments.js": {
+    "mtime": 1777710788.1099043,
+    "hash": "1efeb9db1d93a31470600f63a502e949"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\routes\\goals.js": {
+    "mtime": 1777710788.1119065,
+    "hash": "00a25ecd1fea00b518f4d34a00f9c1c6"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\routes\\invitations.js": {
+    "mtime": 1777699687.010877,
+    "hash": "8672d4a129db7b22d7dcccacb68ec734"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\routes\\invitations.workspace.js": {
+    "mtime": 1777699687.021866,
+    "hash": "b5891b8da0d97986207e50d111a71fbf"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\routes\\members.js": {
+    "mtime": 1777699687.0365095,
+    "hash": "340fdd72d4bbf41bde3630e6c1790d6f"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\routes\\milestones.js": {
+    "mtime": 1777710788.1129045,
+    "hash": "77332fdaf8f885a373af55eba264cb3a"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\routes\\notifications.js": {
+    "mtime": 1777710788.1139019,
+    "hash": "3ddba8b3cea7813bd6d208a11025f470"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\routes\\reactions.js": {
+    "mtime": 1777710788.1159015,
+    "hash": "c7fd9e9f36d951c8b1d348edc5856b88"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\routes\\workspaces.js": {
+    "mtime": 1777710788.1179042,
+    "hash": "852996fcf6856de9a0f55ada227f8414"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\templates\\email\\invitation.js": {
+    "mtime": 1777710788.121907,
+    "hash": "53f5867bd6102838807bc57583d1c365"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\api\\src\\templates\\email\\mention.js": {
+    "mtime": 1777710788.1254392,
+    "hash": "0bde30d3a7624d6ee655b5e73608ffcc"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\next.config.js": {
+    "mtime": 1777710788.1264353,
+    "hash": "7eec5fac888c4e90c76f78a7c06807a6"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\postcss.config.js": {
+    "mtime": 1777548310.6785603,
+    "hash": "8640f9b2e6475cc3f5b1ff4548925765"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\tailwind.config.js": {
+    "mtime": 1777712491.7531683,
+    "hash": "4bd1a625bd159d0e7a1078339dd988f3"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\layout.js": {
+    "mtime": 1777712519.133685,
+    "hash": "e333b23a98c45770746ae93cf52471a4"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\page.js": {
+    "mtime": 1777712604.9641802,
+    "hash": "204128aafdff01deac1d64480c346e9c"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\layout.js": {
+    "mtime": 1777821938.9025166,
+    "hash": "4d7e0e2418844b5ab05306e95f35ea3b"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\page.js": {
+    "mtime": 1777713104.840193,
+    "hash": "4490ae32bf3541ed35785d6dffac7b6e"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\[workspaceId]\\layout.js": {
+    "mtime": 1777819796.7333994,
+    "hash": "1a00bf82dab85a0c25f7f932c0c9bdc8"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\[workspaceId]\\page.js": {
+    "mtime": 1777713071.0340219,
+    "hash": "aa46756db495037e11ea676c37b0ea2c"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\[workspaceId]\\action-items\\page.js": {
+    "mtime": 1777713213.5745575,
+    "hash": "620b25431242815d6f4e0e24f981c765"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\[workspaceId]\\announcements\\page.js": {
+    "mtime": 1777713205.6866362,
+    "hash": "4002562d076a28662d7ea72cea488d30"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\[workspaceId]\\goals\\page.js": {
+    "mtime": 1777814430.2446787,
+    "hash": "03408687842aac27878af485d86c189d"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\[workspaceId]\\goals\\[goalId]\\page.js": {
+    "mtime": 1777815592.0766544,
+    "hash": "80e46fc5a5f48ae4623ed32fade1dde3"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\[workspaceId]\\profile\\page.js": {
+    "mtime": 1777813634.3850553,
+    "hash": "b47147e0588ec6b3396670e841e4b6fd"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\[workspaceId]\\settings\\layout.js": {
+    "mtime": 1777710788.176258,
+    "hash": "847fde8cb65a8926fef0297916791970"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\[workspaceId]\\settings\\page.js": {
+    "mtime": 1777710788.1802607,
+    "hash": "63091c5f796c4d9da94088a974d18487"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\[workspaceId]\\settings\\audit\\page.js": {
+    "mtime": 1777710788.1717372,
+    "hash": "cb7e9558d46f38cf328c8e6f3ace502b"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\[workspaceId]\\settings\\invitations\\page.js": {
+    "mtime": 1777710788.1742413,
+    "hash": "a59cdccb92bf66f4aab30b6e163984fb"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\dashboard\\[workspaceId]\\settings\\members\\page.js": {
+    "mtime": 1777710788.178261,
+    "hash": "5d8550061ba64cec94df6de5db7b2ab4"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\invite\\[token]\\page.js": {
+    "mtime": 1777710788.1853056,
+    "hash": "c3bc19e6af78b2e377c91f3d571772d9"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\login\\page.js": {
+    "mtime": 1777712767.6560607,
+    "hash": "4d0ded550c3f7b383d262e402669c120"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\onboarding\\page.js": {
+    "mtime": 1777713097.955858,
+    "hash": "e9301d3ee6807b5ee5279d644403cb7d"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\app\\register\\page.js": {
+    "mtime": 1777712783.3543537,
+    "hash": "8bfcc3adaa1c2cf3aed4c6122cfd0db5"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\ThemeProvider.jsx": {
+    "mtime": 1777710788.2015102,
+    "hash": "4ec1a176954031ac6f88c4faa92be556"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\actionItems\\ActionItemCard.jsx": {
+    "mtime": 1777713016.6370459,
+    "hash": "40d877f4843debf33432e82d22a8322d"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\actionItems\\ActionItemFormModal.jsx": {
+    "mtime": 1777710788.2065103,
+    "hash": "1b5b662da75e53ba6edbe77f72feda45"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\actionItems\\ActionItemList.jsx": {
+    "mtime": 1777710788.208507,
+    "hash": "d9e2b39ab8ab9d6fe9f34de730bff3f7"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\actionItems\\KanbanBoard.jsx": {
+    "mtime": 1777710788.2095118,
+    "hash": "73f9864d38f1b8710ad84bcac801e9c8"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\actionItems\\KanbanColumn.jsx": {
+    "mtime": 1777713271.9767323,
+    "hash": "3fef6d45b6f0b120fc0dc7e59e26a9b1"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\actionItems\\ViewToggle.jsx": {
+    "mtime": 1777713233.0494561,
+    "hash": "661bb7bb13a95c8e96ab4e6c78310546"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\analytics\\ExportButtons.jsx": {
+    "mtime": 1777710788.2145047,
+    "hash": "8b5a3f56f35fe60b2b68937c7a7a2a65"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\analytics\\GoalCompletionChart.jsx": {
+    "mtime": 1777713045.6235442,
+    "hash": "40142a974e078507f9a09b4592621967"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\analytics\\StatsTiles.jsx": {
+    "mtime": 1777712988.8618839,
+    "hash": "f7a11393a0b567681854fd4079fccfce"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\announcements\\AnnouncementCard.jsx": {
+    "mtime": 1777713255.0493023,
+    "hash": "50cc5e8aeb5047cd225700a72a0adc39"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\announcements\\AnnouncementComposer.jsx": {
+    "mtime": 1777809651.2723606,
+    "hash": "2fe5b4323add2dedb69e7d3fe27f79ce"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\announcements\\CommentList.jsx": {
+    "mtime": 1777710788.2269363,
+    "hash": "64465d2afbc3e1e6e834df4e28bf18ad"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\announcements\\ReactionBar.jsx": {
+    "mtime": 1777710788.2279398,
+    "hash": "cbd44a44ab80e2b4cb7f08bf43a1dd72"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\announcements\\RichTextRenderer.jsx": {
+    "mtime": 1777710788.2299364,
+    "hash": "501c6105bd81f51d8b1ad6398b6afe06"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\audit\\AuditExportButton.jsx": {
+    "mtime": 1777710788.2319405,
+    "hash": "0e32734caa721c53af42cbcc98701645"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\audit\\AuditFilters.jsx": {
+    "mtime": 1777710788.2339413,
+    "hash": "6fa4d272762d12370e7abd22b15f5bf2"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\audit\\AuditTimeline.jsx": {
+    "mtime": 1777710788.2369409,
+    "hash": "878231346ff95d6590f0c721cea45c20"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\auth\\AuthShell.jsx": {
+    "mtime": 1777712742.7604425,
+    "hash": "98c2310f842855cafbb16eba01bd1b55"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\auth\\TextField.jsx": {
+    "mtime": 1777712753.6534984,
+    "hash": "f716c176915d5f963a4788b94a8fa339"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\brand\\LogoMark.jsx": {
+    "mtime": 1777712620.2328372,
+    "hash": "c52b084eeac2960d174b4599e5b56e20"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\goals\\GoalActivityFeed.jsx": {
+    "mtime": 1777710788.2379415,
+    "hash": "4b3f0b1b0c08df897acb5c511d982cb9"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\goals\\GoalCard.jsx": {
+    "mtime": 1777713001.0495014,
+    "hash": "ab0431a84ba869e7e19f8bfbeed728a5"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\goals\\GoalFormModal.jsx": {
+    "mtime": 1777710788.2455106,
+    "hash": "724574a61fca5f644a9a8af4d26e91e8"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\goals\\MilestoneList.jsx": {
+    "mtime": 1777816144.0867987,
+    "hash": "74503b979000566a678c63500ee4fc55"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\goals\\StatusPill.jsx": {
+    "mtime": 1777713025.2961507,
+    "hash": "bda1280cd64aed69bac9aedfe10b07d4"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\invitations\\InvitationList.jsx": {
+    "mtime": 1777710788.2495112,
+    "hash": "1226b680c218ea4033b44b620703c78e"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\invitations\\InvitationStatusBadge.jsx": {
+    "mtime": 1777710788.2515156,
+    "hash": "a81dc47e7d8ce5a11a501a9b6dbf364a"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\invitations\\InviteForm.jsx": {
+    "mtime": 1777710788.2535138,
+    "hash": "0e370f6841d569c56c1d0c37475fa906"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\landing\\LandingFeatureMosaic.jsx": {
+    "mtime": 1777712710.2086716,
+    "hash": "abd964c868f8988a74b9d56a973beb2a"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\landing\\LandingHeroPreview.jsx": {
+    "mtime": 1777712662.4505925,
+    "hash": "b1da2027e8fd00d2b7b7e2d5388e2491"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\members\\MemberList.jsx": {
+    "mtime": 1777710788.2555127,
+    "hash": "0c0db46e1d31abef53f195df385ed85e"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\members\\RoleBadge.jsx": {
+    "mtime": 1777699687.7659872,
+    "hash": "b4fdb03fbcb6bbb9b9450e6df82e044f"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\members\\RoleSelect.jsx": {
+    "mtime": 1777710788.2575119,
+    "hash": "68c0c8d2c7f36941552e49833e888e73"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\mentions\\caretCoordinates.js": {
+    "mtime": 1777809651.2753875,
+    "hash": "2d1a50252cb41ad1b58a9f0b6a01b7c0"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\mentions\\filterMembers.js": {
+    "mtime": 1777809651.2763965,
+    "hash": "8e569f7f0bfd1a91ec1367adeb662c58"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\mentions\\MentionList.jsx": {
+    "mtime": 1777809651.273869,
+    "hash": "432dd5360b92184b743213fcd6dea989"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\mentions\\MentionTextarea.jsx": {
+    "mtime": 1777809651.2743769,
+    "hash": "258adc43c7c9b92d57305bd10e65f554"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\mentions\\useWorkspaceMembers.js": {
+    "mtime": 1777809651.2769625,
+    "hash": "21be930bafecc235719bafa34321084f"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\notifications\\NotificationsBell.jsx": {
+    "mtime": 1777713186.085488,
+    "hash": "7de30593b83800a2c6fce5134a41880f"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\notifications\\NotificationsPanel.jsx": {
+    "mtime": 1777710788.2633135,
+    "hash": "bc6896bf0f58ee335e6b07805f1bc268"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\presence\\PresenceAvatars.jsx": {
+    "mtime": 1777710788.265843,
+    "hash": "f2b04e1ad195fd8738efd3d7357e6790"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\profile\\AvatarUpload.jsx": {
+    "mtime": 1777812813.6383636,
+    "hash": "1333cd2d158f1c9872b7308b07204bde"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\ui\\Button.jsx": {
+    "mtime": 1777712969.718841,
+    "hash": "b7e532280bb6a0f39b17664604c6e9d8"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\ui\\CommandPalette.jsx": {
+    "mtime": 1777713157.9790304,
+    "hash": "aa6a7de47698def5b577bd6af7be13be"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\ui\\ConfirmDialog.jsx": {
+    "mtime": 1777710788.27286,
+    "hash": "8cd038ac62b4e345eb0692fd270312a4"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\ui\\Modal.jsx": {
+    "mtime": 1777713177.2937899,
+    "hash": "cc6ec85a3ae446dac634d0e3785e00fb"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\ui\\PermissionGate.jsx": {
+    "mtime": 1777710788.2758682,
+    "hash": "138bacbe07c5b55e0095582b6a954d70"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\ui\\ThemeToggle.jsx": {
+    "mtime": 1777712959.2433825,
+    "hash": "2ccd00715ae1fae6643019bcc997c66b"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\workspace\\AccentColorPicker.jsx": {
+    "mtime": 1777710788.2803998,
+    "hash": "0a2b034e2fd92034cf1b41242cca2f26"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\workspace\\CreateWorkspaceModal.jsx": {
+    "mtime": 1777710788.2854488,
+    "hash": "8a5f08cf095d70776c0750e60f34b65f"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\workspace\\WorkspaceIconUpload.jsx": {
+    "mtime": 1777710788.2874687,
+    "hash": "62d5be6f7e19edc7c811104a538f3c5b"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\workspace\\WorkspaceRail.jsx": {
+    "mtime": 1777712827.4602215,
+    "hash": "dd1791e22428a43a317d8cc5476842ee"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\components\\workspace\\WorkspaceTile.jsx": {
+    "mtime": 1777712838.5625901,
+    "hash": "5842dc54942f73122a98c90156c3ef53"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\hooks\\useCapability.js": {
+    "mtime": 1777710788.2930033,
+    "hash": "1270d921db1c15a771ae8b39fe10e394"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\lib\\api.js": {
+    "mtime": 1777821797.323681,
+    "hash": "687e891fa314037ae381e62dd03d7346"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\lib\\realtimeBridge.js": {
+    "mtime": 1777710788.2970006,
+    "hash": "a306b1d868483611379d6500d7e3743c"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\lib\\socket.js": {
+    "mtime": 1777710788.298003,
+    "hash": "175b9cf539e26490b0d25b921ab7c0fb"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\actionItemsStore.js": {
+    "mtime": 1777814456.5441997,
+    "hash": "30c29921045bfd964fbf4d17c1289470"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\analyticsStore.js": {
+    "mtime": 1777710788.3015187,
+    "hash": "29ae987cf8074a21ae89a718814c8f54"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\announcementsStore.js": {
+    "mtime": 1777814467.9155364,
+    "hash": "9e307b01b1861a429434313bffbcea54"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\auditStore.js": {
+    "mtime": 1777741308.6319816,
+    "hash": "cd530f8d3e555632e11c741283c46c4d"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\authStore.js": {
+    "mtime": 1777710788.305536,
+    "hash": "565d7fd8d2a76fd8fa863a9d5fc28358"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\commentsStore.js": {
+    "mtime": 1777710788.3075345,
+    "hash": "6a8eba072e601ed95845a9a20e1e3f41"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\goalsStore.js": {
+    "mtime": 1777814437.9361792,
+    "hash": "33d91730f4cb889a60da7ff3b66430ff"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\milestonesStore.js": {
+    "mtime": 1777710788.3105369,
+    "hash": "18535a79e6a4bf933285661b7f8ffa2b"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\notificationsStore.js": {
+    "mtime": 1777710788.3115363,
+    "hash": "c2d8cefb3143c8d3e99e9cc0531c8e47"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\presenceStore.js": {
+    "mtime": 1777710788.3125377,
+    "hash": "b08d6f05984484f78574f76e740e62ed"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\reactionsStore.js": {
+    "mtime": 1777710788.313536,
+    "hash": "477bfa6f37825384ff84f7f17fecb26c"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\themeStore.js": {
+    "mtime": 1777732377.123606,
+    "hash": "a32d6277cf69b8236f12f0c3b57a74b5"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\workspaceMembersStore.js": {
+    "mtime": 1777710788.315928,
+    "hash": "3234e6b8c955c2a8b37f751024cea511"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\src\\stores\\workspaceStore.js": {
+    "mtime": 1777710788.3210096,
+    "hash": "bc3108c7285ee0b260a1586b3e4f334d"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\packages\\shared\\src\\index.js": {
+    "mtime": 1777710788.3491306,
+    "hash": "0bbd15999c763d02789eec68dcdbfad8"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\AGENTS.md": {
+    "mtime": 1777710788.0259037,
+    "hash": "845a21d2fe18c43936eb07eef2efb57e"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\CLAUDE.md": {
+    "mtime": 1778052090.2308686,
+    "hash": "9da55641545c6de5558bd0201648d65c"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\README.md": {
+    "mtime": 1777824345.2338681,
+    "hash": "304c5a0691e0a4031fbfab41a864075a"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\docs\\DEPLOYMENT.md": {
+    "mtime": 1777784795.8426714,
+    "hash": "9d2372e48a7011302e4417058e6431a8"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\docs\\superpowers\\plans\\2026-05-01-team-hub-completion.md": {
+    "mtime": 1777710788.3300836,
+    "hash": "e9e34e7f2510f50e58a0786b9b0673a7"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\docs\\superpowers\\plans\\2026-05-01-workspaces.md": {
+    "mtime": 1777710788.3331192,
+    "hash": "94fc216e40b037eae4b84edeac447b19"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\docs\\superpowers\\plans\\2026-05-03-mention-typeahead.md": {
+    "mtime": 1777787573.2333107,
+    "hash": "ca0106043b8b751c12b5dea77dc60d9f"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\docs\\superpowers\\specs\\2026-04-30-workspaces-design.md": {
+    "mtime": 1777710788.3361554,
+    "hash": "03c983b8c633913ccfefc3fe8dd90570"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\docs\\superpowers\\specs\\2026-05-01-team-hub-completion-design.md": {
+    "mtime": 1777710788.3391986,
+    "hash": "eebd81a87aeaa05119d6c3ca6182d8ae"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\docs\\superpowers\\specs\\2026-05-03-mention-typeahead-design.md": {
+    "mtime": 1777787097.4614139,
+    "hash": "9c2c08f91f9046f96d9483afd375fe8c"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\docs\\FredoCloud_Intern_Assignment.pdf": {
+    "mtime": 1777543035.304502,
+    "hash": "52e7c5e34c16afb2f38cfb99de5530cc"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\public\\icons\\icon-192.png": {
+    "mtime": 1777710788.1400454,
+    "hash": "81bad5a524f80c321df79eb9a7b0df53"
+  },
+  "C:\\Users\\Best Laptop Gallery\\Desktop\\live\\collaborative_team_hub\\apps\\web\\public\\icons\\icon-512.png": {
+    "mtime": 1777710788.1488187,
+    "hash": "81bad5a524f80c321df79eb9a7b0df53"
+  }
+}

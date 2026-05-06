@@ -1,0 +1,139 @@
+{
+  "apps/web/postcss.config.js": {
+    "description": "PostCSS configuration for the frontend. Enables TailwindCSS and Autoprefixer.",
+    "tags": ["config", "postcss", "css"],
+    "dependencies": ["tailwindcss", "autoprefixer"],
+    "connections": [
+      { "to": "apps/web/tailwind.config.js", "type": "configures" }
+    ]
+  },
+  "apps/web/tailwind.config.js": {
+    "description": "TailwindCSS configuration. Defines a premium design system with custom color palettes (ink, primary, accent), Inter typography, display scales, and motion tokens (glow-primary, lift shadows).",
+    "tags": ["config", "tailwind", "design-system", "tokens"],
+    "dependencies": [],
+    "connections": [
+      { "to": "apps/web/src/app/globals.css", "type": "provides_utilities" }
+    ]
+  },
+  "apps/web/src/app/globals.css": {
+    "description": "Global CSS styles. Implements the root design system using CSS variables for light/dark modes, custom scrollbars, and reusable Tailwind layer components (surface, focus-ring).",
+    "tags": ["css", "styling", "design-system", "dark-mode"],
+    "dependencies": ["@tailwind base", "@tailwind components", "@tailwind utilities"],
+    "connections": [
+      { "to": "apps/web/tailwind.config.js", "type": "consumes_tokens" }
+    ]
+  },
+  "apps/web/src/app/layout.js": {
+    "description": "Root layout for the Next.js app. Configures SEO metadata, PWA manifests, and wraps the application in the ThemeProvider.",
+    "tags": ["layout", "seo", "pwa", "theme"],
+    "dependencies": ["@/components/ThemeProvider"],
+    "connections": []
+  },
+  "apps/web/src/app/page.js": {
+    "description": "Marketing landing page. High-fidelity design featuring a hero preview, feature mosaic, and pricing/CTA sections. Uses Framer Motion-like CSS animations for a premium feel.",
+    "tags": ["page", "marketing", "landing"],
+    "dependencies": ["@/stores/authStore", "@/components/ui/ThemeToggle", "@/components/landing/LandingHeroPreview"],
+    "connections": [
+      { "to": "apps/web/src/app/login/page.js", "type": "links_to" },
+      { "to": "apps/web/src/app/register/page.js", "type": "links_to" }
+    ]
+  },
+  "apps/web/src/app/dashboard/layout.js": {
+    "description": "Main shell for the authenticated experience. Handles auth state persistence, workspace fetching, and provides the persistent WorkspaceRail and header.",
+    "tags": ["layout", "authenticated", "shell"],
+    "dependencies": ["@/stores/authStore", "@/stores/workspaceStore", "@/components/workspace/WorkspaceRail"],
+    "connections": [
+      { "to": "apps/web/src/app/dashboard/[workspaceId]/layout.js", "type": "parent_of" }
+    ]
+  },
+  "apps/web/src/app/dashboard/page.js": {
+    "description": "Dashboard entry point. Automatically redirects the user to their last active workspace or the first available one.",
+    "tags": ["page", "redirect", "routing"],
+    "dependencies": ["@/stores/workspaceStore"],
+    "connections": [
+      { "to": "apps/web/src/app/dashboard/[workspaceId]/page.js", "type": "redirects_to" }
+    ]
+  },
+  "apps/web/src/app/dashboard/[workspaceId]/layout.js": {
+    "description": "Workspace-specific layout. Initializes real-time socket connections for the current workspace, hydrates notifications/presence, and provides the workspace sidebar/navigation.",
+    "tags": ["layout", "workspace", "real-time", "presence"],
+    "dependencies": ["@/stores/workspaceStore", "@/lib/realtimeBridge", "@/stores/notificationsStore", "@/stores/presenceStore", "@/components/notifications/NotificationsBell"],
+    "connections": [
+      { "to": "apps/web/src/app/dashboard/[workspaceId]/page.js", "type": "parent_of" }
+    ]
+  },
+  "apps/web/src/app/dashboard/[workspaceId]/page.js": {
+    "description": "Workspace overview dashboard. Displays analytics tiles, goal completion charts, and 'In Flight' vs 'Just Shipped' goal summaries.",
+    "tags": ["page", "dashboard", "analytics", "overview"],
+    "dependencies": ["@/stores/analyticsStore", "@/stores/goalsStore", "@/components/analytics/StatsTiles"],
+    "connections": []
+  },
+  "apps/web/src/app/dashboard/[workspaceId]/announcements/page.js": {
+    "description": "Workspace announcements feed. Lists posts with pinning, editing, and deletion capabilities. Includes rich-text composer and reaction hydration.",
+    "tags": ["page", "announcements", "social", "real-time"],
+    "dependencies": ["@/stores/announcementsStore", "@/stores/reactionsStore", "@/components/announcements/AnnouncementCard"],
+    "connections": []
+  },
+  "apps/web/src/app/dashboard/[workspaceId]/goals/page.js": {
+    "description": "Workspace goals management. Provides status filtering (Not Started, In Progress, Completed) and goal creation via modal.",
+    "tags": ["page", "goals", "okrs", "filtering"],
+    "dependencies": ["@/stores/goalsStore", "@/components/goals/GoalCard"],
+    "connections": [
+      { "to": "apps/web/src/app/dashboard/[workspaceId]/goals/[goalId]/page.js", "type": "links_to" }
+    ]
+  },
+  "apps/web/src/app/dashboard/[workspaceId]/goals/[goalId]/page.js": {
+    "description": "Detailed view of a single goal. Displays description, status management, nested milestones list, and activity audit feed.",
+    "tags": ["page", "goals", "milestones", "audit-log"],
+    "dependencies": ["@/stores/goalsStore", "@/stores/milestonesStore", "@/components/goals/MilestoneList", "@/components/goals/GoalActivityFeed"],
+    "connections": []
+  },
+  "apps/web/src/app/dashboard/[workspaceId]/action-items/page.js": {
+    "description": "Workspace action items (tasks). Supports toggling between Kanban board and List views. Handles task creation/editing via modal.",
+    "tags": ["page", "tasks", "kanban", "productivity"],
+    "dependencies": ["@/stores/actionItemsStore", "@/components/actionItems/KanbanBoard", "@/components/actionItems/ActionItemList"],
+    "connections": []
+  },
+  "apps/web/src/app/dashboard/[workspaceId]/settings/page.js": {
+    "description": "Workspace settings for admins. Allows editing workspace name, description, accent color, and icon upload. Includes 'Danger Zone' for deletion.",
+    "tags": ["page", "settings", "admin", "management"],
+    "dependencies": ["@/stores/workspaceStore", "@/components/workspace/AccentColorPicker", "@/components/workspace/WorkspaceIconUpload"],
+    "connections": []
+  },
+  "apps/web/src/app/invite/[token]/page.js": {
+    "description": "Public landing page for workspace invitations. Validates token status (expired/revoked), shows workspace preview, and handles acceptance for authenticated users.",
+    "tags": ["page", "invitation", "onboarding", "public"],
+    "dependencies": ["@/lib/api", "@/stores/authStore"],
+    "connections": []
+  },
+  "apps/web/src/app/login/page.js": {
+    "description": "User login page. Uses the AuthShell wrapper and handles cookie-based authentication via the authStore.",
+    "tags": ["page", "auth", "login"],
+    "dependencies": ["@/stores/authStore", "@/components/auth/AuthShell", "@/components/auth/TextField"],
+    "connections": []
+  },
+  "apps/web/src/app/register/page.js": {
+    "description": "User registration page. Collects user details and automatically triggers initial workspace creation on success.",
+    "tags": ["page", "auth", "registration"],
+    "dependencies": ["@/stores/authStore", "@/components/auth/AuthShell", "@/components/auth/TextField"],
+    "connections": []
+  },
+  "apps/web/src/app/onboarding/page.js": {
+    "description": "First-run onboarding page for new users. Prompts for workspace creation if no workspaces exist.",
+    "tags": ["page", "onboarding", "ux"],
+    "dependencies": ["@/stores/authStore", "@/stores/workspaceStore", "@/components/workspace/CreateWorkspaceModal"],
+    "connections": []
+  },
+  "apps/web/src/components/auth/AuthShell.jsx": {
+    "description": "UI shell for authentication pages (login, register). Provides the layout and persistent branding elements.",
+    "tags": ["component", "auth", "ui"],
+    "dependencies": [],
+    "connections": []
+  },
+  "apps/web/src/components/auth/TextField.jsx": {
+    "description": "Reusable styled input field for forms. Supports labels, hints, and error states with consistent design system styling.",
+    "tags": ["component", "ui", "form", "input"],
+    "dependencies": [],
+    "connections": []
+  }
+}

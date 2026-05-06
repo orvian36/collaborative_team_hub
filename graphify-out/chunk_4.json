@@ -1,0 +1,150 @@
+{
+  "apps/web/src/components/ThemeProvider.jsx": {
+    "description": "App-wide theme provider. Hydrates the theme state from localStorage on mount.",
+    "tags": ["component", "theme", "provider"],
+    "dependencies": ["@/stores/themeStore"],
+    "connections": []
+  },
+  "apps/web/src/components/actionItems/ActionItemCard.jsx": {
+    "description": "Card component for tasks/action items. Displays priority color coding, linked goals, assignee, and due dates. Used in both Kanban and List views.",
+    "tags": ["component", "ui", "task", "card"],
+    "dependencies": ["next/link"],
+    "connections": []
+  },
+  "apps/web/src/components/actionItems/ActionItemFormModal.jsx": {
+    "description": "Modal for creating and editing action items. Includes fields for title, description, priority, status, assignee, and goal linkage.",
+    "tags": ["component", "modal", "form", "task"],
+    "dependencies": ["@/stores/workspaceMembersStore", "@/stores/goalsStore", "@/components/ui/Modal"],
+    "connections": []
+  },
+  "apps/web/src/components/actionItems/ActionItemList.jsx": {
+    "description": "Table-based list view for action items. Provides a dense overview of all tasks sorted by status.",
+    "tags": ["component", "ui", "list", "task"],
+    "dependencies": ["@/stores/actionItemsStore"],
+    "connections": []
+  },
+  "apps/web/src/components/actionItems/KanbanBoard.jsx": {
+    "description": "Interactive Kanban board using @dnd-kit. Orchestrates drag-and-drop movement of action items between status columns.",
+    "tags": ["component", "kanban", "dnd", "interactivity"],
+    "dependencies": ["@dnd-kit/core", "@/stores/actionItemsStore"],
+    "connections": [
+      { "to": "apps/web/src/components/actionItems/KanbanColumn.jsx", "type": "renders" }
+    ]
+  },
+  "apps/web/src/components/actionItems/KanbanColumn.jsx": {
+    "description": "A single column in the Kanban board. Handles droppable area and sortable context for action item cards.",
+    "tags": ["component", "kanban", "dnd"],
+    "dependencies": ["@dnd-kit/sortable", "@dnd-kit/core"],
+    "connections": [
+      { "to": "apps/web/src/components/actionItems/ActionItemCard.jsx", "type": "renders" }
+    ]
+  },
+  "apps/web/src/components/actionItems/ViewToggle.jsx": {
+    "description": "Segmented control for switching between Kanban and List views. Updates the URL 'view' search parameter.",
+    "tags": ["component", "ui", "toggle", "routing"],
+    "dependencies": ["next/navigation"],
+    "connections": []
+  },
+  "apps/web/src/components/analytics/ExportButtons.jsx": {
+    "description": "Row of buttons for exporting workspace data to CSV. Gated by EXPORT_CSV capability.",
+    "tags": ["component", "analytics", "export", "csv"],
+    "dependencies": ["@/components/ui/PermissionGate", "@/components/ui/Button"],
+    "connections": []
+  },
+  "apps/web/src/components/analytics/GoalCompletionChart.jsx": {
+    "description": "Bar chart visualization using Recharts. Shows a 6-month trend of goals created vs. completed.",
+    "tags": ["component", "analytics", "chart", "recharts"],
+    "dependencies": ["recharts"],
+    "connections": []
+  },
+  "apps/web/src/components/analytics/StatsTiles.jsx": {
+    "description": "Composite overview stats component. Features a large weekly 'Action Items Shipped' metric and a goal-status progress bar.",
+    "tags": ["component", "analytics", "ui", "dashboard"],
+    "dependencies": [],
+    "connections": []
+  },
+  "apps/web/src/components/announcements/AnnouncementCard.jsx": {
+    "description": "Primary display for announcements. Features pinning logic, rich-text rendering, reactions, and threaded comments toggle.",
+    "tags": ["component", "announcements", "social", "reactions"],
+    "dependencies": ["@/hooks/useCapability", "@/components/announcements/RichTextRenderer", "@/components/announcements/ReactionBar", "@/components/announcements/CommentList"],
+    "connections": []
+  },
+  "apps/web/src/components/announcements/AnnouncementComposer.jsx": {
+    "description": "Rich-text editor for announcements using TipTap. Supports @-mentions via a custom extension and workspace member hydration.",
+    "tags": ["component", "announcements", "editor", "tiptap", "mentions"],
+    "dependencies": ["@tiptap/react", "@/components/mentions/MentionList", "@/components/mentions/filterMembers"],
+    "connections": []
+  },
+  "apps/web/src/components/announcements/CommentList.jsx": {
+    "description": "Threaded comment list for announcements. Includes a mention-capable textarea for adding new comments.",
+    "tags": ["component", "announcements", "comments"],
+    "dependencies": ["@/stores/commentsStore", "@/components/mentions/MentionTextarea"],
+    "connections": []
+  },
+  "apps/web/src/components/announcements/ReactionBar.jsx": {
+    "description": "Real-time reaction picker and counter. Allows users to toggle emojis on announcements.",
+    "tags": ["component", "announcements", "reactions", "real-time"],
+    "dependencies": ["@/stores/reactionsStore", "@/hooks/useCapability"],
+    "connections": []
+  },
+  "apps/web/src/components/announcements/RichTextRenderer.jsx": {
+    "description": "Safe renderer for HTML content. Uses Tailwind Typography plugin for consistent styling.",
+    "tags": ["component", "ui", "rich-text"],
+    "dependencies": [],
+    "connections": []
+  },
+  "apps/web/src/components/brand/LogoMark.jsx": {
+    "description": "The official Team Hub logo component. Vector-based with gradient branding.",
+    "tags": ["component", "brand", "ui"],
+    "dependencies": [],
+    "connections": []
+  },
+  "apps/web/src/components/goals/GoalActivityFeed.jsx": {
+    "description": "Vertical timeline of activity for a specific goal. Fetches audit logs from the API.",
+    "tags": ["component", "goals", "audit-log", "feed"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/components/goals/GoalCard.jsx": {
+    "description": "Card preview for a goal. Shows progress percentage based on completed milestones.",
+    "tags": ["component", "goals", "ui", "progress"],
+    "dependencies": ["next/link"],
+    "connections": []
+  },
+  "apps/web/src/components/goals/GoalFormModal.jsx": {
+    "description": "Form for goal creation/editing. Manages title, description, owner, and due dates.",
+    "tags": ["component", "goals", "modal", "form"],
+    "dependencies": ["@/stores/workspaceMembersStore", "@/components/ui/Modal"],
+    "connections": []
+  },
+  "apps/web/src/components/goals/MilestoneList.jsx": {
+    "description": "Interactive checklist of milestones for a goal. Supports range-based progress tracking and removal.",
+    "tags": ["component", "goals", "milestones", "checklist"],
+    "dependencies": ["@/hooks/useCapability", "@/components/ui/Button"],
+    "connections": []
+  },
+  "apps/web/src/components/mentions/MentionList.jsx": {
+    "description": "Portal-rendered dropdown for member mentions. Shared by TipTap and plain textarea composers.",
+    "tags": ["component", "ui", "mentions", "portal"],
+    "dependencies": ["react-dom"],
+    "connections": []
+  },
+  "apps/web/src/components/mentions/MentionTextarea.jsx": {
+    "description": "Custom textarea with @-mention typeahead support. Coordinates caret position and filters members.",
+    "tags": ["component", "form", "mentions", "ux"],
+    "dependencies": ["@/components/mentions/MentionList", "@/components/mentions/caretCoordinates"],
+    "connections": []
+  },
+  "apps/web/src/components/ui/Button.jsx": {
+    "description": "Base button component with multiple variants (primary, ghost, contrast) and sizes. Supports loading states and icons.",
+    "tags": ["component", "ui", "atom"],
+    "dependencies": [],
+    "connections": []
+  },
+  "apps/web/src/components/ui/CommandPalette.jsx": {
+    "description": "Global search and action interface (Cmd+K). Powered by cmdk and Radix UI. Provides quick navigation and creation shortcuts.",
+    "tags": ["component", "ui", "search", "shortcuts"],
+    "dependencies": ["cmdk", "@radix-ui/react-dialog", "@/stores/themeStore"],
+    "connections": []
+  }
+}

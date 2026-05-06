@@ -1,0 +1,1 @@
+{"nodes": [{"id": "node_modules_get_proto_object_getprototypeof_js", "label": "Object.getPrototypeOf.js", "file_type": "code", "source_file": "node_modules\\get-proto\\Object.getPrototypeOf.js", "source_location": "L1"}], "edges": [], "raw_calls": []}

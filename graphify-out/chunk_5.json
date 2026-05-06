@@ -1,0 +1,134 @@
+{
+  "apps/web/src/components/workspace/AccentColorPicker.jsx": {
+    "description": "Custom color picker for workspace branding. Uses a curated 12-color palette or raw hex input.",
+    "tags": ["component", "workspace", "branding", "color-picker"],
+    "dependencies": ["@team-hub/shared"],
+    "connections": []
+  },
+  "apps/web/src/components/workspace/CreateWorkspaceModal.jsx": {
+    "description": "Onboarding modal for creating a new workspace. Collects name, description, and accent color.",
+    "tags": ["component", "modal", "workspace", "creation"],
+    "dependencies": ["@/components/ui/Modal", "@/components/workspace/AccentColorPicker"],
+    "connections": []
+  },
+  "apps/web/src/components/workspace/WorkspaceIconUpload.jsx": {
+    "description": "Image upload component for workspace logos. Supports PNG/JPEG/WebP with client-side size validation.",
+    "tags": ["component", "workspace", "upload", "branding"],
+    "dependencies": ["@/components/ui/Button"],
+    "connections": []
+  },
+  "apps/web/src/components/workspace/WorkspaceRail.jsx": {
+    "description": "Persistent vertical navigation for workspace switching. Always visible in the dashboard layout.",
+    "tags": ["component", "layout", "navigation", "workspace-switcher"],
+    "dependencies": ["@/stores/workspaceStore", "@/components/brand/LogoMark", "@/components/workspace/CreateWorkspaceModal"],
+    "connections": []
+  },
+  "apps/web/src/hooks/useCapability.js": {
+    "description": "Core hook for RBAC checks in components. Reactively determines if the current user can perform an action based on their role in the active workspace.",
+    "tags": ["hook", "auth", "rbac", "security"],
+    "dependencies": ["@team-hub/shared", "@/stores/workspaceStore"],
+    "connections": []
+  },
+  "apps/web/src/lib/api.js": {
+    "description": "Centralized API client. Wraps fetch with automatic 401 interceptors for JWT silent refresh and JSON/FormData handling.",
+    "tags": ["library", "api", "auth", "network"],
+    "dependencies": [],
+    "connections": []
+  },
+  "apps/web/src/lib/realtimeBridge.js": {
+    "description": "Client-side orchestrator for Socket.io events. Connects backend broadcast events to specific Zustand store mutations (upsert/patch/remove).",
+    "tags": ["library", "real-time", "socket", "state-sync"],
+    "dependencies": ["@team-hub/shared", "@/lib/socket", "@/stores/*"],
+    "connections": []
+  },
+  "apps/web/src/stores/actionItemsStore.js": {
+    "description": "State management for tasks. Implements optimistic UI for drag-and-drop movements and status bucket sorting.",
+    "tags": ["store", "zustand", "tasks", "optimistic-ui"],
+    "dependencies": ["@team-hub/shared", "@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/stores/analyticsStore.js": {
+    "description": "State management for workspace statistics and activity charts.",
+    "tags": ["store", "zustand", "analytics"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/stores/announcementsStore.js": {
+    "description": "State management for announcements. Handles pinning logic, sorting by recency/pin status, and real-time updates.",
+    "tags": ["store", "zustand", "announcements"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/stores/authStore.js": {
+    "description": "Global authentication state. Manages the current user object, login/register flows, and profile updates.",
+    "tags": ["store", "zustand", "auth", "user-profile"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/stores/commentsStore.js": {
+    "description": "State management for announcement comment threads. Maps comments to announcement IDs.",
+    "tags": ["store", "zustand", "comments"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/stores/goalsStore.js": {
+    "description": "State management for high-level goals. Coordinates fetching, status changes, and deep goal views.",
+    "tags": ["store", "zustand", "goals"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/stores/milestonesStore.js": {
+    "description": "State management for goal milestones. Handles per-goal milestone list hydration and progress updates.",
+    "tags": ["store", "zustand", "goals", "progress"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/stores/notificationsStore.js": {
+    "description": "State management for user notifications. Tracks unread counts and handles real-time delivery of new items.",
+    "tags": ["store", "zustand", "notifications"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/stores/presenceStore.js": {
+    "description": "State management for real-time user presence. Maintains a Set of online user IDs in the active workspace.",
+    "tags": ["store", "zustand", "presence", "real-time"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/stores/reactionsStore.js": {
+    "description": "State management for emoji reactions. Implements optimistic toggling with server-side reconciliation.",
+    "tags": ["store", "zustand", "reactions", "optimistic-ui"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/stores/themeStore.js": {
+    "description": "User preference for UI theme (light/dark/system). Persists choice to localStorage and applies classes to document element.",
+    "tags": ["store", "zustand", "theme", "ux"],
+    "dependencies": [],
+    "connections": []
+  },
+  "apps/web/src/stores/workspaceMembersStore.js": {
+    "description": "State management for workspace membership and invitations. Handles role updates, removal, and invitation lifecycle.",
+    "tags": ["store", "zustand", "workspace", "members"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/stores/workspaceStore.js": {
+    "description": "Global workspace list and active selection state. Persists the last active workspace ID for seamless return on login.",
+    "tags": ["store", "zustand", "workspace", "navigation"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "apps/web/src/stores/auditStore.js": {
+    "description": "State management for workspace audit logs. Supports pagination and server-side filtering by type or actor.",
+    "tags": ["store", "zustand", "audit-log", "pagination"],
+    "dependencies": ["@/lib/api"],
+    "connections": []
+  },
+  "packages/shared/src/index.js": {
+    "description": "Universal source of truth for constants and logic. Defines the CAPABILITIES/ROLES schema, socket event names, and RBAC utility functions.",
+    "tags": ["shared", "constants", "logic", "rbac"],
+    "dependencies": [],
+    "connections": []
+  }
+}
