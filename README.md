@@ -3,7 +3,7 @@
 ## 📖 Project Overview
 Full-stack collaboration platform designed for modern teams. This platform enables teams to manage shared goals, track action items via Kanban, and communicate through real-time announcements and notifications.
 
-- **📽️ Demo Video:** [Watch the walkthrough](https://drive.google.com/file/d/1MFEl8d5774iaEqbFd043b2Y9jSYIapvh/view?usp=sharing)
+- **📽️ Demo Video:** [Watch here](https://drive.google.com/file/d/1MFEl8d5774iaEqbFd043b2Y9jSYIapvh/view?usp=sharing)
 
 ### 🚀 Live Demo & Documentation
 - **Web App:** [collaborativeteamhub-production.up.railway.app](https://collaborativeteamhub-production.up.railway.app/)
