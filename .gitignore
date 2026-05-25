@@ -25,3 +25,8 @@ npm-debug.log*
 
 # Prisma
 apps/api/prisma/*.db
+
+
+.agent
+.agents
+.claude
