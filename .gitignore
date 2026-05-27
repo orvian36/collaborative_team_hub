@@ -30,4 +30,5 @@ apps/api/prisma/*.db
 .agent
 .agents
 .claude
+.antigravitycli/
 .worktrees/
