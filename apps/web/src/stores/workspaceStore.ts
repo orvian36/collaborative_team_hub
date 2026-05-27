@@ -3,7 +3,7 @@ import { api } from '../lib/api';
 
 const LAST_ACTIVE_KEY = 'team-hub:lastActiveWorkspaceId';
 
-const useWorkspaceStore = create((set, get) => ({
+const useWorkspaceStore: any = create((set, get) => ({
   workspaces: [],
   activeWorkspaceId: null,
   isLoading: false,

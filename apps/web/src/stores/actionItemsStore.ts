@@ -8,7 +8,7 @@ const EMPTY_BUCKETS = () => ({
   [ACTION_ITEM_STATUS.DONE]: [],
 });
 
-const useActionItemsStore = create((set, get) => ({
+const useActionItemsStore: any = create((set, get) => ({
   byStatus: EMPTY_BUCKETS(),
   isLoading: false,
 

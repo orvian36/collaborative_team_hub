@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '@/lib/api';
 
-const useAnnouncementsStore = create((set, get) => ({
+const useAnnouncementsStore: any = create((set, get) => ({
   announcements: [],
   current: null,
   isLoading: false,

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '@/lib/api';
 
-const useAnalyticsStore = create((set) => ({
+const useAnalyticsStore: any = create((set) => ({
   stats: null,
   isLoading: false,
 

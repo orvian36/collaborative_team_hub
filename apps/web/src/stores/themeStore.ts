@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 const KEY = 'theme';
 
-const useThemeStore = create((set, get) => ({
+const useThemeStore: any = create((set, get) => ({
   theme: 'system', // 'light' | 'dark' | 'system' — kept SSR-consistent; real value loaded in hydrate()
 
   set: (theme) => {

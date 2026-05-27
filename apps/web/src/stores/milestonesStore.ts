@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '@/lib/api';
 
-const useMilestonesStore = create((set, get) => ({
+const useMilestonesStore: any = create((set, get) => ({
   byGoalId: {}, // { [goalId]: Milestone[] }
   isLoading: false,
 

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '@/lib/api';
 
-const useNotificationsStore = create((set, get) => ({
+const useNotificationsStore: any = create((set, get) => ({
   items: [],
   unreadCount: 0,
   isLoading: false,

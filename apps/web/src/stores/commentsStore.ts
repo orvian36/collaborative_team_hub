@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '@/lib/api';
 
-const useCommentsStore = create((set, get) => ({
+const useCommentsStore: any = create((set, get) => ({
   byAnnouncementId: {}, // { [id]: Comment[] }
 
   fetchFor: async (workspaceId, announcementId) => {

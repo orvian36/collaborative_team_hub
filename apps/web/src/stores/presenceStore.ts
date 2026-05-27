@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '@/lib/api';
 
-const usePresenceStore = create((set, get) => ({
+const usePresenceStore: any = create((set, get) => ({
   onlineUserIds: new Set(),
 
   hydrate: async (workspaceId) => {

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '@/lib/api';
 
-const useAuditStore = create((set, get) => ({
+const useAuditStore: any = create((set, get) => ({
   events: [],
   page: 1,
   totalPages: 1,

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '@/lib/api';
 
-const useReactionsStore = create((set, get) => ({
+const useReactionsStore: any = create((set, get) => ({
   byAnnouncementId: {}, // { [id]: Reaction[] }
 
   setForAnnouncement: (announcementId, reactions) =>

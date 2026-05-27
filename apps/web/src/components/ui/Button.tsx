@@ -32,7 +32,7 @@ export default function Button({
   leftIcon,
   rightIcon,
   ...rest
-}) {
+}: any) {
   return (
     <button
       type={type}

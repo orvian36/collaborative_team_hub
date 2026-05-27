@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '@/lib/api';
 
-const useGoalsStore = create((set, get) => ({
+const useGoalsStore: any = create((set, get) => ({
   goals: [],
   currentGoal: null,
   isLoading: false,

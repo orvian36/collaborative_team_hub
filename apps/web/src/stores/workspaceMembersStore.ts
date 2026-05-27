@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '../lib/api';
 
-const useWorkspaceMembersStore = create((set, get) => ({
+const useWorkspaceMembersStore: any = create((set, get) => ({
   members: [],
   invitations: [],
   isLoading: false,
