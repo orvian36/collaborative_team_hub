@@ -7,21 +7,21 @@
 const ROLES = {
   ADMIN: 'ADMIN',
   MEMBER: 'MEMBER',
-};
+} as const;
 
 // ─── Goal Statuses ───────────────────────────────────────────
 const GOAL_STATUS = {
   NOT_STARTED: 'NOT_STARTED',
   IN_PROGRESS: 'IN_PROGRESS',
   COMPLETED: 'COMPLETED',
-};
+} as const;
 
 // ─── Action Item Statuses ────────────────────────────────────
 const ACTION_ITEM_STATUS = {
   TODO: 'TODO',
   IN_PROGRESS: 'IN_PROGRESS',
   DONE: 'DONE',
-};
+} as const;
 
 // ─── Action Item Priority ────────────────────────────────────
 const PRIORITY = {
@@ -29,7 +29,7 @@ const PRIORITY = {
   MEDIUM: 'MEDIUM',
   HIGH: 'HIGH',
   URGENT: 'URGENT',
-};
+} as const;
 
 // ─── Activity Types ──────────────────────────────────────────
 const ACTIVITY_TYPES = {
@@ -55,7 +55,7 @@ const ACTIVITY_TYPES = {
   MEMBER_ROLE_CHANGED: 'MEMBER_ROLE_CHANGED',
   MEMBER_REMOVED: 'MEMBER_REMOVED',
   WORKSPACE_SETTINGS_CHANGED: 'WORKSPACE_SETTINGS_CHANGED',
-};
+} as const;
 
 // ─── Notification Types ──────────────────────────────────────
 const NOTIFICATION_TYPES = {
@@ -63,7 +63,7 @@ const NOTIFICATION_TYPES = {
   INVITE: 'INVITE',
   ASSIGNMENT: 'ASSIGNMENT',
   STATUS_UPDATE: 'STATUS_UPDATE',
-};
+} as const;
 
 // ─── Invitations ─────────────────────────────────────────────
 const INVITATION_STATUS = {
@@ -71,7 +71,7 @@ const INVITATION_STATUS = {
   ACCEPTED: 'ACCEPTED',
   REVOKED: 'REVOKED',
   EXPIRED: 'EXPIRED',
-};
+} as const;
 
 const INVITATION_TTL_DAYS = 7;
 
@@ -121,7 +121,7 @@ const SOCKET_EVENTS = {
   USER_OFFLINE: 'user:offline',
   NOTIFICATION_NEW: 'notification:new',
   ACTIVITY_NEW: 'activity:new',
-};
+} as const;
 
 // ─── Capabilities ────────────────────────────────────────────
 const CAPABILITIES = {
@@ -149,9 +149,9 @@ const CAPABILITIES = {
   REACTION_TOGGLE: 'reaction:toggle',
   AUDIT_READ: 'audit:read',
   EXPORT_CSV: 'export:csv',
-};
+} as const;
 
-const ROLE_CAPABILITIES = {
+const ROLE_CAPABILITIES: Record<string, Set<string>> = {
   ADMIN: new Set(Object.values(CAPABILITIES)),
   MEMBER: new Set([
     CAPABILITIES.GOAL_CREATE,
@@ -168,7 +168,7 @@ const ROLE_CAPABILITIES = {
 };
 
 export function hasCapability(role: string, capability: string): boolean {
-  return (ROLE_CAPABILITIES as Record<string, Set<string>>)[role]?.has(capability) ?? false;
+  return ROLE_CAPABILITIES[role]?.has(capability) ?? false;
 }
 
 export {
