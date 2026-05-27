@@ -2,9 +2,13 @@
   "name": "@team-hub/shared",
   "version": "1.0.0",
   "private": true,
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "echo 'No build step for shared'",
+    "build": "tsc",
     "lint": "eslint src/"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
   }
 }
