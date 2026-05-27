@@ -167,11 +167,11 @@ const ROLE_CAPABILITIES = {
   ]),
 };
 
-function hasCapability(role, capability) {
-  return ROLE_CAPABILITIES[role]?.has(capability) ?? false;
+export function hasCapability(role: string, capability: string): boolean {
+  return (ROLE_CAPABILITIES as Record<string, Set<string>>)[role]?.has(capability) ?? false;
 }
 
-module.exports = {
+export {
   ROLES,
   GOAL_STATUS,
   ACTION_ITEM_STATUS,
@@ -184,5 +184,4 @@ module.exports = {
   SOCKET_EVENTS,
   CAPABILITIES,
   ROLE_CAPABILITIES,
-  hasCapability,
 };
