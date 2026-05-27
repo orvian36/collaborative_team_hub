@@ -30,3 +30,4 @@ apps/api/prisma/*.db
 .agent
 .agents
 .claude
+.worktrees/
