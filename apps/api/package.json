@@ -2,16 +2,16 @@
   "name": "@team-hub/api",
   "version": "1.0.0",
   "private": true,
-  "main": "src/index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "nodemon --no-deprecation src/index.js",
-    "start": "node --no-deprecation src/index.js",
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
     "build": "echo 'No build step required for API'",
     "lint": "eslint src/",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "node prisma/seed.js"
+    "db:seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.12.0",
@@ -33,6 +33,14 @@
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.1.0",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "eslint": "^8.57.0",
     "nodemon": "^3.1.0",
     "prisma": "^5.12.0"
